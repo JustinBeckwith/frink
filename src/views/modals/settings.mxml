@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   creationComplete="creationCompleteHandler(event)"
+			    backgroundColor="#000000" title="Frink Settings">
+	<fx:Script>
+		<![CDATA[
+			import events.RedditEvent;
+			
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			protected function creationCompleteHandler(event:Event) : void {
+				txtUsername.text = FrinkData.instance.database.data.username;
+				txtPassword.text = FrinkData.instance.database.data.password;
+			}
+			
+			protected function cancelButton_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			/**
+			 * test and store the credentials
+			 **/
+			protected function saveButton_clickHandler(event:MouseEvent) : void {
+				
+//				if (FrinkData.instance.database.data.username != txtUsername.text ||
+//					FrinkData.instance.database.data.password != txtPassword.text) {
+//				
+					FrinkData.instance.api.addEventListener(RedditEvent.LOGIN_ATTEMPTED, api_loginAttempted);
+					FrinkData.instance.api.attemptLogin(txtUsername.text, txtPassword.text);
+//				}
+//				else {
+//					PopUpManager.removePopUp(this);
+//				}
+			}
+			
+			/**
+			 * if the creds were right, store them, if not, notify the user
+			 **/
+			protected function api_loginAttempted(event:RedditEvent) : void {
+				if (event.result.success) {
+					FrinkData.instance.database.data.username = txtUsername.text;
+					FrinkData.instance.database.data.password = txtPassword.text;
+					lblBad.visible = false;
+					lblBad.includeInLayout = false;
+					PopUpManager.removePopUp(this);
+				}
+				else {
+					lblBad.visible = true;
+					lblBad.includeInLayout = true;
+				}
+			}
+			
+
+		]]>
+	</fx:Script>
+	
+	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20">
+		<s:Label text="Username:" />
+		<s:TextInput id="txtUsername" />
+		<mx:Spacer height="20" />
+		<s:Label text="Password:" />
+		<s:TextInput id="txtPassword" displayAsPassword="true" />
+		<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
+		<mx:Spacer height="20" />
+		<s:HGroup horizontalAlign="center" width="100%">
+			<s:Button label="save" click="saveButton_clickHandler(event)" />
+			<s:Button label="cancel" click="cancelButton_clickHandler(event)" />
+		</s:HGroup>
+	</s:VGroup>
+</s:TitleWindow>

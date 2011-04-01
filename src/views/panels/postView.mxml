@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%" xmlns:renderers="views.renderers.*" creationComplete="creationCompleteHandler(event)" xmlns:controls="controls.*"
+		  backgroundColor="0xCCCCCC" xmlns:panels="views.panels.*" show="showHandler(event)" hide="hideHandler(event)" >
+	<fx:Metadata>
+		[Event(name="close", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			
+			import mx.events.FlexEvent;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Variables
+			//
+			//--------------------------------------------------------------------------
+			
+			private var _post : Object;
+			
+			[Bindable]
+			public function get post() : Object {
+				return _post;
+			}
+			public function set post(value:Object) : void {
+				_post = value;
+				if (_post.data.is_self) {
+					this.comments.loadComments(_post);
+					this.comments.visible = true;
+				} else {
+					this.comments.visible = false;
+				}
+				this.browser.visible = !_post.data.is_self;
+			}
+			
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			
+			/**
+			 * add the web browser thingy
+			 **/
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+			
+			}
+
+			/**
+			 * close this up and back to normal
+			 **/
+			protected function btnBack_clickHandler(event:MouseEvent):void
+			{
+				this.browser.visible = false;
+				this.dispatchEvent(new Event(Event.CLOSE));
+			}
+
+			/**
+			 * register up boat
+			 **/
+			protected function btnUp_clickHandler(event:MouseEvent):void
+			{
+				FrinkData.instance.api.vote(post.data.name, false, null, null);
+			}
+			
+			/**
+			 * register down boat
+			 **/
+			protected function btnDown_clickHandler(event:MouseEvent):void
+			{
+				FrinkData.instance.api.vote(post.data.name, false, null, null);
+			}
+			
+			/**
+			 * switch to/from comments view
+			 **/
+			protected function btnComments_clickHandler(event:MouseEvent):void
+			{
+				if (!this.comments.visible) {
+					this.comments.loadComments(this.post);
+				} 
+				this.browser.visible = this.comments.visible;
+				this.comments.visible = !this.comments.visible;
+			}
+			
+			/**
+			 * open the post in a browser window
+			 **/
+			protected function btnWindow_clickHandler(event:MouseEvent):void
+			{
+				flash.net.navigateToURL(new URLRequest(post.data.url));
+			}
+
+
+			/**
+			 * manage the visibility of this web control
+			 **/
+			protected function showHandler(event:FlexEvent):void
+			{
+				this.browser.visible = !_post.data.is_self;
+			}
+			
+			/**
+			 * manage the visibility of this web control
+			 **/
+			protected function hideHandler(event:FlexEvent):void
+			{
+				this.browser.visible = false;
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%" >
+		<!-- top bar -->
+		<s:SkinnableContainer width="100%" backgroundColor="0x111111">
+			<s:HGroup width="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" >
+				<renderers:PostDetails data="{post}" width="100%" />
+				<s:HGroup>
+					<s:Image source="@Embed(source='assets/NIXUS/32x32/Back.png')" id="btnBack" click="btnBack_clickHandler(event)" />
+					<s:Image source="@Embed(source='assets/NIXUS/32x32/Up.png')" id="btnUp" click="btnUp_clickHandler(event)" />
+					<s:Image source="@Embed(source='assets/NIXUS/32x32/Down.png')" id="btnDown" click="btnDown_clickHandler(event)" />
+					<s:Image source="@Embed(source='assets/NIXUS/32x32/Chat.png')" id="btnComments" click="btnComments_clickHandler(event)"/>
+					<s:Image source="@Embed(source='assets/NIXUS/32x32/Window.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
+				</s:HGroup>
+			</s:HGroup> 
+		</s:SkinnableContainer>
+		
+		
+		<!-- post frame -->
+		<s:SkinnableContainer width="100%" height="100%">
+			<controls:WebBrowser width="100%" height="100%" url="{post.data.url}" id="browser" />
+			<panels:CommentList width="100%" height="100%" visible="false" id="comments" />
+		</s:SkinnableContainer>
+		
+	</s:VGroup>
+	
+</s:SkinnableContainer>

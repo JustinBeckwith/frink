@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				autoDrawBackground="true">
+	
+	<s:SkinnableContainer skinClass="skins.ContainerBorderSkin" width="100%">
+		
+		<s:Label text="{data.data.display_name}" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" />	
+	</s:SkinnableContainer>
+	
+</s:ItemRenderer>

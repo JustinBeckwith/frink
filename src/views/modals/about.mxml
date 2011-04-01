@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" xmlns:controls="controls.*"
+		   backgroundColor="0x000000" title="Project Frink">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			protected function cancelButton_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</fx:Script>
+
+	
+	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20">
+		<s:Image source="@Embed(source='assets/icon.png')" />
+		<s:Label text="Version 1.0 alpaca" />
+		<s:Label text="A reddit application created just for fun by reddit user justinblat." />
+		<controls:hyperlink text="The Blog" url="http://jbeckwith.com" />
+		<controls:hyperlink text="The Twitter" url="http://twitter.com/justinbeckwith" />
+		<s:HGroup horizontalAlign="center" width="100%">
+			<s:Button label="close" click="cancelButton_clickHandler(event)" />
+		</s:HGroup>
+	</s:VGroup>
+	
+</s:TitleWindow>

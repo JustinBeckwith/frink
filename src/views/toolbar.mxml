@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="toolbar" xmlns:controls="controls.*" width="200" height="100%">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+		
+	<fx:Metadata>
+		[Event(name="change", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			import spark.components.Application;
+			
+			import views.modals.about;
+			import views.modals.settings;
+			import views.panels.frinkPanel;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Variables
+			//
+			//--------------------------------------------------------------------------
+			
+			public var selectedPanel : String = frinkPanel.FRONT_PAGE;
+			
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * a list button on the left was clicked
+			 **/
+			protected function btnPanel_clickHandler(event:MouseEvent):void
+			{
+				switch (event.currentTarget) {
+					case btnFrontPage:
+						this.selectedPanel = frinkPanel.FRONT_PAGE;
+						break;
+					case btnAllReddits:
+						this.selectedPanel = frinkPanel.ALL_REDDITS;
+						break;
+					case btnSubReddits:
+						this.selectedPanel = frinkPanel.SUB_REDDITS;
+						break;
+					case btnProfile:
+						this.selectedPanel = frinkPanel.PROFILE;
+						break;
+					case btnSearch:
+						this.selectedPanel = frinkPanel.SEARCH;
+						break;
+					case btnMail:
+						this.selectedPanel = frinkPanel.MAIL;
+						break;
+					case btnSearch: 
+						this.selectedPanel = frinkPanel.SEARCH;
+						break;
+				}
+				//(event.currentTarget as ImageButton).styleName = 
+				this.dispatchEvent(new Event(Event.CHANGE));
+			}
+
+			
+			/**
+			 * show the new post screen
+			 **/
+			protected function btnWrite_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+			}
+
+			/**
+			 * show the settings screen
+			 **/
+			protected function btnSettings_clickHandler(event:MouseEvent):void
+			{
+				var s : settings = new settings();
+				PopUpManager.addPopUp(s, this.parent, true);
+				PopUpManager.centerPopUp(s);
+			}
+
+			/**
+			 * show the about screen
+			 **/
+			protected function btnAbout_clickHandler(event:MouseEvent):void
+			{
+				var a : about = new about();
+				PopUpManager.addPopUp(a, this.parent, true);
+				PopUpManager.centerPopUp(a);
+			}
+
+		]]>
+	</fx:Script>
+
+	<s:HGroup horizontalAlign="center" paddingTop="10" width="100%">
+		<s:VGroup width="100%" gap="0" horizontalAlign="center">
+			<s:Image source="@Embed(source='assets/frink-head.png')" />
+			<s:Line width="100%">
+				<s:stroke>
+					<s:SolidColorStroke color="0xAAAAAA" weight="4" />
+				</s:stroke>
+			</s:Line>
+		</s:VGroup>
+		
+	</s:HGroup>
+	
+	
+	
+	<s:VGroup width="100%">
+		<controls:ImageButton title="Front Page" id="btnFrontPage" icon="@Embed(source='assets/NIXUS/32x32/Home.png')" click="btnPanel_clickHandler(event)" />
+		<controls:ImageButton title="All Reddits" id="btnAllReddits" icon="@Embed(source='assets/NIXUS/32x32/Web.png')" click="btnPanel_clickHandler(event)" />
+		<controls:ImageButton title="Sub Reddits" id="btnSubReddits" icon="@Embed(source='assets/NIXUS/32x32/Template.png')" click="btnPanel_clickHandler(event)" />
+		<controls:ImageButton title="Mail" id="btnMail" icon="@Embed(source='assets/NIXUS/32x32/Mail_Read.png')" click="btnPanel_clickHandler(event)" visible="false"/>
+		<controls:ImageButton title="Profile" id="btnProfile" icon="@Embed(source='assets/NIXUS/32x32/User.png')" click="btnPanel_clickHandler(event)" visible="false" />
+		<controls:ImageButton title="Search" id="btnSearch" icon="@Embed(source='assets/NIXUS/32x32/Search.png')" click="btnPanel_clickHandler(event)" visible="false" />
+	</s:VGroup>
+	
+ 	<s:HGroup width="100%" height="100%" verticalAlign="bottom" horizontalAlign="center" paddingBottom="10" styleName="bottomTest"> 
+		<s:Image id="btnWrite"  source="@Embed(source='assets/NIXUS/32x32/Edit.png')" click="btnWrite_clickHandler(event)" visible="false"/>
+		<s:Image id="btnSettings" source="@Embed(source='assets/NIXUS/32x32/System.png')" click="btnSettings_clickHandler(event)" />
+		<s:Image id="btnAbout" source="@Embed(source='assets/NIXUS/32x32/Info.png')" click="btnAbout_clickHandler(event)" />
+	</s:HGroup>
+	
+</s:View>

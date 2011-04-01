@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<panels:frinkPanel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:panels="views.panels.*" creationComplete="creationCompleteHandler(event)">
+	
+	<fx:Metadata>
+		[Event(name="change", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import events.RedditEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
+			
+			import spark.components.VScrollBar;
+			import spark.events.IndexChangeEvent;
+			
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Variables
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * list of posts to bind
+			 **/
+			[Bindable]
+			protected var posts : ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var page_before : String;
+			
+			[Bindable]
+			protected var page_after : String;
+			
+			[Bindable]
+			protected var subReddit : String;
+			
+			/**
+			 * the currently selected post in the list
+			 **/
+			[Bindable]
+			public var selectedPost : Object;
+			
+			
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Methods
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * use the reddit api to load all posts
+			 **/
+			public function loadReddit(subReddit : String) : void {
+				this.subReddit = subReddit;
+				this.posts.removeAll();
+				FrinkData.instance.api.loadPosts(subReddit);
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * set up the event listeners for the api
+			 **/
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				FrinkData.instance.api.addEventListener(RedditEvent.POSTS_LOADED, api_postsLoaded);
+			}
+			
+			/**
+			 * show the post details
+			 **/
+			protected function list_changeHandler(event : IndexChangeEvent) : void {
+				this.selectedPost = this.posts.getItemAt(event.newIndex);
+				this.dispatchEvent(new Event(Event.CHANGE));
+			}
+			
+			/**
+			 * bind the posts to the list
+			 **/
+			protected function api_postsLoaded(event : RedditEvent) : void {
+				// get the posts returned in the list
+				var records : Array = event.result.data.children as Array;
+				posts.addAll(new ArrayCollection(records));
+				
+				// store the identifiers for the prev and next pages
+				this.page_after = event.result.data.after;
+				this.page_before = event.result.data.before;
+			}
+			
+			
+			/**
+			 * add a scroll handler to the list after created manually
+			 **/
+			protected function list_creationCompleteHandler(event:FlexEvent):void
+			{
+				//list.scroller.verticalScrollBar.addEventListener(Event.CHANGE, list_verticalScrollBar_change);
+				// Does not work with mouse wheel or arrow buttons due to bug http://bugs.adobe.com/jira/browse/SDK-26533
+				/* list.scroller.verticalScrollBar.addEventListener( Event.CHANGE, verticalScrollBarChangeHandler ); */
+				list.scroller.viewport.addEventListener( PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler );
+			}
+			
+			/**
+			 * list scroll event
+			 **/
+			protected function propertyChangeHandler( event : PropertyChangeEvent ) : void {
+				if ( event.property == "verticalScrollPosition" ) {
+					var vsb:VScrollBar = list.scroller.verticalScrollBar;
+					if (vsb.value == vsb.maximum) {
+						// load the next page of posts if at the bottom of the list
+						FrinkData.instance.api.loadPosts(this.subReddit, null, this.page_after);
+					}
+				}
+			}
+
+
+			
+
+		]]>
+	</fx:Script>
+
+	<s:List id="list" width="100%" height="100%" dataProvider="{posts}" itemRenderer="views.renderers.PostDetails"
+			change="list_changeHandler(event)"
+			 creationComplete="list_creationCompleteHandler(event)"
+		   />
+</panels:frinkPanel>

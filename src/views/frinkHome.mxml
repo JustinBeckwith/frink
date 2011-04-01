@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark"  actionBarVisible="false" xmlns:views="views.*" xmlns:panels="views.panels.*" creationComplete="creationCompleteHandler(event)" >
+	<fx:Declarations></fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import flash.filters.*;
+			
+			import mx.events.FlexEvent;
+			
+			import views.panels.frinkPanel;
+			import views.panels.postList;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Methods
+			//
+			//--------------------------------------------------------------------------
+		
+			
+
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * perform the initial load of the front page
+			 **/
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				this.pnlPostList.loadReddit("");
+			}
+			
+			/**
+			 * switch the visible panel based on the clicked button in the toolbar
+			 **/
+			protected function toolbar_changeHandler(event:Event):void
+			{
+				// hide all of the panels
+				for (var i : int = 0; i<5; i++) {
+					var fp : frinkPanel = frinkPanels.getElementAt(i) as frinkPanel;
+					fp.visible = false;
+					fp.includeInLayout = false;
+				}
+				
+				// move the middle panel out if neccesary
+				if (frinkPanels.x != 201) {
+					frinkPanels.x = 201;
+					postView.visible = false;
+					postView.includeInLayout = false;
+					//alphaFilter.alpha = 0;
+				} 
+				
+				// show the appropriate panel
+				var panel : frinkPanel = null;
+				switch(toolbar.selectedPanel) {
+					case frinkPanel.FRONT_PAGE:
+						panel = pnlPostList;
+						pnlPostList.loadReddit("");
+						break;
+					case frinkPanel.ALL_REDDITS:
+						panel = pnlPostList;
+						pnlPostList.loadReddit("all");
+						break;
+					case frinkPanel.SUB_REDDITS:
+						panel = pnlSubReddits;
+						break;
+					case frinkPanel.PROFILE:
+						panel = pnlProfile;
+						break;
+					case frinkPanel.MAIL:
+						panel = pnlMail;
+						break;
+					case frinkPanel.SEARCH:
+						panel = pnlSearch;
+						break;
+				}
+
+				panel.visible = true;
+				panel.includeInLayout = true;
+			}
+			
+			/**
+			 * show the selected post
+			 **/
+			protected function postList_changeHandler(event:Event) : void {
+				var pl : postList = event.currentTarget as postList;
+				postView.post = pl.selectedPost;
+				
+				// move the middle panel over
+				frinkPanels.x = 50;
+				//alphaFilter.alpha = 0.5;
+				
+				// move out the content view
+				postView.visible = true;
+				postView.includeInLayout = true;
+				
+				pl.list.selectedIndex = -1;
+			}
+			
+			/**
+			 * flip to the selected subreddit in the post list
+			 **/
+			protected function subReddit_changeHandler(event:Event) : void {
+				
+				// load the posts for the selected subreddit
+				pnlPostList.loadReddit(pnlSubReddits.subReddit.data.display_name);
+				
+				// hide all of the panels
+				for (var i : int = 0; i<5; i++) {
+					var fp : frinkPanel = frinkPanels.getElementAt(i) as frinkPanel;
+					fp.visible = false;
+					fp.includeInLayout = false;
+				}
+				
+				// show the post list
+				pnlPostList.visible = true;
+				pnlPostList.includeInLayout = true;
+				
+			}
+
+			/**
+			 * switch the UI back to normal
+			 **/
+			protected function postView_closeHandler(event:Event):void
+			{
+				postView.visible = false;
+				postView.includeInLayout = false;
+				frinkPanels.x = 201;
+				
+				//alphaFilter.alpha = 0.0;
+			}
+
+
+			
+
+		]]>
+	</fx:Script>
+	<s:SkinnableContainer width="100%" height="100%">
+		<views:toolbar change="toolbar_changeHandler(event)" id="toolbar" />
+		<s:SkinnableContainer width="100%" height="100%" id="frinkPanels" x="201">
+			<panels:postList id="pnlPostList" change="postList_changeHandler(event)" />
+			<panels:subReddits id="pnlSubReddits" visible="false" includeInLayout="false" change="subReddit_changeHandler(event)"/>
+			<panels:mail id="pnlMail" visible="false" includeInLayout="false"/>
+			<panels:profile id="pnlProfile" visible="false" includeInLayout="false"/>
+			<panels:search id="pnlSearch" visible="false" includeInLayout="false"/>
+		</s:SkinnableContainer>
+		
+		<panels:postView width="100%" height="100%" x="201" visible="false" includeInLayout="false" id="postView" close="postView_closeHandler(event)" />
+		
+	</s:SkinnableContainer>
+	
+	
+	
+</s:View>

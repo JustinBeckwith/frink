@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				autoDrawBackground="true" width="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			
+			/**
+			 * prepend the base url if neccesary to the thumbnail path
+			 **/
+			protected function get thumbnailPath() : String {
+				
+				if (this.data.thumbnail && this.data.thumbnail != '') {
+					// sometimes thumbnail returns a relative system path from reddit.com/static/something.png
+					if ((data.data.thumbnail as String).indexOf("/static/") == 0)
+						data.data.thumbnail = "http://www.reddit.com" + data.data.thumbnail;
+					return data.data.thumbnail;
+				}
+				return '';
+			}
+			
+			/**
+			 * only show the thumbnail image if there is one
+			 **/
+			protected function get thumbnailVisible() : Boolean {
+				return data.data.thumbnail && data.data.thumbnail !='';
+			}
+			
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:SkinnableContainer width="100%" skinClass="skins.ContainerBorderSkin">
+		<s:HGroup width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+			<s:Image source="{thumbnailPath}" visible="{thumbnailVisible}" includeInLayout="{thumbnailVisible}"/>
+			<s:VGroup width="100%" fontSize="14">
+				<s:Label text="{data.data.title}" width="100%" fontSize="18" />
+				<s:Label text="{data.data.domain}" width="100%"/>
+				<s:HGroup fontSize="14">
+					<s:Label text="{data.data.score}" color="0xFF0000"/>
+					<s:Label text="{data.data.subreddit}"/>
+					<s:Label text="by {data.data.author}"/>
+				</s:HGroup>
+				<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)}"/>
+			</s:VGroup>
+		</s:HGroup>
+	</s:SkinnableContainer>
+	
+</s:ItemRenderer>
