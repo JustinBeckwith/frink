@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" width="550" height="100%" xmlns:panels="views.panels.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import events.PanelEvent;
+			
+			import views.panels.frinkPanel;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			
+			/**
+			 * flip to the selected subreddit in the post list
+			 **/
+			protected function subReddit_changeHandler(event:Event) : void {
+				
+				// load the posts for the selected subreddit
+				pnlPostList.loadReddit(pnlSubReddits.subReddit.data.display_name);
+				
+				// hide all of the panels
+				for (var i : int = 1; i<6; i++) {
+					var fp : frinkPanel = this.getElementAt(i) as frinkPanel;
+					fp.visible = false;
+					fp.includeInLayout = false;
+				}
+				
+				// show the post list
+				pnlPostList.visible = true;
+				pnlPostList.includeInLayout = true;
+				
+			}
+			
+			
+			/**
+			 * show the selected post
+			 **/
+			protected function postList_changeHandler(event:Event) : void {
+				var e : PanelEvent = new PanelEvent(PanelEvent.POST_SELECTED, event.currentTarget as postList);
+				this.dispatchEvent(e);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Metadata>
+		[Event(name="postSelected", type="events.PanelEvent")]
+	</fx:Metadata>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="background" />
+	</s:states>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="0xF7F7F7" />
+		</s:fill>
+	</s:Rect>
+	
+	<panels:postList id="pnlPostList" change="postList_changeHandler(event)" />
+	<panels:subReddits id="pnlSubReddits" visible="false" includeInLayout="false" change="subReddit_changeHandler(event)"/>
+	<panels:mail id="pnlMail" visible="false" includeInLayout="false"/>
+	<panels:profile id="pnlProfile" visible="false" includeInLayout="false"/>
+	<panels:search id="pnlSearch" visible="false" includeInLayout="false"/>
+	
+	
+	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="0x000000" alpha.normal="0" alpha.background="0.2" />
+		</s:fill>
+	</s:Rect>
+	
+</s:SkinnableContainer>

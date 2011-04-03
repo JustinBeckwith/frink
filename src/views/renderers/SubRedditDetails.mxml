@@ -3,9 +3,19 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				autoDrawBackground="true">
 	
-	<s:SkinnableContainer skinClass="skins.ContainerBorderSkin" width="100%">
+	<s:SkinnableContainer width="100%">
 		
-		<s:Label text="{data.data.display_name}" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" />	
+		<s:Rect left="0" right="0" top="0" bottom="0"> 
+			<s:fill> 
+				<s:SolidColor color="0xF7F7F7"/> 
+			</s:fill> 
+		</s:Rect>
+		<s:Line left="0" right="0" bottom="0">
+			<s:stroke>
+				<s:SolidColorStroke color="0xD9D9D9" weight="1" />
+			</s:stroke>
+		</s:Line>
+		<s:Label text="{data.data.display_name}" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" depth="26" color="0x040404" />	
 	</s:SkinnableContainer>
 	
 </s:ItemRenderer>

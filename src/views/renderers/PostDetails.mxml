@@ -1,40 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				autoDrawBackground="true" width="100%">
+				autoDrawBackground="false" width="100%">
 	
 	<fx:Script>
 		<![CDATA[
-			
-			/**
-			 * prepend the base url if neccesary to the thumbnail path
-			 **/
-			protected function get thumbnailPath() : String {
-				
-				if (this.data.thumbnail && this.data.thumbnail != '') {
-					// sometimes thumbnail returns a relative system path from reddit.com/static/something.png
-					if ((data.data.thumbnail as String).indexOf("/static/") == 0)
-						data.data.thumbnail = "http://www.reddit.com" + data.data.thumbnail;
-					return data.data.thumbnail;
-				}
-				return '';
-			}
-			
+			import mx.events.FlexEvent;
+
 			/**
 			 * only show the thumbnail image if there is one
 			 **/
-			protected function get thumbnailVisible() : Boolean {
-				return data.data.thumbnail && data.data.thumbnail !='';
+			public override function set data(value : Object) : void {
+				super.data = value;
+				if (data && data.data && data.data.thumbnail && data.data.thumbnail !='') {
+					
+					// sometimes thumbnail returns a relative system path from reddit.com/static/something.png
+					if ((data.data.thumbnail as String).indexOf("/static/") == 0)
+						data.data.thumbnail = "http://www.reddit.com" + data.data.thumbnail;
+					
+					this.img.source = data.data.thumbnail;
+					this.thumbnail.visible = true;
+					this.thumbnail.includeInLayout = true;
+					
+				} else {
+					this.thumbnail.visible = false;
+					this.thumbnail.includeInLayout = false;
+				}
 			}
-			
-			
-			
+
 		]]>
 	</fx:Script>
 	
-	<s:SkinnableContainer width="100%" skinClass="skins.ContainerBorderSkin">
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+	</s:states>    
+	
+	
+
+	<s:Rect id="myRect" left="0" right="0" top="0" bottom="0" alpha="1.0"> 
+		<s:fill> 
+			<s:SolidColor color="0xF7F7F7"/> 
+		</s:fill> 
+	</s:Rect>
+	
+	<s:Line left="0" right="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="0xD9D9D9" weight="1" />
+		</s:stroke>
+	</s:Line>
+	
+	
+	<s:SkinnableContainer width="100%" depth="25" color="0x040404">
 		<s:HGroup width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
-			<s:Image source="{thumbnailPath}" visible="{thumbnailVisible}" includeInLayout="{thumbnailVisible}"/>
+			
+			<s:Group id="thumbnail" maskType="clip">
+				<s:mask>
+					<s:Group>
+						<s:BorderContainer cornerRadius="5" width="{img.width}" height="{img.height}" />	
+					</s:Group>
+				</s:mask>
+				<s:Image id="img" />
+			</s:Group>
+			
+			
 			<s:VGroup width="100%" fontSize="14">
 				<s:Label text="{data.data.title}" width="100%" fontSize="18" />
 				<s:Label text="{data.data.domain}" width="100%"/>

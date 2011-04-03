@@ -4,6 +4,8 @@
 	<fx:Declarations></fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import events.PanelEvent;
+			
 			import flash.filters.*;
 			
 			import mx.events.FlexEvent;
@@ -11,12 +13,7 @@
 			import views.panels.frinkPanel;
 			import views.panels.postList;
 			
-			//--------------------------------------------------------------------------
-			//
-			//  Methods
-			//
-			//--------------------------------------------------------------------------
-		
+			
 			
 
 			
@@ -31,7 +28,7 @@
 			 **/
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				this.pnlPostList.loadReddit("");
+				this.frinkPanels.pnlPostList.loadReddit("");
 			}
 			
 			/**
@@ -40,7 +37,7 @@
 			protected function toolbar_changeHandler(event:Event):void
 			{
 				// hide all of the panels
-				for (var i : int = 0; i<5; i++) {
+				for (var i : int = 1; i<6; i++) {
 					var fp : frinkPanel = frinkPanels.getElementAt(i) as frinkPanel;
 					fp.visible = false;
 					fp.includeInLayout = false;
@@ -51,31 +48,32 @@
 					frinkPanels.x = 201;
 					postView.visible = false;
 					postView.includeInLayout = false;
-					//alphaFilter.alpha = 0;
+					frinkPanels.currentState = "normal";
 				} 
 				
 				// show the appropriate panel
 				var panel : frinkPanel = null;
 				switch(toolbar.selectedPanel) {
 					case frinkPanel.FRONT_PAGE:
-						panel = pnlPostList;
-						pnlPostList.loadReddit("");
+						panel = frinkPanels.pnlPostList;
+						frinkPanels.pnlPostList.loadReddit("");
 						break;
 					case frinkPanel.ALL_REDDITS:
-						panel = pnlPostList;
-						pnlPostList.loadReddit("all");
+						panel = frinkPanels.pnlPostList;
+						frinkPanels.pnlPostList.loadReddit("all");
 						break;
 					case frinkPanel.SUB_REDDITS:
-						panel = pnlSubReddits;
+						panel = frinkPanels.pnlSubReddits;
+						frinkPanels.pnlSubReddits.loadSubReddits();
 						break;
 					case frinkPanel.PROFILE:
-						panel = pnlProfile;
+						panel = frinkPanels.pnlProfile;
 						break;
 					case frinkPanel.MAIL:
-						panel = pnlMail;
+						panel = frinkPanels.pnlMail;
 						break;
 					case frinkPanel.SEARCH:
-						panel = pnlSearch;
+						panel = frinkPanels.pnlSearch;
 						break;
 				}
 
@@ -86,13 +84,13 @@
 			/**
 			 * show the selected post
 			 **/
-			protected function postList_changeHandler(event:Event) : void {
-				var pl : postList = event.currentTarget as postList;
+			protected function postList_changeHandler(event: PanelEvent) : void {
+				var pl : postList = event.list;
 				postView.post = pl.selectedPost;
 				
 				// move the middle panel over
 				frinkPanels.x = 50;
-				//alphaFilter.alpha = 0.5;
+				frinkPanels.currentState = "background";
 				
 				// move out the content view
 				postView.visible = true;
@@ -101,26 +99,7 @@
 				pl.list.selectedIndex = -1;
 			}
 			
-			/**
-			 * flip to the selected subreddit in the post list
-			 **/
-			protected function subReddit_changeHandler(event:Event) : void {
-				
-				// load the posts for the selected subreddit
-				pnlPostList.loadReddit(pnlSubReddits.subReddit.data.display_name);
-				
-				// hide all of the panels
-				for (var i : int = 0; i<5; i++) {
-					var fp : frinkPanel = frinkPanels.getElementAt(i) as frinkPanel;
-					fp.visible = false;
-					fp.includeInLayout = false;
-				}
-				
-				// show the post list
-				pnlPostList.visible = true;
-				pnlPostList.includeInLayout = true;
-				
-			}
+			
 
 			/**
 			 * switch the UI back to normal
@@ -130,8 +109,7 @@
 				postView.visible = false;
 				postView.includeInLayout = false;
 				frinkPanels.x = 201;
-				
-				//alphaFilter.alpha = 0.0;
+				frinkPanels.currentState = "normal";
 			}
 
 
@@ -139,17 +117,24 @@
 
 		]]>
 	</fx:Script>
-	<s:SkinnableContainer width="100%" height="100%">
-		<views:toolbar change="toolbar_changeHandler(event)" id="toolbar" />
-		<s:SkinnableContainer width="100%" height="100%" id="frinkPanels" x="201">
-			<panels:postList id="pnlPostList" change="postList_changeHandler(event)" />
-			<panels:subReddits id="pnlSubReddits" visible="false" includeInLayout="false" change="subReddit_changeHandler(event)"/>
-			<panels:mail id="pnlMail" visible="false" includeInLayout="false"/>
-			<panels:profile id="pnlProfile" visible="false" includeInLayout="false"/>
-			<panels:search id="pnlSearch" visible="false" includeInLayout="false"/>
-		</s:SkinnableContainer>
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="0x000000" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:SkinnableContainer left="2" top="2" right="2" bottom="2">
 		
-		<panels:postView width="100%" height="100%" x="201" visible="false" includeInLayout="false" id="postView" close="postView_closeHandler(event)" />
+		<s:Rect id="backgroundRect" left="0" right="0" top="0" bottom="0" radiusX="10" radiusY="10" >
+			<s:fill>
+				<s:BitmapFill source="@Embed('assets/hash-background.png')" fillMode="repeat" />
+			</s:fill>
+		</s:Rect>
+		
+		<views:toolbar change="toolbar_changeHandler(event)" id="toolbar" />
+		<views:MiddlePanel id="frinkPanels" x="201" postSelected="postList_changeHandler(event)" />	
+		<panels:postView width="100%" height="100%" x="175" visible="false" includeInLayout="false" id="postView" close="postView_closeHandler(event)" />
 		
 	</s:SkinnableContainer>
 	

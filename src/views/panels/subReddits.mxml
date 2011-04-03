@@ -38,15 +38,6 @@
 			[Bindable]
 			public var subReddit : Object;
 			
-			/**
-			 * when the view is made visible bind the list
-			 **/
-			public override function setVisible(value:Boolean, noEvent:Boolean=false):void {
-				super.setVisible(value, noEvent);
-				if (value)
-					showUI();
-			}
-			
 			//--------------------------------------------------------------------------
 			//
 			//  Methods
@@ -56,8 +47,7 @@
 			/**
 			 * when the ui is shown bind the list of reddits
 			 **/
-			public function showUI() : void {
-				FrinkData.instance.api.addEventListener(RedditEvent.SUBREDDITS_LOADED, api_redditsLoaded);
+			public function loadSubReddits() : void {
 				FrinkData.instance.api.loadSubReddits();
 			}
 			
@@ -98,6 +88,7 @@
 				// Does not work with mouse wheel or arrow buttons due to bug http://bugs.adobe.com/jira/browse/SDK-26533
 				/* list.scroller.verticalScrollBar.addEventListener( Event.CHANGE, verticalScrollBarChangeHandler ); */
 				list.scroller.viewport.addEventListener( PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler );
+				FrinkData.instance.api.addEventListener(RedditEvent.SUBREDDITS_LOADED, api_redditsLoaded);
 			}
 			
 			/**
@@ -117,6 +108,7 @@
 	
 	
 	<s:List id="list" width="100%" height="100%" dataProvider="{reddits}" itemRenderer="views.renderers.SubRedditDetails"
+			skinClass="skins.FrinkListSkin"
 			change="list_changeHandler(event)"
 			creationComplete="list_creationCompleteHandler(event)" />
 		
