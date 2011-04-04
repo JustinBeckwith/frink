@@ -34,19 +34,20 @@
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="hovered" />
+		<s:State name="header" />
 	</s:states>    
 	
 	
 
 	<s:Rect id="myRect" left="0" right="0" top="0" bottom="0" alpha="1.0"> 
 		<s:fill> 
-			<s:SolidColor color="0xF7F7F7"/> 
+			<s:SolidColor color="0xF7F7F7" alpha.normal="1.0" alpha.header="0.0"/> 
 		</s:fill> 
 	</s:Rect>
 	
 	<s:Line left="0" right="0" bottom="0">
 		<s:stroke>
-			<s:SolidColorStroke color="0xD9D9D9" weight="1" />
+			<s:SolidColorStroke color="0xD9D9D9" weight="1" alpha.normal="1.0" alpha.header="0.0" />
 		</s:stroke>
 	</s:Line>
 	

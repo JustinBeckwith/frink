@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				autoDrawBackground="true" dataChange="dataChangeHandler(event)">
+				autoDrawBackground="false" dataChange="dataChangeHandler(event)" width="100%">
 
 	<fx:Script>
 		<![CDATA[
@@ -41,7 +41,7 @@
 			{
 				this.childComments.removeAll();
 				if (this.data && this.data.data && this.data.data.replies && this.data.data.replies.data) {
-					//this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
+					this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
 				}
 			}
 
@@ -49,22 +49,34 @@
 	</fx:Script>
 
 	<s:VGroup width="100%" fontSize="14" color="0x000000" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
-		<s:HGroup width="100%">
+		<s:HGroup width="100%" gap="0">
 			<s:VGroup visible="false" includeInLayout="false">
 				<s:Image source="@Embed(source='assets/NIXUS/32x32/Up.png" id="btnUp" click="btnUp_clickHandler(event)" />
 				<s:Image source="@Embed(source='assets/NIXUS/32x32/Down.png" id="btnDown" click="btnDown_clickHandler(event)" />
 			</s:VGroup>
 			<s:VGroup width="100%">
-				<s:SkinnableContainer width="100%" backgroundColor="0x000000" color="0xFFFFFF">
-					<s:HGroup width="100%" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5">
-						<s:Label text="{data.data.author}" />
-						<s:Label text="{data.data.ups - data.data.downs} points" />
-						<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)}"/>
+				<s:SkinnableContainer width="100%" fontSize="12">
+					<s:HGroup width="100%">
+						<s:Label text="{data.data.author}" color="0x336699" fontWeight="bold" />
+						<s:Label text="{data.data.ups - data.data.downs} points" color="0x888888" />
+						<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)} ago" color="0x888888"/>
 					</s:HGroup>
 				</s:SkinnableContainer>
 				<s:Label width="100%" text="{data.data.body}" />
-				<s:HGroup width="100%" paddingLeft="25" visible="false" includeInLayout="false">
-					<s:List id="list" width="100%" dataProvider="{childComments}" itemRenderer="views.renderers.CommentDetails" />	
+				<s:HGroup width="100%">
+					<s:SkinnableContainer height="100%">
+						<s:Line top="0" left="0" bottom="0">
+							<s:stroke>
+								<s:SolidColorStroke color="0xCCCCCC" />
+							</s:stroke>
+						</s:Line>
+					</s:SkinnableContainer>
+					<s:DataGroup id="list" width="100%" dataProvider="{childComments}" itemRenderer="views.renderers.CommentDetails">
+						<s:layout>
+							<s:VerticalLayout />
+						</s:layout>
+					</s:DataGroup>
+				
 				</s:HGroup>
 			</s:VGroup>
 		</s:HGroup>

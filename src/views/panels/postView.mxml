@@ -9,7 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import flash.net.navigateToURL;
-			
+			import flash.filters.*;
 			import mx.events.FlexEvent;
 			
 			//--------------------------------------------------------------------------
@@ -116,11 +116,41 @@
 		]]>
 	</fx:Script>
 	
-	<s:VGroup width="100%" height="100%" >
+	<s:filters>
+		<s:GradientGlowFilter distance="10" angle="180" strength="1"
+								quality="{BitmapFilterQuality.HIGH}" type="{BitmapFilterType.OUTER}">
+			<s:entries>
+				<s:GradientEntry alpha="0" color="0x000000" />
+				<s:GradientEntry alpha="0.2" color="0x000000" />
+			</s:entries>
+		</s:GradientGlowFilter>
+	</s:filters>
+	
+	<s:Line left="0" top="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="0x515151" />
+		</s:stroke>
+	</s:Line>
+	
+	<s:VGroup width="100%" height="100%" gap="0">
 		<!-- top bar -->
-		<s:SkinnableContainer width="100%" backgroundColor="0x111111">
+		<s:SkinnableContainer width="100%">
+			<s:Rect left="0" right="0" top="0" bottom="1">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:GradientEntry color="0xf3f3f5" />
+						<s:GradientEntry color="0xdedfe5" />
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+			<s:Line left="0" right="0" bottom="0">
+				<s:stroke>
+					<s:SolidColorStroke color="0xa5a5a5" />
+				</s:stroke>
+			</s:Line>
+			
 			<s:HGroup width="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" >
-				<renderers:PostDetails data="{post}" width="100%" />
+				<renderers:PostDetails data="{post}" width="100%" currentState="header" />
 				<s:HGroup>
 					<s:Image source="@Embed(source='assets/NIXUS/32x32/Back.png')" id="btnBack" click="btnBack_clickHandler(event)" />
 					<s:Image source="@Embed(source='assets/NIXUS/32x32/Up.png')" id="btnUp" click="btnUp_clickHandler(event)" />
@@ -132,9 +162,9 @@
 		</s:SkinnableContainer>
 		
 		
-		<!-- post frame -->
+		<!-- post frame -->	
 		<s:SkinnableContainer width="100%" height="100%">
-			<controls:WebBrowser width="100%" height="100%" url="{post.data.url}" id="browser" />
+			<controls:WebBrowser width="100%" height="100%" source="{post.data.url}" id="browser" />
 			<panels:CommentList width="100%" height="100%" visible="false" id="comments" />
 		</s:SkinnableContainer>
 		

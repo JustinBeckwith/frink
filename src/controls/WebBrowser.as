@@ -1,6 +1,5 @@
-package controls {
+package controls  {
 	
-	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
@@ -10,154 +9,226 @@ package controls {
 	import flash.media.StageWebView;
 	
 	import mx.core.UIComponent;
-	import mx.events.PropertyChangeEvent;
 	
-	import spark.components.Application;
-	
+	[Event(name="error", type="flash.events.ErrorEvent")]
 	[Event(name="complete", type="flash.events.Event")]
 	[Event(name="locationChanging", type="flash.events.LocationChangeEvent")]
 	[Event(name="locationChange", type="flash.events.LocationChangeEvent")]
 	
 	/**
-	 * component that wraps StageWebView into a UIComponent
-	 * based on - http://soenkerohde.com/2010/11/air-mobile-stagewebview-uicomponent/comment-page-1/
-	 **/
-	public class WebBrowser extends UIComponent{
-		
-		//--------------------------------------------------------------------------
-		//
-		//  Variables
-		//
-		//--------------------------------------------------------------------------
-		
-		public var yOffset:int = 120;
-		public var xOffset:int = 211;
-		protected var myStage:Stage;
-		private var _url:String;
-		private var _text:String;
-		private var _stageWebView:StageWebView;
-		
-		
-		
-		//--------------------------------------------------------------------------
-		//
-		//  Properties
-		//
-		//--------------------------------------------------------------------------
+	 * A UIComponent wrapper around the StageWebView
+	 * To use,
+	 *
+	 * Loading a URL:
+	 * <local:WebView source="http://google.com/" top="5" width="400" height="300"/>
+	 *
+	 * Loading HTML text (not tested):
+	 * <local:WebView content="...html code here..." top="5" width="400" height="300"/>
+	 *
+	 * Credits: myself and code from Soenke's , http://soenkerohde.com/2010/11/air-mobile-stagewebview-uicomponent/
+	 * */
+	public class WebBrowser extends UIComponent {
 		
 		/**
-		 * underlying stagewebview obj
-		 **/
-		public function get stageWebView():StageWebView{
-			return _stageWebView;
-		}
+		 * When set to true the source URL will be loaded when it is set. Default is true.
+		 * */
+		[Bindable]
+		public var autoLoad:Boolean = true;
 		
-	
-		public function set url(url:String):void{
-			_url = url;
-			
-			if(_stageWebView){
-				_stageWebView.loadURL(url);
-			}
-		}
 		
-		public function set text(text:String):void{
-			_text = text;
+		public function WebBrowser() {
+			addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 			
-			if(_stageWebView){
-				_stageWebView.loadString(text);
-			}
+			// not sure if this is the place to give it a minimum size
+			// if we don't do this without a defined size its 0 x 0
+			width = 480;
+			height = 300;
 		}
 		
 		/**
-		 * manually remove/add the stage property as visibility is toggled
-		 **/
+		 * When the stage property is available add it to the web view
+		 * */
+		public function addedToStageHandler(event:Event):void {
+			webView.stage = stage;
+			invalidateDisplayList();
+		}
+		
+		/**
+		 * Load the URL passed in or load the URL specified in the source property
+		 * */
+		public function load(URL:String = ""):void {
+			
+			if (URL) {
+				webView.loadURL(URL);
+				_source = URL;
+			}
+			else if (source) {
+				webView.loadString(source);
+			}
+			
+		}
+		
+		/**
+		 * Load the text passed in
+		 * */
+		public function loadString(value:String, mimeType:String = "text/html"):void {
+			content = value;
+			
+			webView.loadString(value, mimeType);
+			
+		}
+		
+		private var _webView:StageWebView;
+		
+		/**
+		 * @private
+		 * */
+		public function get webView():StageWebView {
+			return _webView;
+		}
+		
+		/**
+		 * Stage Web View is a window to the native browser. It accepts a URL location or text.
+		 * To pass in a URL set the source property. To set the text set the text property.
+		 * */
+		[Bindable]
+		public function set webView(value:StageWebView):void {
+			_webView = value;
+		}
+		
+		private var _source:String;
+		
+		/**
+		 * @private
+		 * */
+		public function get source():String {
+			return _source;
+		}
+		
+		/**
+		 * Source URL for stage web view. If autoLoad is set to true then the URL is loaded automatically.
+		 * If not use load method to load the source URL
+		 * */
+		[Bindable]
+		public function set source(value:String):void {
+			_source = value;
+			
+			if (webView && autoLoad) {
+				webView.loadURL(source);
+			}
+		}
+		
+		private var _content:String;
+		
+		/**
+		 * Sets the content of the webview. Default mime type is text/html.
+		 * This feature has not been tested.
+		 * */
+		[Bindable]
+		public function set content(value:String):void {
+			_content = value;
+			
+			if (webView) {
+				webView.loadString(value, mimeType);
+			}
+		}
+		
+		public function get content():String {
+			return _content;
+		}
+		
+		private var _mimeType:String = "text/html";
+		
+		/**
+		 * MIME type of the web view content. Default is "text/html"
+		 * */
+		public function get mimeType():String {
+			return _mimeType;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set mimeType(value:String):void {
+			_mimeType = value;
+		}
+		
+		/**
+		 * Shows/Hides the web view
+		 * */
 		public override function set visible(value:Boolean):void {
 			super.visible = value;
-			if (_stageWebView != null) {
-				_stageWebView.stage = value ? myStage : null;
-				_stageWebView.viewPort = new Rectangle(xOffset, yOffset, myStage.fullScreenWidth - xOffset, myStage.fullScreenHeight - yOffset);
+			webView.stage = value ? stage : null;
+		}
+		
+		/**
+		 * Disposes of the webview content
+		 * */
+		public function dispose():void {
+			webView.dispose();
+		}
+		
+		/**
+		 * Add event listeners to stage web view events
+		 * */
+		override protected function createChildren():void {
+			super.createChildren();
+			
+			webView = new StageWebView();
+			
+			webView.addEventListener(Event.COMPLETE, completeHandler);
+			webView.addEventListener(ErrorEvent.ERROR, errorHandler);
+			webView.addEventListener(LocationChangeEvent.LOCATION_CHANGING, locationChangingHandler);
+			webView.addEventListener(LocationChangeEvent.LOCATION_CHANGE, locationChangeHandler);
+			
+			// load URL or text if available
+			if (autoLoad && source) {
+				webView.loadURL(source);
+			} else if (content) {
+				webView.loadString(content, mimeType);
 			}
 		}
 		
-		//--------------------------------------------------------------------------
-		//
-		//  Constructors
-		//
-		//--------------------------------------------------------------------------
-		
-		
-		public function WebBrowser(){
-			this.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+		/**
+		 * Dispatched when the page or web content has been fully loaded
+		 * */
+		protected function completeHandler(event:Event):void {
+			dispatchEvent(event);
 		}
 		
-		//--------------------------------------------------------------------------
-		//
-		//  Methods
-		//
-		//--------------------------------------------------------------------------
-		
-		
-		public function hide():void{
-			_stageWebView.stage = null;
+		/**
+		 * Dispatched when the location is about to change
+		 * */
+		protected function locationChangingHandler(event:Event):void {
+			dispatchEvent(event);
 		}
 		
-		public function show():void{
-			_stageWebView.stage = myStage;
+		/**
+		 * Dispatched when the location has changed
+		 * */
+		protected function locationChangeHandler(event:Event):void {
+			dispatchEvent(event);
 		}
 		
-		public function dispose():void{
-			hide();
-			_stageWebView.dispose();
+		/**
+		 * Dispatched when an error occurs
+		 * */
+		protected function errorHandler(event:ErrorEvent):void {
+			dispatchEvent(event);
 		}
-
 		
-		//--------------------------------------------------------------------------
-		//
-		//  Event Handlers
-		//
-		//--------------------------------------------------------------------------
-		
-		protected function addedToStageHandler(event:Event):void{
-			myStage = event.currentTarget.document.stage;
-			removeEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+		/**
+		 * Draws the object and/or sizes and positions its children.
+		 * */
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			
-			_stageWebView = new StageWebView();
-			//_stageWebView.stage = this.visible ? myStage : null;
-			//_stageWebView.viewPort = new Rectangle(0, yOffset, myStage.width, myStage.fullScreenHeight - yOffset);
-			_stageWebView.viewPort = this.getBounds(this.stage);
-			_stageWebView.addEventListener(Event.COMPLETE, completeHandler);
-			_stageWebView.addEventListener(ErrorEvent.ERROR, errorHandler);
-			_stageWebView.addEventListener(LocationChangeEvent.LOCATION_CHANGING, locationChangingHandler);
-			_stageWebView.addEventListener(LocationChangeEvent.LOCATION_CHANGE, locationChangeHandler);
-			
-			if(_url){
-				_stageWebView.loadURL(_url);
-			}else if(_text){
-				_stageWebView.loadString(_text);
+			// because the webview is positioned according to the stage rather than the container
+			// the component is apart of we get the adjusted position
+			if (webView) {
+				var point:Point = localToGlobal(new Point());
+				webView.viewPort = new Rectangle(point.x, point.y, unscaledWidth, unscaledHeight);
 			}
 		}
-		
-		protected function completeHandler(event:Event):void
-		{
-			dispatchEvent(event.clone());
-		}
-		
-		protected function locationChangingHandler(event:Event):void
-		{
-			dispatchEvent(event.clone());
-		}
-		
-		protected function locationChangeHandler(event:Event):void{
-			dispatchEvent(event.clone());
-		}
-		
-		protected function errorHandler(event:Event):void
-		{
-			dispatchEvent(event.clone());
-		}
-		
-		
 	}
 }
 
