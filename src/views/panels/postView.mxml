@@ -164,7 +164,7 @@
 		
 		<!-- post frame -->	
 		<s:SkinnableContainer width="100%" height="100%">
-			<controls:WebBrowser width="100%" height="100%" source="{post.data.url}" id="browser" />
+			<controls:WebBrowser width="100%" height="100%" source="{post.data.url}" id="browser" />	
 			<panels:CommentList width="100%" height="100%" visible="false" id="comments" />
 		</s:SkinnableContainer>
 		

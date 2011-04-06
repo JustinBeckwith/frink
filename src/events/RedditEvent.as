@@ -20,6 +20,8 @@ package events
 		public static const POST_LOADED : String = "postLoaded";
 		public static const LOGIN_ATTEMPTED : String = "loginAttempted";
 		public static const VOTE_COMPLETE : String = "voteComplete";
+		public static const CHILDREN_LOADED : String = "childrenLoaded";
+		public static const API_ERROR : String = "apiError";
 		
 		//--------------------------------------------------------------------------
 		//

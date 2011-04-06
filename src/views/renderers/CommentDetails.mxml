@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				autoDrawBackground="false" dataChange="dataChangeHandler(event)" width="100%">
+				autoDrawBackground="false" dataChange="dataChangeHandler(event)" width="100%"
+				 creationComplete="creationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
+			import events.RedditEvent;
+			
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
 			[Bindable]
 			protected var childComments : ArrayCollection = new ArrayCollection();
 			
+			[Bindable]
+			protected var isCollapsed : Boolean = false;
+			
+			[Bindable]
+			protected var kind : String = "";
+			
+			protected function get collapseSymbol() : String {
+				return isCollapsed ? "+" : "-";
+			}
 						
 			//--------------------------------------------------------------------------
 			//
 			//  Event Handlers
 			//
 			//--------------------------------------------------------------------------
+			
+			/**
+			 * bind the initial api event for loadMore
+			 **/
+			protected function creationCompleteHandler(event:FlexEvent) : void {
+				FrinkData.instance.api.addEventListener(RedditEvent.CHILDREN_LOADED, api_childrenLoadedHandler);
+			}
+													   
 			
 			/**
 			 * up vote the comment
@@ -39,16 +59,68 @@
 			 **/
 			protected function dataChangeHandler(event:FlexEvent):void
 			{
-				this.childComments.removeAll();
-				if (this.data && this.data.data && this.data.data.replies && this.data.data.replies.data) {
-					this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
+				// the data object can be of type "t1" meaning its a comment, or "more"... meaning it isn't.
+				if (this.data.kind == "more") {
+					
+					// for right now don't allow loading of such lowly ranked comments
+					
+					//lblMore.visible = true;
+					//lblMore.includeInLayout = true;
+					
+					gMain.visible = false;
+					gMain.includeInLayout = false;
 				}
+				else {
+					// bind the child collection of comments
+					this.childComments.removeAll();
+					if (this.data && this.data.data && this.data.data.replies && this.data.data.replies.data) {
+						this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
+					}
+				}
+			}
+
+			/**
+			 * expand/collapse button click
+			 **/
+			protected function min_clickHandler(event:MouseEvent):void
+			{
+				this.isCollapsed = !this.isCollapsed;
+				
+			}
+
+			/**
+			 * grab more posts if needed
+			 **/
+			protected function lblMore_clickHandler(event:MouseEvent):void
+			{	
+				// get the parent item renderer, which is another Comment Details obj
+				var parent : DisplayObjectContainer = this.parent;
+				while (!(parent is CommentDetails)) {
+					parent = parent.parent;
+				}
+				
+				var link_id : String = (parent as CommentDetails).data.data.link_id;
+				FrinkData.instance.api.loadChildren(link_id, data.data.name);
+			}
+
+			/**
+			 * do something great when more data is here
+			 **/
+			protected function api_childrenLoadedHandler(event:RedditEvent):void
+			{
+				trace('success!');
 			}
 
 		]]>
 	</fx:Script>
-
-	<s:VGroup width="100%" fontSize="14" color="0x000000" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+	
+	
+	<s:Label id="lblMore" text="load more comments" 
+			 color="0x336699" fontSize="12" fontWeight="bold"
+			 click="lblMore_clickHandler(event)" 
+			 visible="false" includeInLayout="false" />
+	
+	<s:VGroup width="100%" fontSize="14" color="0x000000" paddingLeft="10" paddingRight="10" paddingTop="10" id="gMain">
 		<s:HGroup width="100%" gap="0">
 			<s:VGroup visible="false" includeInLayout="false">
 				<s:Image source="@Embed(source='assets/NIXUS/32x32/Up.png" id="btnUp" click="btnUp_clickHandler(event)" />
@@ -57,13 +129,17 @@
 			<s:VGroup width="100%">
 				<s:SkinnableContainer width="100%" fontSize="12">
 					<s:HGroup width="100%">
+						<s:Label text="[ {isCollapsed ? '+' : '-'} ]" color="0x336699" click="min_clickHandler(event)" />
 						<s:Label text="{data.data.author}" color="0x336699" fontWeight="bold" />
 						<s:Label text="{data.data.ups - data.data.downs} points" color="0x888888" />
 						<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)} ago" color="0x888888"/>
 					</s:HGroup>
 				</s:SkinnableContainer>
-				<s:Label width="100%" text="{data.data.body}" />
-				<s:HGroup width="100%">
+				<s:HGroup width="100%" visible="{!this.isCollapsed}" includeInLayout="{!this.isCollapsed}" paddingBottom="5">
+					<s:Label width="100%" text="{data.data.body}"  />	
+				</s:HGroup>
+				
+				<s:HGroup width="100%" visible="{!this.isCollapsed &amp;&amp; this.childComments.length > 0}" includeInLayout="{!this.isCollapsed &amp;&amp; this.childComments.length > 0}">
 					<s:SkinnableContainer height="100%">
 						<s:Line top="0" left="0" bottom="0">
 							<s:stroke>
@@ -76,7 +152,6 @@
 							<s:VerticalLayout />
 						</s:layout>
 					</s:DataGroup>
-				
 				</s:HGroup>
 			</s:VGroup>
 		</s:HGroup>

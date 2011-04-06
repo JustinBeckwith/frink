@@ -24,6 +24,7 @@ package data
 	[Event(name="postsLoaded", type="events.RedditEvent")]
 	[Event(name="commentsLoaded", type="events.RedditEvent")]
 	[Event(name="loginAttempted", type="events.RedditEvent")] 
+	[Event(name="childrenLoaded", type="events.RedditEvent")]
 	public class RedditAPI extends EventDispatcher
 	{
 		
@@ -102,7 +103,7 @@ package data
 			var request : URLRequest = new URLRequest(url);
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, loadPosts_completeHandler);
-			loader.addEventListener(IOErrorEvent.IO_ERROR, loadPosts_errorHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
 			loader.load(request);
 		}
 		
@@ -111,7 +112,7 @@ package data
 		 **/
 		public function loadComments(post:Object) : void {
 			
-			var url : String = "http://www.reddit.com" + post.data.permalink + ".json";
+			var url : String = "http://www.reddit.com" + post.data.permalink + ".json?sort=top";
 			var request : URLRequest = new URLRequest(url);
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, loadComments_completeHandler);
@@ -141,7 +142,43 @@ package data
 			
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, attemptLogin_completeHandler);
-			loader.addEventListener(IOErrorEvent.IO_ERROR, attemptLogin_errorHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
+			loader.load(request);
+		} 
+		
+		/**
+		 *	loadChildren
+		 * 	
+		 * 	this is used to load additional comments from a thread
+		 **/
+		public function loadChildren(link_id : String, name:String) : void {
+			
+			var url : String = "http://www.reddit.com/api/moreChildren";
+			
+			
+			var request : URLRequest = new URLRequest(url);
+			request.method = "post";
+			
+			/*
+				link_id=t3_gj8g7
+				children=c1nz780%2Cc1nzcj5
+				depth=1
+				id=t1_c1nz780
+				pv_hex=
+				r=pics
+				renderstyle=html
+			*/
+			
+			var requestVars : URLVariables = new URLVariables();
+			requestVars.link_id = link_id;
+			requestVars.children = name;
+			requestVars.depth = 1;
+			requestVars.renderstyle= "html";
+			request.data = requestVars;
+			
+			var loader : URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, loadChildren_completeHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
 			loader.load(request);
 		} 
 		
@@ -185,10 +222,6 @@ package data
 			this.dispatchEvent(new RedditEvent(RedditEvent.POST_LOADED, obj));
 		}
 		
-		protected function loadPost_errorHandler(event:IOErrorEvent) : void {
-			trace(event);
-		}
-		
 		/**
 		 * loadPosts handlers
 		 **/
@@ -198,10 +231,6 @@ package data
 			this.dispatchEvent(new RedditEvent(RedditEvent.POSTS_LOADED, obj));
 		}
 		
-		protected function loadPosts_errorHandler(event:IOErrorEvent) : void {
-			trace(event);
-		}
-		
 		/**
 		 * loadComments handlers
 		 **/
@@ -209,10 +238,6 @@ package data
 		protected function loadComments_completeHandler(event:Event) : void {
 			var obj : Object = JSON.decode((event.target as URLLoader).data);
 			this.dispatchEvent(new RedditEvent(RedditEvent.COMMENTS_LOADED, obj));
-		}
-		
-		protected function api_errorHandler(event:Event) : void {
-			trace(event);
 		}
 		
 		/**
@@ -231,6 +256,14 @@ package data
 			this.dispatchEvent(new RedditEvent(RedditEvent.VOTE_COMPLETE, obj));	
 		}
 		
+		/**
+		 * loadChildren handlers
+		 **/
+		
+		protected function loadChildren_completeHandler(event:Event) : void {
+			var obj : Object = JSON.decode((event.target as URLLoader).data);
+			this.dispatchEvent(new RedditEvent(RedditEvent.CHILDREN_LOADED, obj));
+		}
 		
 		/**
 		 * attemptLogin handlers
@@ -248,8 +281,14 @@ package data
 			this.dispatchEvent(new RedditEvent(RedditEvent.LOGIN_ATTEMPTED, obj));
 		}
 		
-		protected function attemptLogin_errorHandler(event:Event) : void {
-			trace(event);
+		
+		
+		
+		/**
+		 * generic io error handler
+		 **/
+		protected function api_errorHandler(event:Event) : void {
+			this.dispatchEvent(new RedditEvent(RedditEvent.API_ERROR, null));
 		}
 	
 		
