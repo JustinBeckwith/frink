@@ -8,8 +8,9 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import flash.net.navigateToURL;
 			import flash.filters.*;
+			import flash.net.navigateToURL;
+			
 			import mx.events.FlexEvent;
 			
 			//--------------------------------------------------------------------------
@@ -33,8 +34,64 @@
 					this.comments.visible = false;
 				}
 				this.browser.visible = !_post.data.is_self;
+				
+				// set the up/down vote icon glows
+				btnUp.filters = btnDown.filters = null;
+				if (_post.data.likes == true) {
+					btnUp.filters = [glowWorm];
+				}
+				else if (_post.data.likes == false) {
+					btnDown.filters = [glowWorm];
+				}
+					
 			}
 			
+			//--------------------------------------------------------------------------
+			//
+			//  Methods
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * manage the UI and api calls for a vote
+			 * 
+			 * the reddit API only takes a +1, 0, -1 for votes.  An upvote after a downvote
+			 * simply sends the +1, up after up sends a 0, etc
+			 **/
+			protected function makeVote(up:Boolean) : void {
+				
+				var dir : int = 0;
+				
+				// figure out if the user likes it, hates it, or is ambivalent
+				if (post.data.likes == null) {
+					// there hasn't been a vote yet, so just make the call and do the UI work
+					dir = up ? 1 : -1;
+				} else if (post.data.likes == false) {
+					// the post was previously down voted - undo downs but flipsy up votes
+					dir = up ? 1 : 0;
+				} else if (post.data.likes == true) {
+					// the post was previously up voted - undo ups but flipsy downs
+					dir = up ? 0 : -1;
+				}
+				
+				// update the underlying data structure and UI elements 
+				if (dir == 0) {
+					post.data.likes = null;
+					btnUp.filters = null;
+					btnDown.filters = null;
+				} else if (dir == -1) {
+					post.data.likes = false;
+					btnUp.filters = null;
+					btnDown.filters = [glowWorm];
+				} else if (dir == 1) { 
+					post.data.likes = true;
+					btnUp.filters = [glowWorm];
+					btnDown.filters = null;
+				}
+				
+				// perform the back end data call to cast the vote
+				FrinkData.instance.api.vote(post.data.name, dir, null, null);
+			}
 			
 			//--------------------------------------------------------------------------
 			//
@@ -64,8 +121,8 @@
 			 * register up boat
 			 **/
 			protected function btnUp_clickHandler(event:MouseEvent):void
-			{
-				FrinkData.instance.api.vote(post.data.name, false, null, null);
+			{			
+				this.makeVote(true);	
 			}
 			
 			/**
@@ -73,7 +130,7 @@
 			 **/
 			protected function btnDown_clickHandler(event:MouseEvent):void
 			{
-				FrinkData.instance.api.vote(post.data.name, false, null, null);
+				this.makeVote(false);
 			}
 			
 			/**
@@ -115,6 +172,13 @@
 
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<s:GlowFilter id="glowWorm" color="0x33CCFF" alpha="0.8" blurX="35" blurY="35" strength="2" quality="{BitmapFilterQuality.HIGH}" />	
+	</fx:Declarations>
+	
+	
+	
 	
 	<s:filters>
 		<s:GradientGlowFilter distance="10" angle="180" strength="1"

@@ -2,7 +2,7 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   creationComplete="creationCompleteHandler(event)"
-			    backgroundColor="#000000" title="Frink Settings">
+			    backgroundColor="0xFFFFFF" title="Settings">
 	<fx:Script>
 		<![CDATA[
 			import events.RedditEvent;
@@ -32,15 +32,15 @@
 			 **/
 			protected function saveButton_clickHandler(event:MouseEvent) : void {
 				
-//				if (FrinkData.instance.database.data.username != txtUsername.text ||
-//					FrinkData.instance.database.data.password != txtPassword.text) {
-//				
+				if (FrinkData.instance.database.data.username != txtUsername.text ||
+					FrinkData.instance.database.data.password != txtPassword.text) {
+				
 					FrinkData.instance.api.addEventListener(RedditEvent.LOGIN_ATTEMPTED, api_loginAttempted);
 					FrinkData.instance.api.attemptLogin(txtUsername.text, txtPassword.text);
-//				}
-//				else {
-//					PopUpManager.removePopUp(this);
-//				}
+				}
+				else {
+					PopUpManager.removePopUp(this);
+				}
 			}
 			
 			/**
@@ -64,17 +64,22 @@
 		]]>
 	</fx:Script>
 	
-	<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20">
-		<s:Label text="Username:" />
-		<s:TextInput id="txtUsername" />
-		<mx:Spacer height="20" />
-		<s:Label text="Password:" />
-		<s:TextInput id="txtPassword" displayAsPassword="true" />
-		<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
-		<mx:Spacer height="20" />
-		<s:HGroup horizontalAlign="center" width="100%">
-			<s:Button label="save" click="saveButton_clickHandler(event)" />
-			<s:Button label="cancel" click="cancelButton_clickHandler(event)" />
-		</s:HGroup>
-	</s:VGroup>
+	<s:SkinnableContainer width="100%">
+		
+		<s:Image bottom="0" source="@Embed(source='assets/big-frink-head.png')" alpha="0.3" />
+		
+		<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20" color="0x000000">
+			<s:Label text="Username:" />
+			<s:TextInput id="txtUsername" color="0xFFFFFF" />
+			<mx:Spacer height="20" />
+			<s:Label text="Password:" />
+			<s:TextInput id="txtPassword" displayAsPassword="true" color="0xFFFFFF" />
+			<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
+			<mx:Spacer height="20" />
+			<s:HGroup horizontalAlign="center" width="100%">
+				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" />
+				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" />
+			</s:HGroup>
+		</s:VGroup>
+	</s:SkinnableContainer>
 </s:TitleWindow>

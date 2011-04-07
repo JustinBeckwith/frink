@@ -12,6 +12,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import events.FrinkEvent;
 			import events.RedditEvent;
 			
 			import mx.collections.ArrayCollection;
@@ -77,6 +78,7 @@
 			 **/
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
+				FrinkData.instance.addEventListener(FrinkEvent.AUTH_CHANGE, frink_authChangeHandler);
 				FrinkData.instance.api.addEventListener(RedditEvent.POSTS_LOADED, api_postsLoaded);
 			}
 			
@@ -124,6 +126,13 @@
 						FrinkData.instance.api.loadPosts(this.subReddit, null, this.page_after);
 					}
 				}
+			}
+			
+			/**
+			 *	rebind the list after a login/logout 
+			 **/
+			protected function frink_authChangeHandler(event:FrinkEvent) : void {
+				this.loadReddit(this.subReddit);
 			}
 		]]>
 	</fx:Script>

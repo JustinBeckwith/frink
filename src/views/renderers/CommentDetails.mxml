@@ -60,21 +60,23 @@
 			protected function dataChangeHandler(event:FlexEvent):void
 			{
 				// the data object can be of type "t1" meaning its a comment, or "more"... meaning it isn't.
-				if (this.data.kind == "more") {
-					
-					// for right now don't allow loading of such lowly ranked comments
-					
-					//lblMore.visible = true;
-					//lblMore.includeInLayout = true;
-					
-					gMain.visible = false;
-					gMain.includeInLayout = false;
-				}
-				else {
-					// bind the child collection of comments
-					this.childComments.removeAll();
-					if (this.data && this.data.data && this.data.data.replies && this.data.data.replies.data) {
-						this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
+				if (this.data) {
+					if (this.data.kind == "more") {
+						
+						// for right now don't allow loading of such lowly ranked comments
+						
+						//lblMore.visible = true;
+						//lblMore.includeInLayout = true;
+						
+						gMain.visible = false;
+						gMain.includeInLayout = false;
+					}
+					else {
+						// bind the child collection of comments
+						this.childComments.removeAll();
+						if (this.data && this.data.data && this.data.data.replies && this.data.data.replies.data) {
+							this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
+						}
 					}
 				}
 			}

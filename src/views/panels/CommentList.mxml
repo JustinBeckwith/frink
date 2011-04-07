@@ -32,6 +32,15 @@
 			[Bindable]
 			public var post : Object;
 			
+			/**
+			 * the header to the comments data structure
+			 **/
+			[Bindable]
+			public var selfObject : Object;
+			
+			[Bindable]
+			public var showSelfHeader : Boolean;
+			
 			
 			//--------------------------------------------------------------------------
 			//
@@ -44,6 +53,8 @@
 			 **/
 			public function loadComments(post : Object) : void {
 				this.post = post;
+				this.selfObject = null;
+				this.showSelfHeader = false;
 				this.comments.removeAll();
 				FrinkData.instance.api.loadComments(post);
 			}
@@ -72,17 +83,34 @@
 				// get the posts returned in the list
 				var records : Array = (event.result as Array)[1].data.children as Array;
 				comments.addAll(new ArrayCollection(records));
+				
+				// get the header obj that contains basic post info
+				this.selfObject = (event.result as Array)[0].data.children[0];
+				this.showSelfHeader = selfObject != null && selfObject.data.selftext != null && selfObject.data.selftext != '';
 			}	
 		]]>
 	</fx:Script>
-	
+			
 	<s:Scroller width="100%" height="100%">
-		<s:DataGroup width="100%" height="100%" id="list" dataProvider="{comments}" itemRenderer="views.renderers.CommentDetails">
-			<s:layout>
-				<s:VerticalLayout />
-			</s:layout>
-		</s:DataGroup>
+		<s:VGroup width="100%" height="100%">
+			
+			<s:SkinnableContainer width="100%" visible="{showSelfHeader}" includeInLayout="{showSelfHeader}">
+				<s:Line left="0" right="0" bottom="0">
+					<s:stroke>
+						<s:SolidColorStroke color="0x000000" />
+					</s:stroke>
+				</s:Line>
+				<s:Label width="100%" text="{selfObject.data.selftext}" color="0x000000" fontSize="14" 
+						 paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10"	/>
+			</s:SkinnableContainer>
+			
+			
+			<s:DataGroup width="100%" height="100%" id="list" dataProvider="{comments}" itemRenderer="views.renderers.CommentDetails">
+				<s:layout>
+					<s:VerticalLayout />
+				</s:layout>
+			</s:DataGroup>
+		</s:VGroup>
 	</s:Scroller>
-	
 	
 </s:SkinnableContainer>

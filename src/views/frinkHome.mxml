@@ -4,6 +4,7 @@
 	<fx:Declarations></fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import events.FrinkEvent;
 			import events.PanelEvent;
 			
 			import flash.filters.*;
@@ -24,11 +25,18 @@
 			//--------------------------------------------------------------------------
 			
 			/**
-			 * perform the initial load of the front page
+			 * perform the initial load of the front page, or auto log in
 			 **/
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				this.frinkPanels.pnlPostList.loadReddit("");
+				// if the user has cached credentials, log them in automatically
+				//FrinkData.instance.addEventListener(FrinkEvent.AUTH_CHANGE, frink_authChangeHandler);
+				
+				if (FrinkData.instance.hasCredentials) {
+					FrinkData.instance.autoLogin();
+				} else {
+					this.frinkPanels.pnlPostList.loadReddit("");
+				}
 			}
 			
 			/**
@@ -111,7 +119,6 @@
 				frinkPanels.x = 201;
 				frinkPanels.currentState = "normal";
 			}
-
 
 			
 

@@ -54,6 +54,7 @@ package data
 		protected var url_myReddits : String = "http://www.reddit.com/reddits/mine/.json?count=25";
 		protected var url_popularReddits : String = "http://www.reddit.com/reddits/.json?count=25";
 		protected var isLoggedIn : Boolean = false;
+		protected var userHash : String = "";
 		
 		
 		
@@ -184,8 +185,10 @@ package data
 		
 		/**
 		 *	vote
+		 * 
+		 * @param direction - a value of either -1, 0, +1
 		 **/
-		public function vote(name:String, up:Boolean, voteHash : String, userHash : String) : void {
+		public function vote(name:String, direction:int, voteHash : String, userHash : String) : void {
 			
 			var url : String = "http://www.reddit.com/api/vote";
 			
@@ -195,9 +198,9 @@ package data
 			
 			var requestVars : URLVariables = new URLVariables();
 			requestVars.id = name;
-			requestVars.dir = up ? 1 : -1;
-			requestVars.vh = "crap.";
-			requestVars.uh = "wo!";
+			requestVars.dir = direction;
+			requestVars.api_type = 'json';
+			requestVars.uh = this.userHash;
 			request.data = requestVars;
 			
 			var loader : URLLoader = new URLLoader();

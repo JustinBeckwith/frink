@@ -2,12 +2,18 @@ package
 {
 	import data.RedditAPI;
 	
+	import events.FrinkEvent;
+	import events.RedditEvent;
+	
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.net.SharedObject;
 
 	/**
 	 * singelton class that acts as the global data reference
 	 **/
-	public class FrinkData
+	[Event(name="authChange", type="events.FrinkEvent")]
+	public class FrinkData extends EventDispatcher
 	{
 		//--------------------------------------------------------------------------
 		//
@@ -18,6 +24,17 @@ package
 		protected static var _instance : FrinkData;
 		protected var _api : RedditAPI;
 		protected static var allowInstantiation : Boolean;
+		protected var version : String = "1.0.0";
+		
+		/**
+		 * check if the user has previously entered credentials
+		 **/
+		public function get hasCredentials() : Boolean {
+			return this.database.data.username != null &&
+					this.database.data.username != '' &&
+					this.database.data.password != null &&
+					this.database.data.password != '';
+		}
 		
 		/**
 		 * global shared object
@@ -61,6 +78,8 @@ package
 		{
 			if (!FrinkData.allowInstantiation) {
 				throw new Error("Hey, I'm a singleton!  Maybe try getInstance().");
+			} else {
+				this.api.addEventListener(RedditEvent.LOGIN_ATTEMPTED, api_loginAttempted);
 			}
 		}
 		
@@ -86,7 +105,32 @@ package
 			
 			return agoLabel;
 		}
+		
+		/**
+		 * perform a login with the stored credentials
+		 * primarily used at the start of the app
+		 **/
+		public function autoLogin() : void {
+			// global event handler for auto login added in constructor
+			FrinkData.instance.api.attemptLogin(this.database.data.username, this.database.data.password);
+		}
 	
+		
+		//--------------------------------------------------------------------------
+		//
+		//  Event Handlers
+		//
+		//--------------------------------------------------------------------------
+		
+		/**
+		 * when a log in occurs dispatch an event to the rest of the app 
+		 **/
+		protected function api_loginAttempted(event:RedditEvent) : void {
+			if (event.result.success) {
+				var evt : FrinkEvent = new FrinkEvent(FrinkEvent.AUTH_CHANGE, event.result);
+				this.dispatchEvent(evt);
+			}
+		}
 		
 	}
 }
