@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+	<s:HGroup width="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" verticalAlign="middle">
+		<mx:SWFLoader source="@Embed(source='assets/gears.swf', symbol='gearsIcon')"  width="50" height="50" alpha="0.8" />
+		<s:Label text="loading more..." color="0x040404" fontSize="14" />	
+	</s:HGroup>
+</s:SkinnableContainer>

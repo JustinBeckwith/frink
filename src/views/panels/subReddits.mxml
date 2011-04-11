@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panels:frinkPanel xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:panels="views.panels.*">
+				   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:panels="views.panels.*" xmlns:controls="controls.*">
 	
 	<fx:Metadata>
 		[Event(name="change", type="flash.events.Event")]
@@ -48,6 +48,7 @@
 			 * when the ui is shown bind the list of reddits
 			 **/
 			public function loadSubReddits() : void {
+				this.currentState = "loading";
 				FrinkData.instance.api.loadSubReddits();
 			}
 			
@@ -75,6 +76,8 @@
 				// store the identifiers for the prev and next pages
 				this.page_after = event.result.data.after;
 				this.page_before = event.result.data.before;
+				
+				this.currentState = "normal";
 			}
 			
 			
@@ -97,8 +100,9 @@
 			protected function propertyChangeHandler(event : PropertyChangeEvent) : void {
 				if ( event.property == "verticalScrollPosition" ) {
 					var vsb:VScrollBar = list.scroller.verticalScrollBar;
-					if (vsb.value == vsb.maximum) {
+					if (vsb.value == vsb.maximum && this.currentState != "loadingMore") {
 						// load the next page of posts if at the bottom of the list
+						this.currentState = "loadingMore";
 						FrinkData.instance.api.loadSubReddits(null, this.page_after);
 					}
 				}
@@ -106,11 +110,20 @@
 		]]>
 	</fx:Script>
 	
+	<panels:states>
+		<s:State name="normal" />
+		<s:State name="loading" />
+		<s:State name="loadingMore" />
+	</panels:states>
 	
-	<s:List id="list" width="100%" height="100%" dataProvider="{reddits}" itemRenderer="views.renderers.SubRedditDetails"
+	
+	<controls:LoadingBox includeIn="loading" />
+	<s:VGroup width="100%" height="100%" includeIn="normal, loadingMore">
+		<s:List id="list" width="100%" height="100%" dataProvider="{reddits}" itemRenderer="views.renderers.SubRedditDetails"
 			skinClass="skins.FrinkListSkin"
 			change="list_changeHandler(event)"
 			creationComplete="list_creationCompleteHandler(event)" />
-		
+		<controls:ListLoadingBox includeIn="loadingMore" />
+	</s:VGroup>
 	
 </panels:frinkPanel>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<panels:frinkPanel xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				   xmlns:s="library://ns.adobe.com/flex/spark" 
+<panels:frinkPanel xmlns:fx="http://ns.adobe.com/mxml/2009"  
+				   xmlns:s="library://ns.adobe.com/flex/spark"
 				   xmlns:panels="views.panels.*"
-				   creationComplete="creationCompleteHandler(event)">
+				   creationComplete="creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:controls="controls.*">
+	
 	
 	<fx:Metadata>
 		[Event(name="change", type="flash.events.Event")]
@@ -62,6 +63,7 @@
 			 * use the reddit api to load all posts
 			 **/
 			public function loadReddit(subReddit : String) : void {
+				this.currentState = "loading";
 				this.subReddit = subReddit;
 				this.posts.removeAll();
 				FrinkData.instance.api.loadPosts(subReddit);
@@ -101,6 +103,9 @@
 				// store the identifiers for the prev and next pages
 				this.page_after = event.result.data.after;
 				this.page_before = event.result.data.before;
+				
+				// update us to the normal state
+				this.currentState = "normal";
 			}
 			
 			
@@ -121,8 +126,9 @@
 			protected function propertyChangeHandler( event : PropertyChangeEvent ) : void {
 				if ( event.property == "verticalScrollPosition" ) {
 					var vsb:VScrollBar = list.scroller.verticalScrollBar;
-					if (vsb.value == vsb.maximum) {
+					if (vsb.value == vsb.maximum && this.currentState != "loadingMore") {
 						// load the next page of posts if at the bottom of the list
+						this.currentState = "loadingMore";
 						FrinkData.instance.api.loadPosts(this.subReddit, null, this.page_after);
 					}
 				}
@@ -136,10 +142,24 @@
 			}
 		]]>
 	</fx:Script>
+	
 
-	<s:List id="list" width="100%" height="100%" dataProvider="{posts}" itemRenderer="views.renderers.PostDetails"
-			change="list_changeHandler(event)"
-			creationComplete="list_creationCompleteHandler(event)" 
-			skinClass="skins.FrinkListSkin"
-	/>
+	<panels:states>
+		<s:State name="loading" />
+		<s:State name="normal" />
+		<s:State name="loadingMore" />
+	</panels:states>
+	
+	<controls:LoadingBox includeIn="loading" />
+	
+	<s:VGroup width="100%" height="100%" includeIn="normal, loadingMore">
+		<s:List id="list" width="100%" height="100%" dataProvider="{posts}" itemRenderer="views.renderers.PostDetails"
+				change="list_changeHandler(event)"
+				creationComplete="list_creationCompleteHandler(event)" 
+				skinClass="skins.FrinkListSkin"
+				
+		/>
+		<controls:ListLoadingBox includeIn="loadingMore" />
+	</s:VGroup>
+	
 </panels:frinkPanel>

@@ -1,0 +1,14 @@
+<qnx>
+	<initialWindow>
+        <systemChrome>none</systemChrome>
+        <transparent>false</transparent>
+    </initialWindow>
+    <icon>
+        <image>assets/icon.png</image>
+    </icon>
+    <publisher>Koipond Labs</publisher>
+    <category>core.media</category>
+    <permission>access_internet</permission>
+    <permission>access_shared</permission>
+    <permission>play_audio</permission>
+</qnx>

@@ -188,18 +188,20 @@ package data
 		 * 
 		 * @param direction - a value of either -1, 0, +1
 		 **/
-		public function vote(name:String, direction:int, voteHash : String, userHash : String) : void {
+		public function vote(name:String, direction:int) : void {
 			
 			var url : String = "http://www.reddit.com/api/vote";
 			
 			var request : URLRequest = new URLRequest(url);
 			request.method = "post";
-			request.contentType = "json";
+			//request.contentType = "json";
+			
+			// vote hash is in the api docs, but isn't required
 			
 			var requestVars : URLVariables = new URLVariables();
 			requestVars.id = name;
 			requestVars.dir = direction;
-			requestVars.api_type = 'json';
+			requestVars.renderstyle = 'html';
 			requestVars.uh = this.userHash;
 			request.data = requestVars;
 			
@@ -231,6 +233,7 @@ package data
 		
 		protected function loadPosts_completeHandler(event:Event) : void {
 			var obj : Object = JSON.decode((event.target as URLLoader).data);
+			this.userHash = obj.data.modhash;
 			this.dispatchEvent(new RedditEvent(RedditEvent.POSTS_LOADED, obj));
 		}
 		
@@ -269,7 +272,25 @@ package data
 		}
 		
 		/**
-		 * attemptLogin handlers
+		 * attemptLogin handler
+		 * 
+		 * Little explanation on the workflow:  The first request here is a native ajax
+		 * request that reddit.com uses on their home page to perform the login.  It returns
+		 * a goofy jquery array object thing that contains information on what the UI is 
+		 * supposed to do.  For now, I am just checking for the presence of a recover 
+		 * password flag they set if it is a failed request.  
+		 * 
+		 * In the event that there is no recover-password field in the response, I assume
+		 * your login is cool.  This will set a cookie that's used for subsquent URLRequests
+		 * automatically (sweet).  However, to do anything useful, you need to pass a user
+		 * hash (uh) with any vote, comment, or post.  This hash is not returned via header,
+		 * cookie, json, or anything remotely useful for an API.  It is only available in the 
+		 * source of a HTML request from an authenticated user.  So we need to request 
+		 * reddit.com in stage 2, and parse the response looking for:
+		 * 
+		 * <input type="hidden" value="vmunhulvlv638ecd3e025xxxxx051bxxxxxe61c748ea4d64f5" name="uh">
+		 * 
+		 * Do I know how to party, or what?
 		 **/
 		
 		protected function attemptLogin_completeHandler(event:Event) : void {
@@ -280,11 +301,51 @@ package data
 			// to try this, then a follow on request, but I'm very lazy.
 			
 			var success : Boolean = (((event.target as URLLoader).data as String).indexOf(".recover-password") == -1);
+			
+			if (success) {
+				// so here it gets fun.  we've succesfully verified the username and password,
+				// but to do anything fun you need a user hash that's only returned in the 
+				// source of a non json request.  Let the hacking begin.
+				
+				var url : String = "http://www.reddit.com";
+				var request : URLRequest = new URLRequest(url);
+				var loader : URLLoader = new URLLoader();
+				loader.addEventListener(Event.COMPLETE, attemptLoginStage2_completeHandler);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
+				loader.load(request);
+			} else {
+				// since the username password was wrong, no need to go to stage 2 authentication
+				var obj : Object = { success: success };
+				this.dispatchEvent(new RedditEvent(RedditEvent.LOGIN_ATTEMPTED, obj));
+			}
+			
+		}
+		
+		/**
+		 * attemptLoginStage2_completeHandler
+		 **/
+		protected function attemptLoginStage2_completeHandler(event:Event) : void {
+			
+			// look in the response for something like this:
+			// <input type="hidden" value="vmunhulvlv638ecd3e025xxxxx051bxxxxxe61c748ea4d64f5" name="uh">
+			
+			var response : String = (event.target as URLLoader).data;
+			var token : String = "<input type=\"hidden\" name=\"uh\" value=\"";
+			var startTagIdx : Number = response.indexOf(token);
+			var success : Boolean = (startTagIdx != -1);
+			
+			// if the regex found a match, grab the value
+			if (success) {
+				var startIdx : Number = startTagIdx + token.length;
+				var endIdx : Number = response.indexOf("\"", startIdx);
+				//this.userHash = response.substring(startIdx, endIdx);
+			}
+			
+			// raise the event notifying success or fail
+			this.isLoggedIn = success;
 			var obj : Object = { success: success };
 			this.dispatchEvent(new RedditEvent(RedditEvent.LOGIN_ATTEMPTED, obj));
 		}
-		
-		
 		
 		
 		/**
