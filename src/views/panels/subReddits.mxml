@@ -49,6 +49,7 @@
 			 **/
 			public function loadSubReddits() : void {
 				this.currentState = "loading";
+				this.reddits.removeAll();
 				FrinkData.instance.api.loadSubReddits();
 			}
 			
@@ -100,7 +101,7 @@
 			protected function propertyChangeHandler(event : PropertyChangeEvent) : void {
 				if ( event.property == "verticalScrollPosition" ) {
 					var vsb:VScrollBar = list.scroller.verticalScrollBar;
-					if (vsb.value == vsb.maximum && this.currentState != "loadingMore") {
+					if (vsb.value == vsb.maximum && this.currentState != "loadingMore" && this.page_after != null) {
 						// load the next page of posts if at the bottom of the list
 						this.currentState = "loadingMore";
 						FrinkData.instance.api.loadSubReddits(null, this.page_after);

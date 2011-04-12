@@ -17,9 +17,18 @@
 			//
 			//--------------------------------------------------------------------------
 			
+			/**
+			 * preload data and set the initial state
+			 **/
 			protected function creationCompleteHandler(event:Event) : void {
-				txtUsername.text = FrinkData.instance.database.data.username;
-				txtPassword.text = FrinkData.instance.database.data.password;
+				if (FrinkData.instance.database.data.username == null) {
+					this.currentState = "loggedOut";
+					this.txtUsername.setFocus();
+				} else {
+					txtUsername.text = FrinkData.instance.database.data.username;
+					txtPassword.text = FrinkData.instance.database.data.password;
+					this.currentState = "loggedIn";
+				}
 			}
 			
 			protected function cancelButton_clickHandler(event:MouseEvent):void
@@ -44,6 +53,17 @@
 			}
 			
 			/**
+			 * sign out and change state
+			 **/
+			protected function logOutButton_clickHandler(event:MouseEvent) : void {
+				this.txtUsername.text = '';
+				this.txtPassword.text = '';
+				FrinkData.instance.logOut();
+				this.currentState = "loggedOut";	
+				this.txtUsername.setFocus();
+			}
+			
+			/**
 			 * if the creds were right, store them, if not, notify the user
 			 **/
 			protected function api_loginAttempted(event:RedditEvent) : void {
@@ -64,20 +84,26 @@
 		]]>
 	</fx:Script>
 	
+	<s:states>
+		<s:State name="loggedOut" />
+		<s:State name="loggedIn" />
+	</s:states>
+	
 	<s:SkinnableContainer width="100%">
 		
 		<s:Image bottom="0" source="@Embed(source='assets/big-frink-head.png')" alpha="0.3" />
 		
 		<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20" color="0x000000">
-			<s:Label text="Username:" />
-			<s:TextInput id="txtUsername" color="0xFFFFFF" />
+			<s:Label text.loggedIn="Logged in as:" text.loggedOut="Username:" />
+			<s:TextInput id="txtUsername" color="0xFFFFFF" enabled="{this.currentState=='loggedOut'}" />
 			<mx:Spacer height="20" />
-			<s:Label text="Password:" />
-			<s:TextInput id="txtPassword" displayAsPassword="true" color="0xFFFFFF" />
+			<s:Label text="Password:" includeIn="loggedOut" />
+			<s:TextInput id="txtPassword" displayAsPassword="true" color="0xFFFFFF" includeIn="loggedOut" />
 			<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
 			<mx:Spacer height="20" />
 			<s:HGroup horizontalAlign="center" width="100%">
-				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" />
+				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedOut" />
+				<s:Button label="log out" click="logOutButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedIn" />
 				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" />
 			</s:HGroup>
 		</s:VGroup>

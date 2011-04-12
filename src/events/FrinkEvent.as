@@ -31,7 +31,7 @@ package events
 		//
 		//--------------------------------------------------------------------------
 		
-		public function FrinkEvent(type:String, result:Object, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function FrinkEvent(type:String, result:Object=null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			this.result = result;
 			super(type, bubbles, cancelable);

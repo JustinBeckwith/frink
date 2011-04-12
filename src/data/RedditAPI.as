@@ -25,6 +25,7 @@ package data
 	[Event(name="commentsLoaded", type="events.RedditEvent")]
 	[Event(name="loginAttempted", type="events.RedditEvent")] 
 	[Event(name="childrenLoaded", type="events.RedditEvent")]
+	[Event(name="logout", type="events.RedditEvent")] 
 	public class RedditAPI extends EventDispatcher
 	{
 		
@@ -210,6 +211,26 @@ package data
 			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
 			loader.load(request);
 		} 
+		
+		/**
+		 * log the user out 
+		 **/
+		public function logOut() : void {
+			
+			var url : String = "http://www.reddit.com/logout";
+			
+			var request : URLRequest = new URLRequest(url);
+			request.method = "post";
+			
+			var requestVars : URLVariables = new URLVariables();
+			requestVars.uh = this.userHash;
+			request.data = requestVars;
+			
+			var loader : URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, logOut_completeHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
+			loader.load(request);
+		}
 
 		
 		//--------------------------------------------------------------------------
@@ -347,6 +368,14 @@ package data
 			this.dispatchEvent(new RedditEvent(RedditEvent.LOGIN_ATTEMPTED, obj));
 		}
 		
+		
+		/**
+		 * set the not logged in flag and raise an event when done
+		 **/
+		protected function logOut_completeHandler(event:Event) : void {
+			this.isLoggedIn = false;
+			this.dispatchEvent(new RedditEvent(RedditEvent.LOGOUT));
+		}
 		
 		/**
 		 * generic io error handler

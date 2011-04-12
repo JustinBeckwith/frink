@@ -80,6 +80,7 @@ package
 				throw new Error("Hey, I'm a singleton!  Maybe try getInstance().");
 			} else {
 				this.api.addEventListener(RedditEvent.LOGIN_ATTEMPTED, api_loginAttempted);
+				this.api.addEventListener(RedditEvent.LOGOUT, api_logout);
 			}
 		}
 		
@@ -114,6 +115,15 @@ package
 			// global event handler for auto login added in constructor
 			FrinkData.instance.api.attemptLogin(this.database.data.username, this.database.data.password);
 		}
+		
+		/**
+		 * clear the credentials and log the user out
+		 **/
+		public function logOut() : void {
+			this.database.data.username = null;
+			this.database.data.password = null;
+			FrinkData.instance.api.logOut();
+		}
 	
 		
 		//--------------------------------------------------------------------------
@@ -130,6 +140,14 @@ package
 				var evt : FrinkEvent = new FrinkEvent(FrinkEvent.AUTH_CHANGE, event.result);
 				this.dispatchEvent(evt);
 			}
+		}
+		
+		/**
+		 * notify the system a logout event has occurred
+		 **/
+		protected function api_logout(event:RedditEvent) : void {
+			var evt : FrinkEvent = new FrinkEvent(FrinkEvent.AUTH_CHANGE, event.result);
+			this.dispatchEvent(evt);
 		}
 		
 	}

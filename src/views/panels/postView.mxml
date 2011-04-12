@@ -90,7 +90,7 @@
 				}
 				
 				// perform the back end data call to cast the vote
-				FrinkData.instance.api.vote(post.data.name, dir, null);
+				FrinkData.instance.api.vote(post.data.name, dir);
 			}
 			
 			//--------------------------------------------------------------------------

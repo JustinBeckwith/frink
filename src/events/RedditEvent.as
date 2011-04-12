@@ -19,6 +19,7 @@ package events
 		public static const COMMENTS_LOADED : String = "commentsLoaded";
 		public static const POST_LOADED : String = "postLoaded";
 		public static const LOGIN_ATTEMPTED : String = "loginAttempted";
+		public static const LOGOUT : String = "logout";
 		public static const VOTE_COMPLETE : String = "voteComplete";
 		public static const CHILDREN_LOADED : String = "childrenLoaded";
 		public static const API_ERROR : String = "apiError";
@@ -37,7 +38,7 @@ package events
 		//
 		//--------------------------------------------------------------------------
 		
-		public function RedditEvent(type:String, result:Object, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function RedditEvent(type:String, result:Object=null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			this.result = result;
 			super(type, bubbles, cancelable);
