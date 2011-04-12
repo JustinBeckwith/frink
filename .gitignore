@@ -1,2 +1,6 @@
 # ignore the deploy directory
 deploy/
+
+# never deploy bar files
+*.bar
+
