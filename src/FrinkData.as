@@ -13,6 +13,8 @@ package
 	 * singelton class that acts as the global data reference
 	 **/
 	[Event(name="authChange", type="events.FrinkEvent")]
+	[Event(name="modalOpen", type="events.FrinkEvent")]
+	[Event(name="modalClose", type="events.FrinkEvent")]
 	public class FrinkData extends EventDispatcher
 	{
 		//--------------------------------------------------------------------------
@@ -63,6 +65,13 @@ package
 				FrinkData.allowInstantiation = false;
 			}
 			return FrinkData._instance;
+		}
+		
+		/**
+		 * wrapper method for reddit api isLoggedIn
+		 **/
+		public function get isLoggedIn() : Boolean {
+			return this.api.isLoggedIn;
 		}
 		
 		//--------------------------------------------------------------------------
@@ -124,7 +133,13 @@ package
 			this.database.data.password = null;
 			FrinkData.instance.api.logOut();
 		}
-	
+		
+		/**
+		 * raise a global event notifying a modal open or close
+		 **/
+		public function raiseModalEvent(event:FrinkEvent) : void {
+			this.dispatchEvent(event);
+		}
 		
 		//--------------------------------------------------------------------------
 		//

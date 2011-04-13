@@ -15,8 +15,8 @@
 			
 			import spark.components.Application;
 			
-			import views.modals.about;
-			import views.modals.settings;
+			import views.modals.AboutModal;
+			import views.modals.SettingsModal;
 			import views.panels.frinkPanel;
 			
 			//--------------------------------------------------------------------------
@@ -86,9 +86,8 @@
 			 **/
 			protected function btnSettings_clickHandler(event:MouseEvent):void
 			{
-				var s : settings = new settings();
-				PopUpManager.addPopUp(s, this.parent, true);
-				PopUpManager.centerPopUp(s);
+				var s : SettingsModal = new SettingsModal();
+				s.show(this.parent);
 			}
 
 			/**
@@ -96,9 +95,8 @@
 			 **/
 			protected function btnAbout_clickHandler(event:MouseEvent):void
 			{
-				var a : about = new about();
-				PopUpManager.addPopUp(a, this.parent, true);
-				PopUpManager.centerPopUp(a);
+				var a : AboutModal = new AboutModal();
+				a.show(this.parent);
 			}
 
 		]]>

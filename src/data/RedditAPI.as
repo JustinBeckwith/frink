@@ -54,9 +54,21 @@ package data
 		protected var url_base : String = "http://www.reddit.com/";
 		protected var url_myReddits : String = "http://www.reddit.com/reddits/mine/.json?count=25";
 		protected var url_popularReddits : String = "http://www.reddit.com/reddits/.json?count=25";
-		protected var isLoggedIn : Boolean = false;
+		protected var _isLoggedIn : Boolean = false;
 		protected var userHash : String = "";
 		
+		//--------------------------------------------------------------------------
+		//
+		//	Properties
+		//
+		//--------------------------------------------------------------------------
+		
+		/**
+		 * expose the isLoggedIn property
+		 **/
+		public function get isLoggedIn() : Boolean {
+			return _isLoggedIn;
+		}
 		
 		
 		//--------------------------------------------------------------------------
@@ -70,7 +82,7 @@ package data
 		 **/
 		public function loadSubReddits(before:String = null, after:String = null) : void {
 			
-			var url : String = isLoggedIn ? url_myReddits : url_popularReddits;
+			var url : String = _isLoggedIn ? url_myReddits : url_popularReddits;
 			
 			if (before != null) 
 				url += "&before=" + before;
@@ -195,7 +207,7 @@ package data
 			
 			var request : URLRequest = new URLRequest(url);
 			request.method = "post";
-			//request.contentType = "json";
+			request.contentType = "application/x-www-form-urlencoded";
 			
 			// vote hash is in the api docs, but isn't required
 			
@@ -363,7 +375,7 @@ package data
 			}
 			
 			// raise the event notifying success or fail
-			this.isLoggedIn = success;
+			_isLoggedIn = success;
 			var obj : Object = { success: success };
 			this.dispatchEvent(new RedditEvent(RedditEvent.LOGIN_ATTEMPTED, obj));
 		}
@@ -373,7 +385,7 @@ package data
 		 * set the not logged in flag and raise an event when done
 		 **/
 		protected function logOut_completeHandler(event:Event) : void {
-			this.isLoggedIn = false;
+			_isLoggedIn = false;
 			this.dispatchEvent(new RedditEvent(RedditEvent.LOGOUT));
 		}
 		

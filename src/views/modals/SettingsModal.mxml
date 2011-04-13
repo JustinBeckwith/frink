@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modals:ModalBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   creationComplete="settings_creationCompleteHandler(event)"
+			    backgroundColor="0xFFFFFF" title="Settings" xmlns:modals="views.modals.*" xmlns:controls="controls.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import events.RedditEvent;
+			
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * preload data and set the initial state
+			 **/
+			protected function settings_creationCompleteHandler(event:Event) : void {
+				if (FrinkData.instance.database.data.username == null) {
+					this.currentState = "loggedOut";
+					this.txtUsername.setFocus();
+				} else {
+					txtUsername.text = FrinkData.instance.database.data.username;
+					txtPassword.text = FrinkData.instance.database.data.password;
+					this.currentState = "loggedIn";
+				}
+			}
+			
+			/**
+			 * close the modal
+			 **/
+			protected function cancelButton_clickHandler(event:MouseEvent):void
+			{
+				this.closeModal();
+			}
+			
+			/**
+			 * test and store the credentials
+			 **/
+			protected function saveButton_clickHandler(event:MouseEvent) : void {
+				
+				if (FrinkData.instance.database.data.username != txtUsername.text ||
+					FrinkData.instance.database.data.password != txtPassword.text) {
+				
+					this.currentState = "loading";
+					FrinkData.instance.api.addEventListener(RedditEvent.LOGIN_ATTEMPTED, api_loginAttempted);
+					FrinkData.instance.api.attemptLogin(txtUsername.text, txtPassword.text);
+				}
+				else {
+					this.closeModal();
+				}
+			}
+			
+			/**
+			 * sign out and change state
+			 **/
+			protected function logOutButton_clickHandler(event:MouseEvent) : void {
+				this.txtUsername.text = '';
+				this.txtPassword.text = '';
+				FrinkData.instance.logOut();
+				this.currentState = "loggedOut";	
+				this.txtUsername.setFocus();
+			}
+			
+			/**
+			 * if the creds were right, store them, if not, notify the user
+			 **/
+			protected function api_loginAttempted(event:RedditEvent) : void {
+				if (event.result.success) {
+					FrinkData.instance.database.data.username = txtUsername.text;
+					FrinkData.instance.database.data.password = txtPassword.text;
+					lblBad.visible = false;
+					lblBad.includeInLayout = false;
+					if (this.successCallback != null)
+						successCallback.call();
+					this.closeModal();
+				}
+				else {
+					this.currentState = "loggedOut";
+					lblBad.visible = true;
+					lblBad.includeInLayout = true;
+					this.txtUsername.setFocus();
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<modals:states>
+		<s:State name="loggedOut" />
+		<s:State name="loggedIn" />
+		<s:State name="loading" />
+	</modals:states>
+	
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" includeIn="loading">
+		<controls:LoadingBox />
+	</s:VGroup>
+	
+	<s:SkinnableContainer width="100%" alpha.loading="0.2">
+		
+		<s:Image bottom="0" source="@Embed(source='assets/big-frink-head.png')" alpha="0.3" />
+		
+		<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20" color="0x000000">
+			<s:Label text.loggedIn="Logged in as:" text.loggedOut="Username:" />
+			<s:TextInput id="txtUsername" color="0xFFFFFF" enabled="{this.currentState=='loggedOut'}" />
+			<mx:Spacer height="20" />
+			<s:Label text="Password:" includeIn="loggedOut, loading" />
+			<s:TextInput id="txtPassword" displayAsPassword="true" color="0xFFFFFF" includeIn="loggedOut, loading" />
+			<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
+			<mx:Spacer height="20" />
+			<s:HGroup horizontalAlign="center" width="100%">
+				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedOut, loading" />
+				<s:Button label="log out" click="logOutButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedIn, loading" />
+				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" />
+			</s:HGroup>
+		</s:VGroup>
+	</s:SkinnableContainer>
+</modals:ModalBase>

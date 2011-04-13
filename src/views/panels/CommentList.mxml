@@ -4,6 +4,10 @@
 					  backgroundColor="0xFFFFFF"
 					  creationComplete="creationCompleteHandler(event)">
 		
+	<fx:Metadata>
+		[Event(name="complete", type="flash.events.Event")]
+	</fx:Metadata>
+	
 	<fx:Script>
 		<![CDATA[
 			import events.RedditEvent;
@@ -87,6 +91,9 @@
 				// get the header obj that contains basic post info
 				this.selfObject = (event.result as Array)[0].data.children[0];
 				this.showSelfHeader = selfObject != null && selfObject.data.selftext != null && selfObject.data.selftext != '';
+				
+				// notify parent that the data is loaded
+				this.dispatchEvent(new Event(Event.COMPLETE));
 			}	
 		]]>
 	</fx:Script>

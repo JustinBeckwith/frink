@@ -15,7 +15,8 @@ package events
 		//--------------------------------------------------------------------------
 		
 		public static const AUTH_CHANGE : String = "authChange";
-		
+		public static const MODAL_OPEN : String = "modalOpen";
+		public static const MODAL_CLOSE : String = "modalClose";
 		
 		//--------------------------------------------------------------------------
 		//
