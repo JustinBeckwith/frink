@@ -210,7 +210,7 @@
 			 **/
 			protected function frink_modalClose(event:FrinkEvent) : void {
 				if (_post && _post.data)
-					this.browser.visible = !_post.data.is_self;
+					this.browser.visible = this.visible && !_post.data.is_self;
 			}
 			
 			/**
@@ -279,7 +279,7 @@
 					<s:Image source="@Embed(source='assets/NIXUS/32x32/Back.png')" id="btnBack" click="btnBack_clickHandler(event)" />
 					<s:Image source="@Embed(source='assets/NIXUS/32x32/Up.png')" id="btnUp" click="btnUp_clickHandler(event)" />
 					<s:Image source="@Embed(source='assets/NIXUS/32x32/Down.png')" id="btnDown" click="btnDown_clickHandler(event)" />
-					<s:Image source="@Embed(source='assets/NIXUS/32x32/Chat.png')" id="btnComments" click="btnComments_clickHandler(event)"/>
+					<s:Image source="@Embed(source='assets/NIXUS/32x32/Chat.png')" id="btnComments" click="btnComments_clickHandler(event)" visible="{!post.data.is_self}" includeInLayout="{!post.data.is_self}"/>
 					<s:Image source="@Embed(source='assets/NIXUS/32x32/Window.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
 				</s:HGroup>
 			</s:HGroup> 
