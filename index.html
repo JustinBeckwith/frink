@@ -1,90 +1,105 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset='utf-8'>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Frink! - the reddit client for tablets</title>		
+		<meta name="author" content="Justin Beckwith">
+		
+		<!-- jquery -->
+		<script src="plugins/jquery-1.5.2.min.js" type="text/javascript"></script>
 
+		<!-- coin slider -->
+		<script type="text/javascript" src="plugins/coin-slider/coin-slider.min.js"></script>
+		<link rel="stylesheet" href="plugins/coin-slider/coin-slider-styles.css" type="text/css" />
 
+		<!-- core -->
+		<link rel="stylesheet" href="styles/frink.css" />
+		<script src="scripts/frink.js" type="text/javascript"></script>
+		
+	</head>
+	<body>
+		<a href="http://github.com/JustinBeckwith/frink"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+		<div id="top">
+			<img src="images/bigfrink.png" alt="coming soon..." />
+		</div>	
+		
+		<div id="main">
+								
+			<table cellspacing="14">
+				<tr>
+					<td class="box">
+						<h1>OPEN SOURCE</h1>
+						<hr />
+						The source code for Frink! is available under a non-commercial license.  The entire project is written in actionscript, using Adobe Flex 4. It's available over at <a href="https://github.com/JustinBeckwith/frink" target="_blank">GitHub.</a>
+					</td>
+					<td class="box">
+						<h1>FRINK! IS COMING</h1>
+						<hr />
+						Frink! is an (unofficial) mobile client for the web site <a href="http://www.reddit.com" target="_blank">Reddit</a>.  It is designed specifically to be used with tablets, taking advantage of gestures in a unique user interface.
+					</td>
+					<td class="box">
+						<h1>GET IN TOUCH</h1>
+						<hr />
+						<ul>
+							<li><a href="http://www.reddit.com/r/frinkapp" target="_blank">On Reddit</a></li>
+							<li><a href="http://twitter.com/frinkapp" target="_blank">Twitter</a></li>
+							<li><a href="http://orangepoplabs.com" target="_blank">OrangePop Labs</a></li>
+							<li><a href="http://jbeckwith.com" target="_blank">Justin Beckwith</a></li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			
+			<br />
+			
+			<div id>
+				<a href="http://github.com/JustinBeckwith/frink/zipball/master">
+					<img border="0" width="90" src="http://github.com/images/modules/download/zip.png">
+				</a>
+				<a href="http://github.com/JustinBeckwith/frink/tarball/master">
+					<img border="0" width="90" src="http://github.com/images/modules/download/tar.png">
+				</a>
+			
+				<p>
+					You can also clone the project with <a href="http://git-scm.com">git</a> by running:
+					<pre>$ git clone git://github.com/JustinBeckwith/frink</pre>
+				</p>
+			</div>
+			
+			<!--
+			<div id="slideOuter">
+				<div id="slideInner" >
+					<div id='coin-slider'>
+						<a href="#">
+							<img src='images/screenshots/posts.png' >
+							<span>Here is a list of posts</span>
+						</a>				
+						<a href="#">
+							<img src='images/screenshots/comments.png' >
+							<span>View comments from other users</span>
+						</a>	
+						<a href="#">
+							<img src='images/screenshots/post-details.png' >
+							<span>View the details of a post</span>
+						</a>	
+						<a href="#">
+							<img src='images/screenshots/subreddits.png' >
+							<span>Read individual subreddits</span>
+						</a>	
+					</div>
+				</div>
+			</div>
+			-->	
+		</div>
+		
+		<div id="footer">						
+		    
+		   <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Frink!</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://jbeckwith.com" property="cc:attributionName" rel="cc:attributionURL">Justin Beckwith</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="http://frinkapp.com" rel="cc:morePermissions">http://frinkapp.com</a>.
+		      		        		           			
+		</div>
 
-  <title>JustinBeckwith/frink @ GitHub</title>
-
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #FFFFFF;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #aa0e5e; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #aa0e5e; }
-    h3 { text-align: center; color: #aa0e5e; }
-    a { color: #aa0e5e; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
-</head>
-
-<body>
-  <a href="http://github.com/JustinBeckwith/frink"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-
-  <div id="container">
-
-    <div class="download">
-      <a href="http://github.com/JustinBeckwith/frink/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/JustinBeckwith/frink/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
-
-    <h1><a href="http://github.com/JustinBeckwith/frink">Frink!</a>
-      <span class="small">by <a href="http://github.com/JustinBeckwith">JustinBeckwith</a></span></h1>
-
-    <div class="description">
-      Frink is a reddit client designed for Android Tablets and the BlackBerry PlayBook
-    </div>
-
-    <p>Welcome to Frink! 
-
-This is the main project text.</p><h2>Dependencies</h2>
-<p>There aren't any.</p>
-<h2>Install</h2>
-<p>Import the project into Flash Builder 4.5 Burrito.</p>
-<h2>License</h2>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Frink!</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://jbeckwith.com" property="cc:attributionName" rel="cc:attributionURL">Justin Beckwith</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="http://frinkapp.com" rel="cc:morePermissions">http://frinkapp.com</a>.</p>
-<h2>Authors</h2>
-<p>Justin Beckwith (justin.beckwith@gmail.com)
-<br/>
-<br/>      </p>
-<h2>Contact</h2>
-<p>Justin Beckwith (justin.beckwith@gmail.com)
-<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/JustinBeckwith/frink/zipball/master">zip</a> or
-      <a href="http://github.com/JustinBeckwith/frink/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/JustinBeckwith/frink</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/JustinBeckwith/frink">JustinBeckwith/frink</a>
-    </div>
-
-  </div>
-
-  
-</body>
+		 
+			    
+			
+	</body>
 </html>

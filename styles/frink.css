@@ -1,0 +1,103 @@
+
+
+/*--------------------------------------------------------------------------
+--
+-- MAIN
+--
+--------------------------------------------------------------------------*/
+
+body {
+	font-family: verdana, arial;
+	margin: 0px;
+	padding: 0px;
+	background-color: #FFFFFF;
+}
+
+pre { 
+	background: #000; 
+	color: #fff; 
+	padding: 15px;
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#top {
+	background-color: #FFFFFF;
+	text-align: center;
+}
+
+#top img {
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+}
+
+#main {
+	border-bottom: 17px solid #000000;
+	border-top: 17px solid #000000;
+	font-size: 2em;
+	padding: 4px;
+	text-align: center;
+	vertical-align: top;
+	background-color: #336699;
+}
+
+#footer {
+	margin-top: 25px;
+	min-height: 150px;
+	text-align:center;
+}
+
+#footer a {
+	color: #336699;
+}
+
+#main table {
+	width: 100%;
+	border: none;
+}
+
+.box {
+	vertical-align: top;
+	margin: 10px;
+	text-align: left;
+	width: 25%;
+	border: 8px solid #000000;
+	background-color: #DFDFDF;
+	color: #000000;
+	padding: 10px;
+	font-size: 0.6em;
+}
+
+.box h1 {
+	font-size: 2em;
+	font-weight: bold;
+	text-align: center;
+	font-family: impact;
+	text-transform: capitalize;
+}
+
+
+.box a {
+	color: #336699;
+}
+
+#slideOuter {
+	margin: 10px;
+	border: 8px solid #000000; 
+	background-color: #CCCCCC;
+}
+
+#slideInner {
+	width:1104px; 
+	margin-right: auto; 
+	margin-left: auto;
+}
+
