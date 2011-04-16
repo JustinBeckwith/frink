@@ -79,6 +79,7 @@
 						break;
 					case frinkPanel.MAIL:
 						panel = frinkPanels.pnlMail;
+						frinkPanels.pnlMail.loadMessages();
 						break;
 					case frinkPanel.SEARCH:
 						panel = frinkPanels.pnlSearch;

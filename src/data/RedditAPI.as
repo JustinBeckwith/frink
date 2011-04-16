@@ -25,6 +25,7 @@ package data
 	[Event(name="commentsLoaded", type="events.RedditEvent")]
 	[Event(name="loginAttempted", type="events.RedditEvent")] 
 	[Event(name="childrenLoaded", type="events.RedditEvent")]
+	[Event(name="messagesLoaded", type="events.RedditEvent")]
 	[Event(name="logout", type="events.RedditEvent")] 
 	public class RedditAPI extends EventDispatcher
 	{
@@ -243,6 +244,27 @@ package data
 			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
 			loader.load(request);
 		}
+		
+		
+		/**
+		 *	loadMessages
+		 **/
+		public function loadMessages(before:String = null, after:String = null) : void {
+			
+			var url : String = "http://www.reddit.com/message/inbox/.json"
+			
+			if (before != null) 
+				url += "&before=" + before;
+			
+			if (after != null)
+				url += "&after=" + after;
+			
+			var request : URLRequest = new URLRequest(url);
+			var loader : URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, loadMessages_completeHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
+			loader.load(request);
+		} 
 
 		
 		//--------------------------------------------------------------------------
@@ -302,6 +324,16 @@ package data
 		protected function loadChildren_completeHandler(event:Event) : void {
 			var obj : Object = JSON.decode((event.target as URLLoader).data);
 			this.dispatchEvent(new RedditEvent(RedditEvent.CHILDREN_LOADED, obj));
+		}
+		
+		
+		/**
+		 * loadMessages handlers
+		 **/
+		
+		protected function loadMessages_completeHandler(event:Event) : void {
+			var obj : Object = JSON.decode((event.target as URLLoader).data);
+			this.dispatchEvent(new RedditEvent(RedditEvent.MESSAGES_LOADED, obj));
 		}
 		
 		/**

@@ -65,7 +65,7 @@
 	
 	<panels:postList id="pnlPostList" change="postList_changeHandler(event)" />
 	<panels:subReddits id="pnlSubReddits" visible="false" includeInLayout="false" change="subReddit_changeHandler(event)"/>
-	<panels:mail id="pnlMail" visible="false" includeInLayout="false"/>
+	<panels:MailPanel id="pnlMail" visible="false" includeInLayout="false"/>
 	<panels:profile id="pnlProfile" visible="false" includeInLayout="false"/>
 	<panels:search id="pnlSearch" visible="false" includeInLayout="false"/>
 	
