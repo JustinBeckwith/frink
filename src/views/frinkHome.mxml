@@ -129,7 +129,7 @@
 			protected function frink_authChangeHandler(event:FrinkEvent) : void {
 				
 				if (!FrinkData.instance.isLoggedIn && toolbar.selectedPanel == frinkPanel.MAIL) 
-					toolbar.selectButton(toolbar.btnMail);
+					toolbar.selectButton(toolbar.btnFrontPage);
 			}
 
 			

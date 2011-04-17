@@ -42,7 +42,36 @@
 			 * invoke click on selected button
 			 **/
 			public function selectButton(button:ImageButton) : void {
-				button.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false));
+				
+				this.btnFrontPage.currentState = "normal";
+				this.btnAllReddits.currentState = "normal";
+				this.btnSubReddits.currentState = "normal";
+				this.btnProfile.currentState = "normal";
+				this.btnSearch.currentState = "normal";
+				this.btnMail.currentState = "normal";
+				button.currentState = "selected";
+				
+				switch (button) {
+					case btnFrontPage:
+						this.selectedPanel = frinkPanel.FRONT_PAGE;
+						break;
+					case btnAllReddits:
+						this.selectedPanel = frinkPanel.ALL_REDDITS;
+						break;
+					case btnSubReddits:
+						this.selectedPanel = frinkPanel.SUB_REDDITS;
+						break;
+					case btnProfile:
+						this.selectedPanel = frinkPanel.PROFILE;
+						break;
+					case btnSearch:
+						this.selectedPanel = frinkPanel.SEARCH;
+						break;
+					case btnMail:
+						this.selectedPanel = frinkPanel.MAIL;
+						break;
+				}
+				this.dispatchEvent(new Event(Event.CHANGE));
 			}
 			
 			//--------------------------------------------------------------------------
@@ -65,37 +94,7 @@
 			 **/
 			protected function btnPanel_clickHandler(event:MouseEvent):void
 			{
-				
-				this.btnFrontPage.currentState = "normal";
-				this.btnAllReddits.currentState = "normal";
-				this.btnSubReddits.currentState = "normal";
-				this.btnProfile.currentState = "normal";
-				this.btnSearch.currentState = "normal";
-				this.btnMail.currentState = "normal";
-				(event.currentTarget as ImageButton).currentState = "selected";
-				
-				switch (event.currentTarget) {
-					case btnFrontPage:
-						this.selectedPanel = frinkPanel.FRONT_PAGE;
-						break;
-					case btnAllReddits:
-						this.selectedPanel = frinkPanel.ALL_REDDITS;
-						break;
-					case btnSubReddits:
-						this.selectedPanel = frinkPanel.SUB_REDDITS;
-						break;
-					case btnProfile:
-						this.selectedPanel = frinkPanel.PROFILE;
-						break;
-					case btnSearch:
-						this.selectedPanel = frinkPanel.SEARCH;
-						break;
-					case btnMail:
-						this.selectedPanel = frinkPanel.MAIL;
-						break;
-				}
-				//(event.currentTarget as ImageButton).styleName = 
-				this.dispatchEvent(new Event(Event.CHANGE));
+				this.selectButton(event.currentTarget as ImageButton);				
 			}
 
 			
