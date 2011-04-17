@@ -30,7 +30,7 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				// if the user has cached credentials, log them in automatically
-				//FrinkData.instance.addEventListener(FrinkEvent.AUTH_CHANGE, frink_authChangeHandler);
+				FrinkData.instance.addEventListener(FrinkEvent.AUTH_CHANGE, frink_authChangeHandler);
 				
 				if (FrinkData.instance.hasCredentials) {
 					FrinkData.instance.autoLogin();
@@ -79,7 +79,8 @@
 						break;
 					case frinkPanel.MAIL:
 						panel = frinkPanels.pnlMail;
-						frinkPanels.pnlMail.loadMessages();
+						if (FrinkData.instance.isLoggedIn)
+							frinkPanels.pnlMail.loadMessages();
 						break;
 					case frinkPanel.SEARCH:
 						panel = frinkPanels.pnlSearch;
@@ -119,6 +120,16 @@
 				postView.includeInLayout = false;
 				frinkPanels.x = 201;
 				frinkPanels.currentState = "normal";
+			}
+			
+			
+			/**
+			 *	if a tab that requires an account is visible, hide it on logout 
+			 **/
+			protected function frink_authChangeHandler(event:FrinkEvent) : void {
+				
+				if (!FrinkData.instance.isLoggedIn && toolbar.selectedPanel == frinkPanel.MAIL) 
+					toolbar.selectButton(toolbar.btnMail);
 			}
 
 			

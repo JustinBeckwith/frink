@@ -30,10 +30,9 @@
 		<s:VGroup width="100%" fontSize="14" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 			<s:Label text="{data.data.subject}" width="100%" fontSize="18" />
 			<s:HGroup fontSize="14" width="100%">
-				<s:Label text="from "/>
+				<s:Label text="from"/>
 				<s:Label text="{data.data.author}" color="0x336699" fontWeight="bold"/>
-				<s:Label text="sent"/>
-				<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)} ago"/>	
+				<s:Label text="sent {FrinkData.instance.getAgoLabel(data.data.created_utc)} ago"/>	
 			</s:HGroup>
 			<s:Label text="{data.data.body}" width="100%"/>
 		</s:VGroup>

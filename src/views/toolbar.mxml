@@ -32,6 +32,18 @@
 			
 			public var selectedPanel : String = frinkPanel.FRONT_PAGE;
 			
+			//--------------------------------------------------------------------------
+			//
+			//	Methods
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * invoke click on selected button
+			 **/
+			public function selectButton(button:ImageButton) : void {
+				button.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false));
+			}
 			
 			//--------------------------------------------------------------------------
 			//

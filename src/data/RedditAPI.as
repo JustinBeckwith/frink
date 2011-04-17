@@ -52,11 +52,23 @@ package data
 		
 		
 		// url constants
-		protected var url_base : String = "http://www.reddit.com/";
-		protected var url_myReddits : String = "http://www.reddit.com/reddits/mine/.json?count=25";
-		protected var url_popularReddits : String = "http://www.reddit.com/reddits/.json?count=25";
+		protected const URL_BASE : String = "http://www.reddit.com/";
+	
+		protected const URL_MY_REDDITS : String = "http://www.reddit.com/reddits/mine/.json?count=25";
+		protected const URL_POPULAR_REDDITS : String = "http://www.reddit.com/reddits/.json?count=25";
+		
+		protected const URL_MESSAGES_INBOX : String = "http://www.reddit.com/message/inbox/.json";
+		protected const URL_MESSAGES_SENT : String = "http://www.reddit.com/message/sent/.json";
+		protected const URL_MESSAGES_COMMENTS : String = "http://www.reddit.com/message/comments/.json";
+		protected const URL_MESSAGES_MOD : String = "http://www.reddit.com/message/moderator/.json";
+		
+		protected const URL_VOTE : String = "http://www.reddit.com/api/vote";
+		protected const URL_MORE_CHILDREN : String = "http://www.reddit.com/api/moreChildren";
+		protected const URL_LOGOUT : String = "http://www.reddit.com/logout";
+		
 		protected var _isLoggedIn : Boolean = false;
 		protected var userHash : String = "";
+		
 		
 		//--------------------------------------------------------------------------
 		//
@@ -83,7 +95,7 @@ package data
 		 **/
 		public function loadSubReddits(before:String = null, after:String = null) : void {
 			
-			var url : String = _isLoggedIn ? url_myReddits : url_popularReddits;
+			var url : String = _isLoggedIn ? URL_MY_REDDITS : URL_POPULAR_REDDITS;
 			
 			if (before != null) 
 				url += "&before=" + before;
@@ -103,7 +115,7 @@ package data
 		 **/
 		public function loadPosts(subreddit:String = null, before:String = null, after:String = null) : void {
 			
-			var url : String = url_base;	
+			var url : String = URL_BASE;	
 			if (subreddit != null && subreddit != "") {
 				url += "r/" + subreddit + "/";		
 			} // end if		
@@ -168,10 +180,7 @@ package data
 		 **/
 		public function loadChildren(link_id : String, name:String) : void {
 			
-			var url : String = "http://www.reddit.com/api/moreChildren";
-			
-			
-			var request : URLRequest = new URLRequest(url);
+			var request : URLRequest = new URLRequest(URL_MORE_CHILDREN);
 			request.method = "post";
 			
 			/*
@@ -203,10 +212,8 @@ package data
 		 * @param direction - a value of either -1, 0, +1
 		 **/
 		public function vote(name:String, direction:int) : void {
-			
-			var url : String = "http://www.reddit.com/api/vote";
-			
-			var request : URLRequest = new URLRequest(url);
+				
+			var request : URLRequest = new URLRequest(URL_VOTE);
 			request.method = "post";
 			request.contentType = "application/x-www-form-urlencoded";
 			
@@ -230,9 +237,7 @@ package data
 		 **/
 		public function logOut() : void {
 			
-			var url : String = "http://www.reddit.com/logout";
-			
-			var request : URLRequest = new URLRequest(url);
+			var request : URLRequest = new URLRequest(URL_LOGOUT);
 			request.method = "post";
 			
 			var requestVars : URLVariables = new URLVariables();
@@ -249,9 +254,23 @@ package data
 		/**
 		 *	loadMessages
 		 **/
-		public function loadMessages(before:String = null, after:String = null) : void {
+		public function loadMessages(messageType:String, before:String = null, after:String = null) : void {
 			
-			var url : String = "http://www.reddit.com/message/inbox/.json"
+			var url : String = null;
+			switch(messageType) {
+				case MessageType.INBOX:
+					url = this.URL_MESSAGES_INBOX;
+					break;
+				case MessageType.COMMENTS:
+					url = this.URL_MESSAGES_COMMENTS;
+					break;
+				case MessageType.MOD:
+					url = this.URL_MESSAGES_MOD;
+					break;
+				case MessageType.SENT:
+					url = this.URL_MESSAGES_SENT;
+					break;
+			}
 			
 			if (before != null) 
 				url += "&before=" + before;

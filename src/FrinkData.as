@@ -106,13 +106,27 @@ package
 			
 			var currentTimeTicks : Number = (new Date()).getTime();
 			var minutesAgoCreated : Number = (currentTimeTicks - (created_utc*1000))/1000/60;
-			var agoLabel : String = "";
-			if (minutesAgoCreated > 60) {
-				agoLabel = Math.round(minutesAgoCreated/60) + " Hours";
+			var unitsAgo : Number;
+			var unitLabel : String;
+			
+			if (minutesAgoCreated > 60*24*365) {
+				unitsAgo = Math.round(minutesAgoCreated/60/24/30);
+				unitLabel = "year"
+			} else if (minutesAgoCreated > 60*24*30) {
+				unitsAgo = Math.round(minutesAgoCreated/60/24/30);
+				unitLabel = "month";
+			} else if (minutesAgoCreated > 60*24) {
+				unitsAgo = Math.round(minutesAgoCreated/60/24);
+				unitLabel = "day";	
+			} else if (minutesAgoCreated > 60) {
+				unitsAgo = Math.round(minutesAgoCreated/60);
+				unitLabel = "hour";
 			} else {
-				agoLabel = Math.round(minutesAgoCreated) + " Minutes";
+				unitsAgo = Math.round(minutesAgoCreated);
+				unitLabel = "minute";
 			} // end else
 			
+			var agoLabel : String = unitsAgo + " " + unitLabel + (unitsAgo > 1 ? "s" : "");
 			return agoLabel;
 		}
 		
