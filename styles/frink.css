@@ -90,13 +90,10 @@ a:hover {
 }
 
 #slideOuter {
-	margin: 10px;
-	border: 8px solid #000000; 
-	background-color: #CCCCCC;
+	
 }
 
 #slideInner {
-	width:1104px; 
 	margin-right: auto; 
 	margin-left: auto;
 }

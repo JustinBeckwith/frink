@@ -3,10 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>CNAME</string>
+	<string>index.html</string>
 	<key>documents</key>
 	<array>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>plugins</string>
 			<key>regexFolderFilter</key>
@@ -18,9 +20,13 @@
 			<key>filename</key>
 			<string>index.html</string>
 			<key>lastUsed</key>
-			<date>2011-04-15T01:33:54Z</date>
+			<date>2011-04-18T01:18:39Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>images</string>
 			<key>regexFolderFilter</key>
@@ -29,6 +35,8 @@
 			<string>images</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>scripts</string>
 			<key>regexFolderFilter</key>
@@ -48,9 +56,7 @@
 			<key>filename</key>
 			<string>CNAME</string>
 			<key>lastUsed</key>
-			<date>2011-04-15T01:51:53Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2011-04-18T01:04:05Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -96,33 +102,48 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>17</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>53</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1</integer>
+			<integer>45</integer>
+		</dict>
+		<key>scripts/frink.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>styles/frink.css</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>15</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>58</integer>
+				<integer>93</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>30</integer>
+			<integer>60</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>index.html</string>
+		<string>scripts/frink.js</string>
 		<string>styles/frink.css</string>
 		<string>README</string>
 		<string>CNAME</string>
@@ -130,6 +151,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{213, 91}, {1227, 787}}</string>
+	<string>{{216, 91}, {1227, 787}}</string>
 </dict>
 </plist>
