@@ -118,7 +118,7 @@
 			<s:HGroup horizontalAlign="center" width="100%">
 				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" excludeFrom="loggedIn" />
 				<s:Button label="log out" click="logOutButton_clickHandler(event)" color="0xFFFFFF" excludeFrom="loggedOut" />
-				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedOut" />
+				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" />
 			</s:HGroup>
 		</s:VGroup>
 	</s:SkinnableContainer>
