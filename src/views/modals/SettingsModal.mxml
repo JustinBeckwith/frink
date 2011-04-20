@@ -108,7 +108,7 @@
 		<s:Image bottom="0" source="@Embed(source='assets/big-frink-head.png')" alpha="0.3" />
 		
 		<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20" color="0x000000">
-			<s:Label text.loggedIn="Logged in as:" text.loggedOut="Username:" />
+			<s:Label text.loggedIn="Logged in as:" text="Username:" />
 			<s:TextInput id="txtUsername" color="0xFFFFFF" enabled="{this.currentState=='loggedOut'}" />
 			<mx:Spacer height="20" />
 			<s:Label text="Password:" includeIn="loggedOut, loading" />
@@ -116,8 +116,8 @@
 			<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
 			<mx:Spacer height="20" />
 			<s:HGroup horizontalAlign="center" width="100%">
-				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedOut, loading" />
-				<s:Button label="log out" click="logOutButton_clickHandler(event)" color="0xFFFFFF" includeIn="loggedIn, loading" />
+				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" excludeFrom="loggedIn" />
+				<s:Button label="log out" click="logOutButton_clickHandler(event)" color="0xFFFFFF" excludeFrom="loggedOut" />
 				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" />
 			</s:HGroup>
 		</s:VGroup>

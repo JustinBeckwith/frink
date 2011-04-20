@@ -22,6 +22,8 @@ package events
 		public static const LOGOUT : String = "logout";
 		public static const VOTE_COMPLETE : String = "voteComplete";
 		public static const CHILDREN_LOADED : String = "childrenLoaded";
+		public static const MESSAGES_LOADED : String = "messagesLoaded";
+		public static const UNREAD_MESSAGE_COUNT_LOADED : String = "unreadMessageCountLoaded";
 		public static const API_ERROR : String = "apiError";
 		
 		//--------------------------------------------------------------------------
