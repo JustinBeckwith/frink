@@ -9,7 +9,10 @@
 			public var title : String;
 			
 			[Bindable]
-			public var icon : Object;
+			public var icon_normal : Object;
+			
+			[Bindable]
+			public var icon_selected : Object;
 			
 		]]>
 	</fx:Script>
@@ -38,7 +41,7 @@
 	</s:Line>
 	
 	<s:HGroup width="100%" verticalAlign="middle" gap="15" paddingBottom="10" paddingLeft="10" paddingRight="5" paddingTop="10">
-		<s:Image id="iconImage" source="{icon}" />
+		<s:Image id="iconImage" source.normal="{icon_normal}" source.selected="{icon_selected}" />
 		<s:Label id="lblTitle" fontSize="18" text="{title}" />
 	</s:HGroup>
 	

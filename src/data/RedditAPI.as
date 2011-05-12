@@ -13,7 +13,6 @@ package data
 	import flash.net.URLVariables;
 
 	
-	
 	/**
 	 * RedditAPI
 	 * 

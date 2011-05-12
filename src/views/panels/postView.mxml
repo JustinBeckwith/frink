@@ -46,15 +46,16 @@
 				} else {
 					this.comments.visible = false;
 				}
+				btnComments.currentState = "normal";
 				this.browser.visible = !_post.data.is_self;
 				
 				// set the up/down vote icon glows
-				btnUp.filters = btnDown.filters = null;
+				btnUp.currentState = btnDown.currentState = "normal";
 				if (_post.data.likes == true) {
-					btnUp.filters = [glowWorm];
+					btnUp.currentState = "selected";
 				}
 				else if (_post.data.likes == false) {
-					btnDown.filters = [glowWorm];
+					btnDown.currentState = "selected";
 				}
 					
 			}
@@ -94,16 +95,16 @@
 					// update the underlying data structure and UI elements 
 					if (dir == 0) {
 						post.data.likes = null;
-						btnUp.filters = null;
-						btnDown.filters = null;
+						btnUp.currentState = "normal";
+						btnDown.currentState = "normal";
 					} else if (dir == -1) {
 						post.data.likes = false;
-						btnUp.filters = null;
-						btnDown.filters = [glowWorm];
+						btnUp.currentState = "normal";
+						btnDown.currentState = "selected";
 					} else if (dir == 1) { 
 						post.data.likes = true;
-						btnUp.filters = [glowWorm];
-						btnDown.filters = null;
+						btnUp.currentState = "selected";
+						btnDown.currentState = "normal";
 					}
 					
 					// perform the back end data call to cast the vote
@@ -179,6 +180,7 @@
 				} 
 				this.browser.visible = this.comments.visible;
 				this.comments.visible = !this.comments.visible;
+				btnComments.currentState = (this.comments.visible ? "selected" : "normal");
 			}
 			
 			/**
@@ -228,27 +230,14 @@
 			}
 
 		]]>
-	</fx:Script>
-	
-	<fx:Declarations>
-		<s:GlowFilter id="glowWorm" color="0x33CCFF" alpha="0.8" blurX="35" blurY="35" strength="2" quality="{BitmapFilterQuality.HIGH}" />	
-	</fx:Declarations>
-	
+	</fx:Script>	
 	
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="loading" />
 	</s:states>
 	
-	<s:filters>
-		<s:GradientGlowFilter distance="10" angle="180" strength="1"
-								quality="{BitmapFilterQuality.HIGH}" type="{BitmapFilterType.OUTER}">
-			<s:entries>
-				<s:GradientEntry alpha="0" color="0x000000" />
-				<s:GradientEntry alpha="0.2" color="0x000000" />
-			</s:entries>
-		</s:GradientGlowFilter>
-	</s:filters>
+	
 	
 	<s:Line left="0" top="0" bottom="0">
 		<s:stroke>
@@ -276,11 +265,24 @@
 			<s:HGroup width="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" >
 				<renderers:PostDetails data="{post}" width="100%" currentState="header" />
 				<s:HGroup>
-					<s:Image source="@Embed(source='assets/NIXUS/32x32/Back.png')" id="btnBack" click="btnBack_clickHandler(event)" />
-					<s:Image source="@Embed(source='assets/NIXUS/32x32/Up.png')" id="btnUp" click="btnUp_clickHandler(event)" />
-					<s:Image source="@Embed(source='assets/NIXUS/32x32/Down.png')" id="btnDown" click="btnDown_clickHandler(event)" />
-					<s:Image source="@Embed(source='assets/NIXUS/32x32/Chat.png')" id="btnComments" click="btnComments_clickHandler(event)" visible="{!post.data.is_self}" includeInLayout="{!post.data.is_self}"/>
-					<s:Image source="@Embed(source='assets/NIXUS/32x32/Window.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
+					<s:Image source="@Embed(source='assets/icons/arrow-left.png')" id="btnBack" click="btnBack_clickHandler(event)" />
+
+					<controls:SelectableButton 
+						icon_normal="@Embed(source='assets/icons/arrow-up.png')"
+						icon_selected="@Embed(source='assets/icons/arrow-up-selected.png')"
+						id="btnUp" click="btnUp_clickHandler(event)" />
+					
+					<controls:SelectableButton 
+						icon_normal="@Embed(source='assets/icons/arrow-down.png')"
+						icon_selected="@Embed(source='assets/icons/arrow-down-selected.png')" 
+						id="btnDown" click="btnDown_clickHandler(event)" />
+					
+					<controls:SelectableButton 
+						icon_normal="@Embed(source='assets/icons/comments.png')"
+						icon_selected="@Embed(source='assets/icons/comments-selected.png')"
+						id="btnComments" click="btnComments_clickHandler(event)" visible="{!post.data.is_self}" includeInLayout="{!post.data.is_self}"/>
+					
+					<s:Image source="@Embed(source='assets/icons/action.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
 				</s:HGroup>
 			</s:HGroup> 
 		</s:SkinnableContainer>
