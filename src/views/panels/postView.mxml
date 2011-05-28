@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%" xmlns:renderers="views.renderers.*" creationComplete="creationCompleteHandler(event)" xmlns:controls="controls.*"
-		  backgroundColor="0xCCCCCC" xmlns:panels="views.panels.*" show="showHandler(event)" hide="hideHandler(event)" >
+		  backgroundColor="0xCCCCCC" xmlns:panels="views.panels.*" show="showHandler(event)" hide="hideHandler(event)" xmlns:views="views.*" >
 	<fx:Metadata>
 		[Event(name="close", type="flash.events.Event")]
 	</fx:Metadata>
@@ -16,6 +16,8 @@
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
+			
+			import org.hamcrest.object.nullValue;
 			
 			import views.modals.SettingsModal;
 			
@@ -39,23 +41,26 @@
 			}
 			public function set post(value:Object) : void {
 				_post = value;
-				if (_post.data.is_self) {
-					this.currentState = "loading";
-					this.comments.loadComments(_post);
-					this.comments.visible = true;
-				} else {
-					this.comments.visible = false;
-				}
-				btnComments.currentState = "normal";
-				this.browser.visible = !_post.data.is_self;
 				
-				// set the up/down vote icon glows
-				btnUp.currentState = btnDown.currentState = "normal";
-				if (_post.data.likes == true) {
-					btnUp.currentState = "selected";
-				}
-				else if (_post.data.likes == false) {
-					btnDown.currentState = "selected";
+				if (_post != null) {
+					if (_post.data.is_self) {
+						this.currentState = "loading";
+						this.comments.loadComments(_post);
+						this.comments.visible = true;
+					} else {
+						this.comments.visible = false;
+					}
+					btnComments.currentState = "normal";
+					this.browser.visible = !_post.data.is_self;
+					
+					// set the up/down vote icon glows
+					btnUp.currentState = btnDown.currentState = "normal";
+					if (_post.data.likes == true) {
+						btnUp.currentState = "selected";
+					}
+					else if (_post.data.likes == false) {
+						btnDown.currentState = "selected";
+					}
 				}
 					
 			}
@@ -149,6 +154,7 @@
 			 **/
 			protected function btnBack_clickHandler(event:MouseEvent):void
 			{
+				this.post = null;
 				this.browser.visible = false;
 				this.dispatchEvent(new Event(Event.CLOSE));
 			}
@@ -263,7 +269,11 @@
 			</s:Line>
 			
 			<s:HGroup width="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" >
-				<renderers:PostDetails data="{post}" width="100%" currentState="header" />
+				
+				
+				<views:PostDetails data="{post}" width="100%" currentState="header" />
+				
+				
 				<s:HGroup>
 					<s:Image source="@Embed(source='assets/icons/arrow-left.png')" id="btnBack" click="btnBack_clickHandler(event)" />
 
@@ -280,7 +290,7 @@
 					<controls:SelectableButton 
 						icon_normal="@Embed(source='assets/icons/comments.png')"
 						icon_selected="@Embed(source='assets/icons/comments-selected.png')"
-						id="btnComments" click="btnComments_clickHandler(event)" visible="{!post.data.is_self}" includeInLayout="{!post.data.is_self}"/>
+						id="btnComments" click="btnComments_clickHandler(event)" visible="{post != null &amp;&amp; !post.data.is_self}" includeInLayout="{post != null &amp;&amp; !post.data.is_self}"/>
 					
 					<s:Image source="@Embed(source='assets/icons/action.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
 				</s:HGroup>
@@ -291,7 +301,7 @@
 		<!-- post frame -->	
 		<s:SkinnableContainer width="100%" height="100%">
 			
-			<controls:WebBrowser width="100%" height="100%" source="{post.data.url}" id="browser" />	
+			<controls:WebBrowser width="100%" height="100%" source="{post == null ? 'about:blank' : post.data.url}" id="browser" />	
 			<panels:CommentList width="100%" height="100%" visible="false" id="comments" />
 			<controls:LoadingBox includeIn="loading" />
 		</s:SkinnableContainer>

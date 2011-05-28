@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				autoDrawBackground="false" width="100%">
+				width="100%">
 	
 	<fx:Script>
 		<![CDATA[
+			import flashx.textLayout.formats.VerticalAlign;
+			
 			import mx.events.FlexEvent;
 
 			/**
 			 * only show the thumbnail image if there is one
 			 **/
-			public override function set data(value : Object) : void {
-				super.data = value;
-				if (data && data.data && data.data.thumbnail && data.data.thumbnail !='') {
+			private var _data : Object;
+			[Bindable]
+			public function get data() : Object {
+				return _data;
+			}
+			public function set data(value : Object) : void {
+				_data = value;
+				if (data && _data.data && data.data.thumbnail && data.data.thumbnail !='') {
 					
 					// sometimes thumbnail returns a relative system path from reddit.com/static/something.png
 					if ((data.data.thumbnail as String).indexOf("/static/") == 0)
@@ -33,15 +40,14 @@
 	
 	<s:states>
 		<s:State name="normal" />
-		<s:State name="hovered" />
 		<s:State name="header" />
 	</s:states>    
 	
 	
 
-	<s:Rect id="myRect" left="0" right="0" top="0" bottom="0" alpha="1.0"> 
+	<s:Rect id="myRect" left="0" right="0" top="0" bottom="0" > 
 		<s:fill> 
-			<s:SolidColor color="0xF7F7F7" alpha.normal="1.0" alpha.header="0.0"/> 
+			<s:SolidColor color="0xF7F7F7" alpha.normal="0.0" alpha.header="1.0" /> 
 		</s:fill> 
 	</s:Rect>
 	
@@ -52,7 +58,7 @@
 	</s:Line>
 	
 	
-	<s:SkinnableContainer width="100%" depth="25" color="0x040404">
+	<s:SkinnableContainer width="100%" depth="25" color="0x040404" backgroundAlpha="0.0">
 		<s:HGroup width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 			
 			<s:Group id="thumbnail" maskType="clip">
@@ -67,15 +73,25 @@
 			
 			<s:VGroup width="100%" fontSize="14">
 				<s:Label text="{data.data.title}" width="100%" fontSize="18" />
-				<s:Label text="{data.data.domain}" width="100%"/>
-				<s:HGroup fontSize="14">
-					<s:Label text="{data.data.score}" color="0xFF0000"/>
-					<s:Label text="{data.data.subreddit}"/>
-					<s:Label text="by {data.data.author}"/>
+				
+				<s:HGroup width="100%">
+					<s:VGroup>
+						<s:Label text="{data.data.domain}" width="100%"/>
+						<s:HGroup fontSize="14">
+							<s:Label text="{data.data.score}" color="0xFF0000"/>
+							<s:Label text="{data.data.subreddit}"/>
+							<s:Label text="by {data.data.author}"/>
+						</s:HGroup>
+						<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)}"/>
+					</s:VGroup>
+					<s:HGroup width="100%" horizontalAlign="right" verticalAlign="bottom" visible.normal="true" visible.header="true">
+						<s:Label text="yeah" />
+					</s:HGroup>
 				</s:HGroup>
-				<s:Label text="{FrinkData.instance.getAgoLabel(data.data.created_utc)}"/>
+				
+				
 			</s:VGroup>
 		</s:HGroup>
 	</s:SkinnableContainer>
 	
-</s:ItemRenderer>
+</s:SkinnableContainer>

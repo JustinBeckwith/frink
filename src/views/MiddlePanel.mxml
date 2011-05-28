@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					  xmlns:s="library://ns.adobe.com/flex/spark" width="550" height="100%" xmlns:panels="views.panels.*">
+					  xmlns:s="library://ns.adobe.com/flex/spark" width="550" height="100%" xmlns:panels="views.panels.*" backgroundAlpha="0.0">
 	
 	<fx:Script>
 		<![CDATA[
@@ -57,7 +57,7 @@
 		<s:State name="background" />
 	</s:states>
 	
-	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="10" radiusY="10">
+	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="5" radiusY="5">
 		<s:fill>
 			<s:SolidColor color="0xF7F7F7" />
 		</s:fill>
@@ -70,7 +70,7 @@
 	<panels:search id="pnlSearch" visible="false" includeInLayout="false"/>
 	
 	
-	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="10" radiusY="10">
+	<s:Rect left="0" right="0" top="0" bottom="0" radiusX="5" radiusY="5">
 		<s:fill>
 			<s:SolidColor color="0x000000" alpha.normal="0" alpha.background="0.2" />
 		</s:fill>

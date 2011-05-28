@@ -2,7 +2,7 @@
 <modals:ModalBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   creationComplete="settings_creationCompleteHandler(event)"
-			    backgroundColor="0xFFFFFF" title="Settings" xmlns:modals="views.modals.*" xmlns:controls="controls.*">
+			    title="Settings" xmlns:modals="views.modals.*" xmlns:controls="controls.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -106,20 +106,21 @@
 	<s:SkinnableContainer width="100%" alpha.loading="0.2">
 		
 		<s:Image bottom="0" source="@Embed(source='assets/big-frink-head.png')" alpha="0.3" />
-		
-		<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20" color="0x000000">
-			<s:Label text.loggedIn="Logged in as:" text="Username:" />
-			<s:TextInput id="txtUsername" color="0xFFFFFF" enabled="{this.currentState=='loggedOut'}" />
-			<mx:Spacer height="20" />
-			<s:Label text="Password:" includeIn="loggedOut, loading" />
-			<s:TextInput id="txtPassword" displayAsPassword="true" color="0xFFFFFF" includeIn="loggedOut, loading" />
-			<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
-			<mx:Spacer height="20" />
-			<s:HGroup horizontalAlign="center" width="100%">
-				<s:Button label="save" click="saveButton_clickHandler(event)" color="0xFFFFFF" excludeFrom="loggedIn" />
-				<s:Button label="log out" click="logOutButton_clickHandler(event)" color="0xFFFFFF" excludeFrom="loggedOut" />
-				<s:Button label="cancel" click="cancelButton_clickHandler(event)" color="0xFFFFFF" />
-			</s:HGroup>
+		<s:VGroup horizontalAlign="center" width="100%">
+			<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20">
+				<s:Label text.loggedIn="Logged in as:" text="Username:" />
+				<s:TextInput id="txtUsername" enabled="{this.currentState=='loggedOut'}" />
+				<mx:Spacer height="20" />
+				<s:Label text="Password:" includeIn="loggedOut, loading" />
+				<s:TextInput id="txtPassword" displayAsPassword="true" includeIn="loggedOut, loading" />
+				<s:Label id="lblBad" color="#FF0000" text="incorrect username or password" paddingTop="20" visible="false" includeInLayout="false" />
+				<mx:Spacer height="20" />
+				<s:HGroup horizontalAlign="center" width="100%">
+					<s:Button label="save" click="saveButton_clickHandler(event)" excludeFrom="loggedIn" />
+					<s:Button label="log out" click="logOutButton_clickHandler(event)" excludeFrom="loggedOut" />
+					<s:Button label="cancel" click="cancelButton_clickHandler(event)" />
+				</s:HGroup>
+			</s:VGroup>
 		</s:VGroup>
 	</s:SkinnableContainer>
 </modals:ModalBase>
