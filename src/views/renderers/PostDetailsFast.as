@@ -1,4 +1,8 @@
 package views.renderers {
+	import flash.text.TextFormat;
+	
+	import mx.styles.CSSStyleDeclaration;
+	
 	import spark.components.IconItemRenderer;
 	import spark.components.supportClasses.StyleableTextField;
 
@@ -11,12 +15,11 @@ package views.renderers {
 		protected var dataChanged : Boolean = false;
 		
 		protected var oldUnscaledWidth : int = 0;
-		//protected var oldPreferredTitleHeight : int = 0;
 		
 		public var titleDisplay : StyleableTextField;
-		public var domainLabelDisplay : StyleableTextField;
-		public var subredditLabelDisplay: StyleableTextField;
-		public var scoreLabelDisplay : StyleableTextField;
+		public var domainDisplay : StyleableTextField;
+		public var subredditDisplay: StyleableTextField;
+		public var scoreDisplay : StyleableTextField;
 		
 		
 		override protected function createChildren():void {
@@ -34,6 +37,30 @@ package views.renderers {
 				addChild(titleDisplay);
 			}
 			
+			// DOMAIN
+			if (!domainDisplay) {
+				domainDisplay = new StyleableTextField();
+				domainDisplay.styleName = this;
+				domainDisplay.editable = false;
+				domainDisplay.selectable = false;
+				domainDisplay.multiline = false;
+				domainDisplay.wordWrap = false;
+				domainDisplay.setStyle("fontSize", 14);
+				addChild(domainDisplay);
+			}
+			
+			// SUBREDDIT
+			if (!subredditDisplay) {
+				subredditDisplay = new StyleableTextField();
+				subredditDisplay.styleName = this;
+				subredditDisplay.editable = false;
+				subredditDisplay.selectable = false;
+				subredditDisplay.multiline = false;
+				subredditDisplay.wordWrap = false;
+				subredditDisplay.setStyle("fontSize", 14);
+				addChild(subredditDisplay);
+			}
+			
 			// use a function on the icon to ensure it gets created
 			this.iconFunction = function(data:Object) : String {
 				if (data && data.data && data.data.thumbnail && data.data.thumbnail !='') {
@@ -47,18 +74,9 @@ package views.renderers {
 			}
 		}
 		
-		
-		override public function styleChanged(styleName:String):void {
-			super.styleChanged(styleName);
-			
-			if (titleDisplay)
-				titleDisplay.styleChanged(styleName);
-		}
-		
-		
 		override public function set data(value:Object):void {
 			super.data = value;
-			this.dataChanged = false;
+			this.dataChanged = true;
 			this.invalidateProperties();			
 		}
 		
@@ -68,9 +86,11 @@ package views.renderers {
 			
 			if (this.dataChanged) {
 				this.dataChanged = false;
-				
+				this.labelDisplay.text = '';
 				this.titleDisplay.text = data.data.title;
-				
+				this.domainDisplay.text = data.data.domain;
+				this.subredditDisplay.text = data.data.score + " " + data.data.subreddit + " by " + data.data.author;
+					
 				invalidateSize();
 				invalidateDisplayList();
 			}
@@ -141,20 +161,35 @@ package views.renderers {
 				myMeasuredMinHeight = Math.max(myMeasuredHeight, decoratorHeight);
 			}
 			
+			
+			
 			// Text is aligned next to icon
 			var titleWidth:Number = 0;
 			var titleHeight:Number = 0;
 			
-			
-			var titleDisplayEstimatedWidth:Number = 640 - paddingAndGapWidth - myIconWidth - decoratorWidth;
+			var titleDisplayEstimatedWidth:Number = oldUnscaledWidth - paddingAndGapWidth - myIconWidth - decoratorWidth;
 			setElementSize(titleDisplay, titleDisplayEstimatedWidth, NaN);
 				
 			titleWidth = getElementPreferredWidth(titleDisplay);
 			titleHeight = getElementPreferredHeight(titleDisplay);
 			
+			// get domain dims
+			var domainWidth:Number = 0;
+			var domainHeight:Number = 0;
 			
-			myMeasuredWidth += Math.max(titleWidth);
-			myMeasuredHeight = Math.max(myMeasuredHeight, titleHeight + verticalGap);
+			domainWidth = getElementPreferredWidth(domainDisplay);
+			domainHeight = getElementPreferredHeight(domainDisplay);
+			
+			// get subreddit doms
+			var subredditWidth:Number = 0;
+			var subredditHeight:Number = 0;
+			
+			subredditWidth = getElementPreferredWidth(subredditDisplay);
+			subredditHeight = getElementPreferredHeight(subredditDisplay);
+			
+			
+			myMeasuredWidth += Math.max(titleWidth, domainWidth, subredditWidth);
+			myMeasuredHeight = Math.max(myMeasuredHeight, titleHeight + verticalGap + domainHeight + verticalGap + subredditHeight);
 			
 			myMeasuredWidth += paddingAndGapWidth;
 			myMeasuredMinWidth += paddingAndGapWidth;
@@ -182,26 +217,15 @@ package views.renderers {
 			var decoratorWidth:Number = 0;
 			var decoratorHeight:Number = 0;
 			
-			var hasLabel:Boolean = labelDisplay && labelDisplay.text != "";
-			var hastitle:Boolean = titleDisplay && titleDisplay.text != "";
-			
 			var paddingLeft:Number   = getStyle("paddingLeft");
 			var paddingRight:Number  = getStyle("paddingRight");
 			var paddingTop:Number    = getStyle("paddingTop");
 			var paddingBottom:Number = getStyle("paddingBottom");
 			var horizontalGap:Number = getStyle("horizontalGap");
 			var verticalAlign:String = getStyle("verticalAlign");
-			var verticalGap:Number   = (hasLabel && hastitle) ? getStyle("verticalGap") : 0;
+			var verticalGap:Number   = getStyle("verticalGap");
 			
-			var vAlign:Number;
-			if (verticalAlign == "top")
-				vAlign = 0;
-			else if (verticalAlign == "bottom")
-				vAlign = 1;
-			else // if (verticalAlign == "middle")
-				vAlign = 0.5;
-			// made "middle" last even though it's most likely so it is the default and if someone 
-			// types "center", then it will still vertically center itself.
+			var vAlign:Number = 0;
 			
 			var viewWidth:Number  = unscaledWidth  - paddingLeft - paddingRight;
 			var viewHeight:Number = unscaledHeight - paddingTop  - paddingBottom;
@@ -250,11 +274,10 @@ package views.renderers {
 			// calculte the natural height for the label
 			var labelTextHeight:Number = 0;
 			
-			if (hastitle)
-			{
-				// commit styles to make sure it uses updated look
-				titleDisplay.commitStyles();
-			}
+			// commit styles to make sure it uses updated look
+			titleDisplay.commitStyles();
+			domainDisplay.commitStyles();
+			subredditDisplay.commitStyles();
 			
 			// now size and position the elements, 3 different configurations we care about:
 			// 1) label and title
@@ -264,71 +287,123 @@ package views.renderers {
 			// label display goes on top
 			// title display goes below
 			
-			var labelWidth:Number = 0;
-			var labelHeight:Number = 0;
+			
+			
 			var titleWidth:Number = 0;
 			var titleHeight:Number = 0;
 			
-			if (hasLabel)
+	
+			
+			// MEASURE TITLE
+		
+			// handle title...because the text is multi-line, measuring and layout 
+			// can be somewhat tricky
+			titleWidth = Math.max(labelComponentsViewWidth, 0);
+			
+			// We get called with unscaledWidth = 0 a few times...
+			// rather than deal with this case normally, 
+			// we can just special-case it later to do something smarter
+			if (titleWidth == 0)
 			{
-				// handle labelDisplay.  it can only be 1 line
+				// if unscaledWidth is 0, we want to make sure titleDisplay is invisible.
+				// we could set titleDisplay's width to 0, but that would cause an extra 
+				// layout pass because of the text reflow logic.  Because of that, we 
+				// can just set its height to 0.
+				setElementSize(titleDisplay, NaN, 0);
+			}
+			else
+			{
+				// grab old textDisplay height before resizing it
+				var oldPreferredtitleHeight:Number = getElementPreferredHeight(titleDisplay);
 				
-				// width of label takes up rest of space
-				// height only takes up what it needs so we can properly place the title
-				// and make sure verticalAlign is operating on a correct value.
-				labelWidth = Math.max(labelComponentsViewWidth, 0);
-				labelHeight = labelTextHeight;
+				// keep track of oldUnscaledWidth so we have a good guess as to the width 
+				// of the titleDisplay on the next measure() pass
+				oldUnscaledWidth = unscaledWidth;
 				
-				if (labelWidth == 0)
-					setElementSize(labelDisplay, NaN, 0);
-				else
-					setElementSize(labelDisplay, labelWidth, labelHeight);
+				// set the width of titleDisplay to titleWidth.
+				// set the height to oldtitleHeight.  If the height's actually wrong, 
+				// we'll invalidateSize() and go through this layout pass again anyways
+				setElementSize(titleDisplay, titleWidth, oldPreferredtitleHeight);
 				
-				// attempt to truncate text
-				labelDisplay.truncateToFit();
+				// grab new titleDisplay height after the titleDisplay has taken its final width
+				var newPreferredtitleHeight:Number = getElementPreferredHeight(titleDisplay);
+				
+				// if the resize caused the titleDisplay's height to change (because of 
+				// text reflow), then we need to remeasure ourselves with our new width
+				if (oldPreferredtitleHeight != newPreferredtitleHeight)
+					invalidateSize();
+				
+				titleHeight = newPreferredtitleHeight;
 			}
 			
-			if (hastitle)
+			
+			// MEASURE DOMAIN
+			var domainWidth:Number = 0;
+			var domainHeight:Number = 0;
+			
+			domainWidth = Math.max(labelComponentsViewWidth, 0);
+			if (domainWidth == 0)
 			{
-				// handle title...because the text is multi-line, measuring and layout 
-				// can be somewhat tricky
-				titleWidth = Math.max(labelComponentsViewWidth, 0);
+				setElementSize(domainDisplay, NaN, 0);
+			}
+			else
+			{
+				// grab old textDisplay height before resizing it
+				var oldPreferredDomainHeight:Number = getElementPreferredHeight(domainDisplay);
 				
-				// We get called with unscaledWidth = 0 a few times...
-				// rather than deal with this case normally, 
-				// we can just special-case it later to do something smarter
-				if (titleWidth == 0)
-				{
-					// if unscaledWidth is 0, we want to make sure titleDisplay is invisible.
-					// we could set titleDisplay's width to 0, but that would cause an extra 
-					// layout pass because of the text reflow logic.  Because of that, we 
-					// can just set its height to 0.
-					setElementSize(titleDisplay, NaN, 0);
-				}
-				else
-				{
-					// grab old textDisplay height before resizing it
-					var oldPreferredtitleHeight:Number = getElementPreferredHeight(titleDisplay);
-					
-					// keep track of oldUnscaledWidth so we have a good guess as to the width 
-					// of the titleDisplay on the next measure() pass
-					oldUnscaledWidth = unscaledWidth;
-					
-					// set the width of titleDisplay to titleWidth.
-					// set the height to oldtitleHeight.  If the height's actually wrong, 
-					// we'll invalidateSize() and go through this layout pass again anyways
-					setElementSize(titleDisplay, titleWidth, oldPreferredtitleHeight);
-					
-					// grab new titleDisplay height after the titleDisplay has taken its final width
-					var newPreferredtitleHeight:Number = getElementPreferredHeight(titleDisplay);
-					
-					// if the resize caused the titleDisplay's height to change (because of 
-					// text reflow), then we need to remeasure ourselves with our new width
-					if (oldPreferredtitleHeight != newPreferredtitleHeight)
-						invalidateSize();
-					
-					titleHeight = newPreferredtitleHeight;
-				}
+				// keep track of oldUnscaledWidth so we have a good guess as to the width 
+				// of the titleDisplay on the next measure() pass
+				oldUnscaledWidth = unscaledWidth;
+				
+				// set the width of titleDisplay to titleWidth.
+				// set the height to oldtitleHeight.  If the height's actually wrong, 
+				// we'll invalidateSize() and go through this layout pass again anyways
+				setElementSize(domainDisplay, domainWidth, oldPreferredDomainHeight);
+				
+				// grab new titleDisplay height after the titleDisplay has taken its final width
+				var newPreferredDomainHeight:Number = getElementPreferredHeight(domainDisplay);
+				
+				// if the resize caused the titleDisplay's height to change (because of 
+				// text reflow), then we need to remeasure ourselves with our new width
+				if (oldPreferredDomainHeight != newPreferredDomainHeight)
+					invalidateSize();
+				
+				domainHeight = newPreferredDomainHeight;
+			}
+			
+			// MEASURE SUBREDDIT
+			
+			var subredditWidth:Number = 0;
+			var subredditHeight:Number = 0;
+			
+			subredditWidth = Math.max(labelComponentsViewWidth, 0);
+			if (subredditWidth == 0)
+			{
+				setElementSize(subredditDisplay, NaN, 0);
+			}
+			else
+			{
+				// grab old textDisplay height before resizing it
+				var oldPreferredSubredditHeight:Number = getElementPreferredHeight(subredditDisplay);
+				
+				// keep track of oldUnscaledWidth so we have a good guess as to the width 
+				// of the titleDisplay on the next measure() pass
+				oldUnscaledWidth = unscaledWidth;
+				
+				// set the width of titleDisplay to titleWidth.
+				// set the height to oldtitleHeight.  If the height's actually wrong, 
+				// we'll invalidateSize() and go through this layout pass again anyways
+				setElementSize(subredditDisplay, subredditWidth, oldPreferredSubredditHeight);
+				
+				// grab new titleDisplay height after the titleDisplay has taken its final width
+				var newPreferredSubredditHeight:Number = getElementPreferredHeight(subredditDisplay);
+				
+				// if the resize caused the titleDisplay's height to change (because of 
+				// text reflow), then we need to remeasure ourselves with our new width
+				if (oldPreferredSubredditHeight != newPreferredSubredditHeight)
+					invalidateSize();
+				
+				subredditHeight = newPreferredSubredditHeight;
 			}
 			
 			// Position the text components now that we know all heights so we can respect verticalAlign style
@@ -336,25 +411,26 @@ package views.renderers {
 			var labelComponentsY:Number = 0; 
 			
 			// Heights used in our alignment calculations.  We only care about the "real" ascent 
-			var labelAlignmentHeight:Number = 0; 
-			var titleAlignmentHeight:Number = 0; 
-			
-			if (hasLabel)
-				labelAlignmentHeight = getElementPreferredHeight(labelDisplay);
-			if (hastitle)
-				titleAlignmentHeight = getElementPreferredHeight(titleDisplay);
-			
-			totalHeight = labelAlignmentHeight + titleAlignmentHeight + verticalGap;          
+			var titleAlignmentHeight:Number = getElementPreferredHeight(titleDisplay);; 
+			var domainAlignmentHeight:Number = getElementPreferredHeight(domainDisplay);;
+			var subredditAlignmentHeight:Number = getElementPreferredHeight(subredditDisplay);
+		
+			totalHeight = titleAlignmentHeight + verticalGap + domainAlignmentHeight + verticalGap + subredditAlignmentHeight;          
 			labelComponentsY = Math.round(vAlign * (viewHeight - totalHeight)) + paddingTop;
 			
-			if (labelDisplay)
-				setElementPosition(labelDisplay, labelComponentsX, labelComponentsY);
+			var currentY:Number = labelComponentsY;
 			
-			if (titleDisplay)
-			{
-				var titleY:Number = labelComponentsY + labelAlignmentHeight + verticalGap;
-				setElementPosition(titleDisplay, labelComponentsX, titleY);
-			}
+			// title
+			setElementPosition(titleDisplay, labelComponentsX, currentY);
+			currentY += titleAlignmentHeight + verticalGap;
+						
+			// domain
+			setElementPosition(domainDisplay, labelComponentsX, currentY);
+			currentY += domainAlignmentHeight + verticalGap;
+			
+			// subreddit
+			setElementPosition(subredditDisplay, labelComponentsX, currentY);
+			currentY += subredditAlignmentHeight + verticalGap;
 		}
 		
 		

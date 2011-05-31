@@ -61,6 +61,21 @@
 					else if (_post.data.likes == false) {
 						btnDown.currentState = "selected";
 					}
+					
+					if (post.data && post.data.thumbnail && post.data.thumbnail !='') {
+						
+						// sometimes thumbnail returns a relative system path from reddit.com/static/something.png
+						if ((post.data.thumbnail as String).indexOf("/static/") == 0)
+							post.data.thumbnail = "http://www.reddit.com" + post.data.thumbnail;
+						
+						this.img.source = post.data.thumbnail;
+						this.thumbnail.visible = true;
+						this.thumbnail.includeInLayout = true;
+						
+					} else {
+						this.thumbnail.visible = false;
+						this.thumbnail.includeInLayout = false;
+					}
 				}
 					
 			}
@@ -270,30 +285,63 @@
 			
 			<s:HGroup width="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" >
 				
+					<s:HGroup width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+						
+						<s:Group id="thumbnail" maskType="clip">
+							<s:mask>
+								<s:Group>
+									<s:BorderContainer cornerRadius="5" width="{img.width}" height="{img.height}" />	
+								</s:Group>
+							</s:mask>
+							<s:Image id="img" />
+						</s:Group>
+						
+						
+						<s:VGroup width="100%" fontSize="14">
+							<s:Label text="{post.data.title}" width="100%" fontSize="18" />
+							
+							<s:HGroup width="100%" verticalAlign="bottom">
+								<s:VGroup width="100%">
+									<s:Label text="{post.data.domain}" width="100%"/>
+									<s:HGroup fontSize="14">
+										<s:Label text="{post.data.score}" color="0xFF0000"/>
+										<s:Label text="{post.data.subreddit}"/>
+										<s:Label text="by {post.data.author}"/>
+									</s:HGroup>
+									<s:Label text="{FrinkData.instance.getAgoLabel(post.data.created_utc)}"/>
+								</s:VGroup>
+								<s:HGroup>
+									<s:Image source="@Embed(source='assets/icons/arrow-left.png')" id="btnBack" click="btnBack_clickHandler(event)" />
+									
+									<controls:SelectableButton 
+										icon_normal="@Embed(source='assets/icons/arrow-up.png')"
+										icon_selected="@Embed(source='assets/icons/arrow-up-selected.png')"
+										id="btnUp" click="btnUp_clickHandler(event)" />
+									
+									<controls:SelectableButton 
+										icon_normal="@Embed(source='assets/icons/arrow-down.png')"
+										icon_selected="@Embed(source='assets/icons/arrow-down-selected.png')" 
+										id="btnDown" click="btnDown_clickHandler(event)" />
+									
+									<controls:SelectableButton 
+										icon_normal="@Embed(source='assets/icons/comments.png')"
+										icon_selected="@Embed(source='assets/icons/comments-selected.png')"
+										id="btnComments" click="btnComments_clickHandler(event)" visible="{post != null &amp;&amp; !post.data.is_self}" includeInLayout="{post != null &amp;&amp; !post.data.is_self}"/>
+									
+									<s:Image source="@Embed(source='assets/icons/action.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
+								</s:HGroup>
+							</s:HGroup>
+							
+							
+						</s:VGroup>
+						
+						
+						
+					</s:HGroup>
 				
-				<views:PostDetails data="{post}" width="100%" currentState="header" />
 				
 				
-				<s:HGroup>
-					<s:Image source="@Embed(source='assets/icons/arrow-left.png')" id="btnBack" click="btnBack_clickHandler(event)" />
-
-					<controls:SelectableButton 
-						icon_normal="@Embed(source='assets/icons/arrow-up.png')"
-						icon_selected="@Embed(source='assets/icons/arrow-up-selected.png')"
-						id="btnUp" click="btnUp_clickHandler(event)" />
-					
-					<controls:SelectableButton 
-						icon_normal="@Embed(source='assets/icons/arrow-down.png')"
-						icon_selected="@Embed(source='assets/icons/arrow-down-selected.png')" 
-						id="btnDown" click="btnDown_clickHandler(event)" />
-					
-					<controls:SelectableButton 
-						icon_normal="@Embed(source='assets/icons/comments.png')"
-						icon_selected="@Embed(source='assets/icons/comments-selected.png')"
-						id="btnComments" click="btnComments_clickHandler(event)" visible="{post != null &amp;&amp; !post.data.is_self}" includeInLayout="{post != null &amp;&amp; !post.data.is_self}"/>
-					
-					<s:Image source="@Embed(source='assets/icons/action.png')" id="btnWindow" click="btnWindow_clickHandler(event)" />
-				</s:HGroup>
+				
 			</s:HGroup> 
 		</s:SkinnableContainer>
 		
