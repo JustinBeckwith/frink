@@ -20,7 +20,7 @@ package views.renderers {
 		public var domainDisplay : StyleableTextField;
 		public var subredditDisplay: StyleableTextField;
 		public var scoreDisplay : StyleableTextField;
-		
+		public var authorDisplay : StyleableTextField;
 		
 		override protected function createChildren():void {
 			
@@ -61,6 +61,31 @@ package views.renderers {
 				addChild(subredditDisplay);
 			}
 			
+			// SCORE
+			if (!scoreDisplay) {
+				scoreDisplay = new StyleableTextField();
+				scoreDisplay.styleName = this;
+				scoreDisplay.editable = false;
+				scoreDisplay.selectable = false;
+				scoreDisplay.multiline = false;
+				scoreDisplay.wordWrap = false;
+				scoreDisplay.setStyle("fontSize", 14);
+				scoreDisplay.setStyle("color", "0xFF0000");
+				addChild(scoreDisplay);
+			}
+			
+			// AUTHOR
+			if (!authorDisplay) {
+				authorDisplay = new StyleableTextField();
+				authorDisplay.styleName = this;
+				authorDisplay.editable = false;
+				authorDisplay.selectable = false;
+				authorDisplay.multiline = false;
+				authorDisplay.wordWrap = false;
+				authorDisplay.setStyle("fontSize", 14);
+				addChild(authorDisplay);
+			}
+			
 			// use a function on the icon to ensure it gets created
 			this.iconFunction = function(data:Object) : String {
 				if (data && data.data && data.data.thumbnail && data.data.thumbnail !='') {
@@ -89,7 +114,9 @@ package views.renderers {
 				this.labelDisplay.text = '';
 				this.titleDisplay.text = data.data.title;
 				this.domainDisplay.text = data.data.domain;
-				this.subredditDisplay.text = data.data.score + " " + data.data.subreddit + " by " + data.data.author;
+				this.scoreDisplay.text = data.data.score;
+				this.authorDisplay.text = "by " + data.data.author;
+				this.subredditDisplay.text = data.data.subreddit;
 					
 				invalidateSize();
 				invalidateDisplayList();
@@ -184,8 +211,8 @@ package views.renderers {
 			var subredditWidth:Number = 0;
 			var subredditHeight:Number = 0;
 			
-			subredditWidth = getElementPreferredWidth(subredditDisplay);
-			subredditHeight = getElementPreferredHeight(subredditDisplay);
+			subredditWidth = getElementPreferredWidth(subredditDisplay) + getElementPreferredWidth(scoreDisplay) + getElementPreferredWidth(authorDisplay);
+			subredditHeight = Math.max(getElementPreferredHeight(subredditDisplay), getElementPreferredHeight(scoreDisplay), getElementPreferredHeight(authorDisplay));
 			
 			
 			myMeasuredWidth += Math.max(titleWidth, domainWidth, subredditWidth);
@@ -278,6 +305,8 @@ package views.renderers {
 			titleDisplay.commitStyles();
 			domainDisplay.commitStyles();
 			subredditDisplay.commitStyles();
+			authorDisplay.commitStyles();
+			scoreDisplay.commitStyles();
 			
 			// now size and position the elements, 3 different configurations we care about:
 			// 1) label and title
@@ -376,7 +405,7 @@ package views.renderers {
 			var subredditWidth:Number = 0;
 			var subredditHeight:Number = 0;
 			
-			subredditWidth = Math.max(labelComponentsViewWidth, 0);
+			subredditWidth = getElementPreferredWidth(subredditDisplay);
 			if (subredditWidth == 0)
 			{
 				setElementSize(subredditDisplay, NaN, 0);
@@ -406,6 +435,76 @@ package views.renderers {
 				subredditHeight = newPreferredSubredditHeight;
 			}
 			
+			// MEASURE SCORE
+			
+			var scoreWidth:Number = 0;
+			var scoreHeight:Number = 0;
+			
+			scoreWidth = getElementPreferredWidth(scoreDisplay);
+			if (scoreWidth == 0)
+			{
+				setElementSize(scoreDisplay, NaN, 0);
+			}
+			else
+			{
+				// grab old textDisplay height before resizing it
+				var oldPreferredScoreHeight:Number = getElementPreferredHeight(scoreDisplay);
+				
+				// keep track of oldUnscaledWidth so we have a good guess as to the width 
+				// of the titleDisplay on the next measure() pass
+				oldUnscaledWidth = unscaledWidth;
+				
+				// set the width of titleDisplay to titleWidth.
+				// set the height to oldtitleHeight.  If the height's actually wrong, 
+				// we'll invalidateSize() and go through this layout pass again anyways
+				setElementSize(scoreDisplay, scoreWidth, oldPreferredScoreHeight);
+				
+				// grab new titleDisplay height after the titleDisplay has taken its final width
+				var newPreferredScoreHeight:Number = getElementPreferredHeight(scoreDisplay);
+				
+				// if the resize caused the titleDisplay's height to change (because of 
+				// text reflow), then we need to remeasure ourselves with our new width
+				if (oldPreferredScoreHeight != newPreferredScoreHeight)
+					invalidateSize();
+				
+				scoreHeight = newPreferredScoreHeight;
+			}
+			
+			// MEASURE Author
+			
+			var authorWidth:Number = 0;
+			var authorHeight:Number = 0;
+			
+			authorWidth = getElementPreferredWidth(authorDisplay);
+			if (authorWidth == 0)
+			{
+				setElementSize(authorDisplay, NaN, 0);
+			}
+			else
+			{
+				// grab old textDisplay height before resizing it
+				var oldPreferredAuthorHeight:Number = getElementPreferredHeight(authorDisplay);
+				
+				// keep track of oldUnscaledWidth so we have a good guess as to the width 
+				// of the titleDisplay on the next measure() pass
+				oldUnscaledWidth = unscaledWidth;
+				
+				// set the width of titleDisplay to titleWidth.
+				// set the height to oldtitleHeight.  If the height's actually wrong, 
+				// we'll invalidateSize() and go through this layout pass again anyways
+				setElementSize(authorDisplay, authorWidth, oldPreferredAuthorHeight);
+				
+				// grab new titleDisplay height after the titleDisplay has taken its final width
+				var newPreferredAuthorHeight:Number = getElementPreferredHeight(authorDisplay);
+				
+				// if the resize caused the titleDisplay's height to change (because of 
+				// text reflow), then we need to remeasure ourselves with our new width
+				if (oldPreferredAuthorHeight != newPreferredAuthorHeight)
+					invalidateSize();
+				
+				authorHeight = newPreferredAuthorHeight;
+			}
+			
 			// Position the text components now that we know all heights so we can respect verticalAlign style
 			var totalHeight:Number = 0;
 			var labelComponentsY:Number = 0; 
@@ -429,7 +528,10 @@ package views.renderers {
 			currentY += domainAlignmentHeight + verticalGap;
 			
 			// subreddit
-			setElementPosition(subredditDisplay, labelComponentsX, currentY);
+			trace ("subreddit Width: " + subredditWidth);
+			setElementPosition(scoreDisplay, labelComponentsX, currentY);
+			setElementPosition(subredditDisplay, labelComponentsX + verticalGap + scoreWidth, currentY);
+			setElementPosition(authorDisplay, labelComponentsX + verticalGap + scoreWidth + verticalGap + subredditWidth, currentY);
 			currentY += subredditAlignmentHeight + verticalGap;
 		}
 		
