@@ -1,14 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
 <qnx>
-	<initialWindow>
-        <systemChrome>none</systemChrome>
-        <transparent>false</transparent>
-    </initialWindow>
-    <icon>
-        <image>assets/icon.png</image>
-    </icon>
-    <publisher>Koipond Labs</publisher>
-    <category>core.media</category>
-    <permission>access_internet</permission>
-    <permission>access_shared</permission>
-    <permission>play_audio</permission>
+   <initialWindow>
+      <systemChrome>none</systemChrome>
+      <transparent>false</transparent>
+   </initialWindow>
+
+   <icon>
+      <image>assets/icon.png</image>
+   </icon>
+
+   <category>core.media</category>
+   <permission>access_internet</permission>
+   <permission>access_shared</permission>
+   <permission>play_audio</permission>
+   <author>Koipond Labs</author>
+   <authorId>gYAAgNmO9AN9uFnUXxV9qu0Q3Mk</authorId>
 </qnx>

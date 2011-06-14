@@ -11,6 +11,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
+			
 			[Bindable]
 			protected var childComments : ArrayCollection = new ArrayCollection();
 			
@@ -77,6 +78,9 @@
 						if (this.data && this.data.data && this.data.data.replies && this.data.data.replies.data) {
 							this.childComments.addAll(new ArrayCollection(data.data.replies.data.children));
 						}
+						
+						// set the body of the textarea
+						this.processBody(this.data.data.body);
 					}
 				}
 			}
@@ -112,6 +116,20 @@
 			{
 				trace('success!');
 			}
+			
+			/**
+			 * process the body formatting language to render styled output
+			 **/
+			protected function processBody(body : String) : String {
+				
+				var txt : String = body;
+				
+				// italics are formatted as *the italic text*
+				var pattern : RegExp = /\*.*?\*/;
+				txt = body.replace(pattern, "<i>$&</i>");  
+				
+				return txt;
+			}
 
 		]]>
 	</fx:Script>
@@ -138,7 +156,7 @@
 					</s:HGroup>
 				</s:SkinnableContainer>
 				<s:HGroup width="100%" visible="{!this.isCollapsed}" includeInLayout="{!this.isCollapsed}" paddingBottom="5">
-					<s:Label width="100%" text="{data.data.body}"  />	
+					<s:Label width="100%" text="{data.data.body}"  />
 				</s:HGroup>
 				
 				<s:HGroup width="100%" visible="{!this.isCollapsed &amp;&amp; this.childComments.length > 0}" includeInLayout="{!this.isCollapsed &amp;&amp; this.childComments.length > 0}">
@@ -151,7 +169,7 @@
 					</s:SkinnableContainer>
 					<s:DataGroup id="list" width="100%" dataProvider="{childComments}" itemRenderer="views.renderers.CommentDetails">
 						<s:layout>
-							<s:VerticalLayout />
+							<s:VerticalLayout useVirtualLayout="true" />
 						</s:layout>
 					</s:DataGroup>
 				</s:HGroup>

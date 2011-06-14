@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modals:ModalBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" xmlns:controls="controls.*"
-		   backgroundColor="0xFFFFFF" title="About" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:modals="views.modals.*">
+		   title="About" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:modals="views.modals.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -37,14 +37,14 @@
 		<s:Image bottom="0" source="@Embed(source='assets/big-frink-head.png')" alpha="0.3" />
 
 		<s:VGroup paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20" 
-				  color="0x000000" horizontalAlign="center" width="100%" gap="25">
+				  horizontalAlign="center" width="100%" gap="25">
 			
 			<s:VGroup fontSize="18" fontWeight="bold">
-				<s:Label text="Version 1.0.1" />
+				<s:Label text="Version 1.1.0" />
 				<s:Label text="A reddit app designed for tablets by reddit user justinblat." />	
 			</s:VGroup>
 			
-			<s:List change="list_changeHandler(event)" color="0xFFFFFF" width="300" id="list" itemRenderer="views.renderers.LinkItem">
+			<s:List change="list_changeHandler(event)" width="300" id="list" itemRenderer="spark.components.LabelItemRenderer" borderColor="0x000000" borderVisible="true" fontWeight="bold">
 				<s:dataProvider>
 					<s:ArrayList>
 						<fx:Object label="Visit our blog" url="http://jbeckwith.com"  />
@@ -55,7 +55,7 @@
 				</s:dataProvider>
 			</s:List>
 			
-			<s:Button label="close" click="cancelButton_clickHandler(event)" color="0xFFFFFF" fontSize="18" />
+			<s:Button label="close" click="cancelButton_clickHandler(event)" fontSize="18" />
 			
 		</s:VGroup>
 	</s:SkinnableContainer>

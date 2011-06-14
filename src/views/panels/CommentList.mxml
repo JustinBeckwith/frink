@@ -112,9 +112,9 @@
 			</s:SkinnableContainer>
 			
 			
-			<s:DataGroup width="100%" height="100%" id="list" dataProvider="{comments}" itemRenderer="views.renderers.CommentDetails">
+			<s:DataGroup width="100%" height="100%" id="list" dataProvider="{comments}" itemRenderer="views.renderers.CommentDetailsFast">
 				<s:layout>
-					<s:VerticalLayout />
+					<s:VerticalLayout gap="0" useVirtualLayout="true" />
 				</s:layout>
 			</s:DataGroup>
 		</s:VGroup>

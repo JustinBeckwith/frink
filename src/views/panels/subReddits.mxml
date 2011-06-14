@@ -101,12 +101,16 @@
 			protected function propertyChangeHandler(event : PropertyChangeEvent) : void {
 				if ( event.property == "verticalScrollPosition" ) {
 					var vsb:VScrollBar = list.scroller.verticalScrollBar;
-					if (vsb.value == vsb.maximum && this.currentState != "loadingMore" && this.page_after != null) {
+					if (vsb.value == (vsb.maximum - vsb.pageSize) && this.currentState != "loadingMore" && this.page_after != null) {
 						// load the next page of posts if at the bottom of the list
 						this.currentState = "loadingMore";
 						FrinkData.instance.api.loadSubReddits(null, this.page_after);
 					}
 				}
+			}
+			
+			protected function getLabel(data:Object) : String {
+				return data.data.display_name;
 			}
 		]]>
 	</fx:Script>
@@ -120,7 +124,7 @@
 	
 	<controls:LoadingBox includeIn="loading" />
 	<s:VGroup width="100%" height="100%" includeIn="normal, loadingMore">
-		<s:List id="list" width="100%" height="100%" dataProvider="{reddits}" itemRenderer="views.renderers.SubRedditDetails"
+		<s:List id="list" width="100%" height="100%" dataProvider="{reddits}" itemRenderer="spark.components.LabelItemRenderer" labelFunction="getLabel" 
 			skinClass="skins.FrinkListSkin"
 			change="list_changeHandler(event)"
 			creationComplete="list_creationCompleteHandler(event)" />

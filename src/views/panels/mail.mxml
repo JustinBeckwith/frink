@@ -1,8 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panels:frinkPanel xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:panels="views.panels.*">
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
-	<s:Label text="Mail coming soon!" />
+				   xmlns:s="library://ns.adobe.com/flex/spark" xmlns:panels="views.panels.*" xmlns:controls="controls.*"
+				    creationComplete="creationCompleteHandler(event)">
+	<fx:Metadata>
+		[Event(name="change", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import data.MessageType;
+			
+			import events.FrinkEvent;
+			import events.RedditEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
+			
+			import spark.components.VScrollBar;
+			import spark.events.IndexChangeEvent;
+			
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Variables
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 *	rolling list of available subreddits
+			 **/
+			[Bindable]
+			protected var messages : ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var page_before : String;
+			
+			[Bindable]
+			protected var page_after : String;
+			
+			[Bindable]
+			public var message : Object;
+			
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Properties
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * inbox, comments, sent, or mod messages 
+			 **/
+			protected function get selectedType() : String {
+				return (buttonBar.selectedItem as String).toLocaleLowerCase();	
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Methods
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * when the ui is shown bind the list of messages
+			 **/
+			public function loadMessages(messageType:String=MessageType.INBOX) : void {
+				this.currentState = "loading";
+				this.messages.removeAll();
+				if (messageType != selectedType)
+					buttonBar.selectedItem = messageType;
+				FrinkData.instance.api.loadMessages(messageType);
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 * set up the event listeners for the api
+			 **/
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				FrinkData.instance.addEventListener(FrinkEvent.AUTH_CHANGE, frink_authChangeHandler);
+				FrinkData.instance.api.addEventListener(RedditEvent.MESSAGES_LOADED, api_messagesLoaded);
+			}
+			
+			/**
+			 * show the message details
+			 **/
+			protected function list_changeHandler(event : Event) : void {
+				this.message = list.selectedItem;
+				this.dispatchEvent(new Event(Event.CHANGE));
+			}
+			
+			/**
+			 * bind the posts to the list
+			 **/
+			protected function api_messagesLoaded(event : RedditEvent) : void {
+				
+				var records : Array = event.result.data.children as Array;
+				messages.addAll(new ArrayCollection(records));
+				
+				// store the identifiers for the prev and next pages
+				this.page_after = event.result.data.after;
+				this.page_before = event.result.data.before;
+				
+				this.currentState = records.length == 0 ? "empty" : "normal";
+			}
+			
+			
+			
+			/**
+			 * add a scroll handler to the list after created manually
+			 **/
+			protected function list_creationCompleteHandler(event:FlexEvent):void
+			{
+				//list.scroller.verticalScrollBar.addEventListener(Event.CHANGE, list_verticalScrollBar_change);
+				// Does not work with mouse wheel or arrow buttons due to bug http://bugs.adobe.com/jira/browse/SDK-26533
+				/* list.scroller.verticalScrollBar.addEventListener( Event.CHANGE, verticalScrollBarChangeHandler ); */
+				list.scroller.viewport.addEventListener( PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler );
+			}
+			
+			/**
+			 * list scroll event
+			 **/
+			protected function propertyChangeHandler(event : PropertyChangeEvent) : void {
+				if ( event.property == "verticalScrollPosition" ) {
+					var vsb:VScrollBar = list.scroller.verticalScrollBar;
+					if (vsb.value == (vsb.maximum - vsb.pageSize) && this.currentState != "loadingMore" && this.page_after != null) {
+						// load the next page of posts if at the bottom of the list
+						this.currentState = "loadingMore";
+						FrinkData.instance.api.loadMessages(this.selectedType, null, this.page_after);
+					}
+				}
+			}
+			
+			/**
+			 * rebind the posts with the new list
+			 **/
+			protected function buttonBar_changeHandler(event:IndexChangeEvent):void
+			{
+				this.loadMessages(this.selectedType);
+			}
+			
+			/**
+			 *	rebind the list after a login/logout 
+			 **/
+			protected function frink_authChangeHandler(event:FrinkEvent) : void {
+				if (FrinkData.instance.isLoggedIn)
+					this.loadMessages(this.selectedType);
+			}
+
+		]]>
+	</fx:Script>
+	
+	<panels:states>
+		<s:State name="loading" />
+		<s:State name="normal" />
+		<s:State name="loadingMore" />
+		<s:State name="empty" />
+	</panels:states>
+	
+	<controls:LoadingBox includeIn="loading" />
+	
+	
+	
+	<s:VGroup width="100%" height="100%">
+		
+		<s:VGroup width="100%" paddingLeft="5" paddingRight="5" paddingTop="5">
+			<s:ButtonBar id="buttonBar" fontSize="14" fontWeight="bold" selectedIndex="0" width="100%" requireSelection="true" change="buttonBar_changeHandler(event)">
+				<s:ArrayCollection>
+					<fx:String>inbox</fx:String> 
+					<fx:String>sent</fx:String> 
+					<fx:String>comments</fx:String> 
+					<fx:String>moderator</fx:String> 
+				</s:ArrayCollection>
+			</s:ButtonBar>
+		</s:VGroup>
+		
+		<s:List id="list" width="100%" height="100%" dataProvider="{messages}" itemRenderer="views.renderers.MailMessage"
+				skinClass="skins.FrinkListSkin"
+				change="list_changeHandler(event)"
+				creationComplete="list_creationCompleteHandler(event)" excludeFrom="empty" />
+		
+		
+		<s:Label color="0xFF0000" fontSize="14" text="there doesn't seem to be anything here" includeIn="empty" paddingTop="15" paddingLeft="25" />
+		
+		<controls:ListLoadingBox includeIn="loadingMore" />
+	</s:VGroup>
+	
 </panels:frinkPanel>

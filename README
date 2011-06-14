@@ -6,3 +6,10 @@ Frink! is written in as3 and mxml, using Adobe Flex 4.5.  The project files for 
 
 For more information, please visit Frink! at http://frinkapp.com.    
 
+Version 1.1.0 includes:
+* mail - you can now send and receive mail
+* gesture support - swipe to move panels around instead of hitting the arrows
+* comments now render in html
+
+
+mail!

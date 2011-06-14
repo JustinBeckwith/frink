@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="toolbar" xmlns:controls="controls.*" width="200" height="100%" xmlns:mx="library://ns.adobe.com/flex/mx">
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" xmlns:controls="controls.*" 
+		width="200" height="100%" xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="creationCompleteHandler(event)" backgroundAlpha="0.0">
 	<s:layout>
 		<s:VerticalLayout gap="0"/>
 	</s:layout>
@@ -11,6 +13,10 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import events.FrinkEvent;
+			import events.RedditEvent;
+			
+			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
 			import spark.components.Application;
@@ -26,19 +32,26 @@
 			//--------------------------------------------------------------------------
 			
 			public var selectedPanel : String = frinkPanel.FRONT_PAGE;
+			protected var isNewMail : Boolean = false;
 			
+			[Embed(source="assets/icons/mail-emboss.png")]
+			[Bindable]
+			protected var imgMailEmboss:Class;
+			
+			[Embed(source="assets/icons/mail-emboss-orange.png")]
+			[Bindable]
+			protected var imgMailOrange:Class;
 			
 			//--------------------------------------------------------------------------
 			//
-			//  Event Handlers
+			//	Methods
 			//
 			//--------------------------------------------------------------------------
 			
 			/**
-			 * a list button on the left was clicked
+			 * invoke click on selected button
 			 **/
-			protected function btnPanel_clickHandler(event:MouseEvent):void
-			{
+			public function selectButton(button:ImageButton) : void {
 				
 				this.btnFrontPage.currentState = "normal";
 				this.btnAllReddits.currentState = "normal";
@@ -46,9 +59,9 @@
 				this.btnProfile.currentState = "normal";
 				this.btnSearch.currentState = "normal";
 				this.btnMail.currentState = "normal";
-				(event.currentTarget as ImageButton).currentState = "selected";
+				button.currentState = "selected";
 				
-				switch (event.currentTarget) {
+				switch (button) {
 					case btnFrontPage:
 						this.selectedPanel = frinkPanel.FRONT_PAGE;
 						break;
@@ -68,8 +81,31 @@
 						this.selectedPanel = frinkPanel.MAIL;
 						break;
 				}
-				//(event.currentTarget as ImageButton).styleName = 
 				this.dispatchEvent(new Event(Event.CHANGE));
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Event Handlers
+			//
+			//--------------------------------------------------------------------------
+			
+			
+			/**
+			 * add event handlers
+			 **/
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				FrinkData.instance.addEventListener(FrinkEvent.AUTH_CHANGE, frink_authChangeHandler);
+				FrinkData.instance.api.addEventListener(RedditEvent.UNREAD_MESSAGE_COUNT_LOADED, api_unreadMessageCountHandler);
+			}
+			
+			/**
+			 * a list button on the left was clicked
+			 **/
+			protected function btnPanel_clickHandler(event:MouseEvent):void
+			{
+				this.selectButton(event.currentTarget as ImageButton);				
 			}
 
 			
@@ -98,12 +134,28 @@
 				var a : AboutModal = new AboutModal();
 				a.show(this.parent);
 			}
+			
+			/**
+			 * show the mail icon only if the user is logged in
+			 **/
+			protected function frink_authChangeHandler(event:FrinkEvent) : void {
+				this.btnMail.visible = FrinkData.instance.isLoggedIn;
+				this.isNewMail = false;
+			}
+			
+			/**
+			 * invoked when the number of unread messages is updated
+			 **/
+			protected function api_unreadMessageCountHandler(event:RedditEvent):void {
+				this.isNewMail = (event.result as int) > 0;
+				this.btnMail.icon_normal = (isNewMail ? this.imgMailOrange : this.imgMailEmboss);
+			}
 
 		]]>
 	</fx:Script>
 
 	
-	<s:SkinnableContainer width="100%">
+	<s:SkinnableContainer width="100%" backgroundAlpha="0.0">
 		<s:Line bottom="0" left="0" right="0">
 			<s:stroke>
 				<s:SolidColorStroke color="0x404045" weight="1" />
@@ -119,7 +171,7 @@
 		</s:HGroup>
 	</s:SkinnableContainer>
 
-	<s:SkinnableContainer width="100%" height="100%">
+	<s:SkinnableContainer width="100%" height="100%" backgroundAlpha="0.0">
 		<s:Rect left="0" right="0" bottom="0" height="5">
 			<s:fill>
 				<s:LinearGradient rotation="90">
@@ -129,17 +181,38 @@
 			</s:fill>
 		</s:Rect>
 		<s:VGroup width="100%" height="100%" gap="0">
-			<controls:ImageButton title="Front Page" id="btnFrontPage" icon="@Embed(source='assets/NIXUS/32x32/Home.png')" click="btnPanel_clickHandler(event)" currentState="selected" />
-			<controls:ImageButton title="All Reddits" id="btnAllReddits" icon="@Embed(source='assets/NIXUS/32x32/Web.png')" click="btnPanel_clickHandler(event)" />
-			<controls:ImageButton title="Sub Reddits" id="btnSubReddits" icon="@Embed(source='assets/NIXUS/32x32/Template.png')" click="btnPanel_clickHandler(event)" />
-			<controls:ImageButton title="Mail" id="btnMail" icon="@Embed(source='assets/NIXUS/32x32/Mail_Read.png')" click="btnPanel_clickHandler(event)" visible="false"/>
-			<controls:ImageButton title="Profile" id="btnProfile" icon="@Embed(source='assets/NIXUS/32x32/User.png')" click="btnPanel_clickHandler(event)" visible="false" />
-			<controls:ImageButton title="Search" id="btnSearch" icon="@Embed(source='assets/NIXUS/32x32/Search.png')" click="btnPanel_clickHandler(event)" visible="false" />
+			
+			<controls:ImageButton title="Front Page" id="btnFrontPage" currentState="selected"
+					icon_selected="@Embed(source='assets/icons/front-page-selected.png')" 
+					icon_normal="@Embed(source='assets/icons/front-page-emboss.png')" 
+					click="btnPanel_clickHandler(event)"  />
+			
+			<controls:ImageButton title="All Reddits" id="btnAllReddits" 
+					icon_normal="@Embed(source='assets/icons/all-reddits-emboss.png')" 
+					icon_selected="@Embed(source='assets/icons/all-reddits-selected.png')" 
+					click="btnPanel_clickHandler(event)" />
+			
+			<controls:ImageButton title="Sub Reddits" id="btnSubReddits" 
+					icon_normal="@Embed(source='assets/icons/sub-reddits-emboss.png')" 
+					icon_selected="@Embed(source='assets/icons/sub-reddits-selected.png')" 
+					click="btnPanel_clickHandler(event)" />
+			
+			<controls:ImageButton title="Mail" id="btnMail"  
+					icon_normal="@Embed(source='assets/icons/mail-emboss.png')" 
+					icon_selected="@Embed(source='assets/icons/mail-selected.png')" 
+					click="btnPanel_clickHandler(event)" visible="false" />
+			
+			<controls:ImageButton title="Profile" id="btnProfile" 
+					click="btnPanel_clickHandler(event)" visible="false" />
+			
+			<controls:ImageButton title="Search" id="btnSearch" 
+					click="btnPanel_clickHandler(event)" visible="false" />
+			
 		</s:VGroup>
 	</s:SkinnableContainer>
 	
 	
-	<s:SkinnableContainer width="100%">
+	<s:SkinnableContainer width="100%" backgroundAlpha="0.0">
 		
 		<s:Line top="1" left="0" right="0">
 			<s:stroke>
@@ -154,13 +227,13 @@
 		</s:Line>
 		
 		<s:HGroup width="100%" verticalAlign="bottom" horizontalAlign="center" paddingBottom="10" paddingLeft="15" paddingRight="15" paddingTop="10"> 
-			<s:Image id="btnWrite"  source="@Embed(source='assets/NIXUS/32x32/Edit.png')" click="btnWrite_clickHandler(event)" visible="false" includeInLayout="false"/>
-			<s:Image id="btnSettings" source="@Embed(source='assets/NIXUS/32x32/System.png')" click="btnSettings_clickHandler(event)" />
+			<s:Image id="btnWrite"  click="btnWrite_clickHandler(event)" visible="false" includeInLayout="false"/>
+			<s:Image id="btnSettings" source="@Embed(source='assets/icons/settings-emboss.png')" click="btnSettings_clickHandler(event)" />
 			<mx:Spacer width="100%" />
-			<s:Image id="btnAbout" source="@Embed(source='assets/NIXUS/32x32/Info.png')" click="btnAbout_clickHandler(event)" />
+			<s:Image id="btnAbout" source="@Embed(source='assets/icons/info-emboss.png')" click="btnAbout_clickHandler(event)" />
 		</s:HGroup>
 		
 	</s:SkinnableContainer>
  	
 	
-</s:View>
+</s:SkinnableContainer>
