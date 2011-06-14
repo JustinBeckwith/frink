@@ -6,14 +6,17 @@
 		<title>Frink Reddit Client</title>
 		
 		<!-- jquery -->
-		<script type="text/javascript" src="plugins/jquery/jquery-1.4.4.min.js"></script>
+		<script type="text/javascript" src="plugins/jquery/jquery-1.6.1.min.js"></script>
 		
 		<!-- fancybox -->
 		<script type="text/javascript" src="plugins/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-		<link rel="stylesheet" href="plugins/fancybox/jquery.fancybox-1.3.4.css" />
+		<link type="text/css" rel="stylesheet" href="plugins/fancybox/jquery.fancybox-1.3.4.css" />
+		
+		<!-- iscroll -->
+		<script type="text/javascript" src="plugins/iscroll/iscroll-4.0.js"></script>
 		
 		<!-- core -->
-		<link rel="stylesheet" href="styles/frink.css" />	
+		<link type="text/css" rel="stylesheet" href="styles/frink.css" />	
 		<script type="text/javascript" src="scripts/frink.js"></script>
 		<script type="text/javascript" src="scripts/reddit-api.js"></script>
 		
@@ -161,17 +164,20 @@
 		<!-- ABOUT -->
 		<div class="modal">
 			<div class="modal-content" id="tabAbout">
-				<h2>Project Fink</h2>
-				<img src="images/frink.png" />
+				<h2>Project Frink!</h2>
+				Version 1.1
 				<br />
-				Version 1.0 alpha
-				<br />
-				A reddit application created just for the PlayBook by reddit user <a href="http://www.reddit.com/user/justinblat/" target="_blank">justinblat</a>.
+				A reddit application for tablets by reddit user <a href="http://www.reddit.com/user/justinblat/" target="_blank">justinblat</a>.
 				<br />
 				<br />
-				<a href="http://jbeckwith.com" target="_blank">The Blog</a>
-				<br />
-				<a href="http://twitter.com/justinbeckwith" target="_blank">The Twitter</a>
+				
+				<ul class="link-box">
+					<li><a href="http://jbeckwith.com" target="_blank">Visit the Blog</a></li>
+					<li><a href="http://twitter.com/frinkapp" target="_blank">Frink! on Twitter</a></li>
+					<li><a href="https://github.com/JustinBeckwith/frink" target="_blank">View the Source</a></li>
+					<li><a href="https://github.com/JustinBeckwith/frink/issues" target="_blank">Report a Bug</a></li>
+				</ul>
+								
 				<div class="modal-footer">
 					<input type="button" value="close" class="close-button">
 				</div>

@@ -12,9 +12,6 @@
    </icon>
 
    <category>core.media</category>
-   <permission>access_internet</permission>
-   <permission>access_shared</permission>
-   <permission>play_audio</permission>
    <author>Koipond Labs</author>
    <authorId>gYAAgNmO9AN9uFnUXxV9qu0Q3Mk</authorId>
 </qnx>

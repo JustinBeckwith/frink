@@ -17,8 +17,6 @@
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
-			import org.hamcrest.object.nullValue;
-			
 			import views.modals.SettingsModal;
 			
 			//--------------------------------------------------------------------------

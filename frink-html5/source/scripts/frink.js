@@ -23,6 +23,37 @@ var startMouseX;
 var startTabX;
 var isDown = false;
 
+var scrollPosts, scrollReddits;
+
+/**
+ * once dom content is loaded enable the iScroll component
+ */
+function loaded() {
+	
+	// set iScroll on tabPosts
+	scrollPosts = new iScroll('tabPosts', {
+		pullToRefresh: 'both',
+		pullUpLabel: 'load more posts...',
+		onPullDown: function() {
+			// clear the current posts list and reload
+			$("#posts").html("");
+			LoadPosts(loadPosts_Handler, r_subreddit);
+		},
+		onPullUp: function() {
+			// load the next page of results
+			console.log('loading more...' + r_before + ":" + r_after);
+			LoadPosts(loadPosts_Handler, r_subreddit, null, r_after);
+		}
+	});
+	
+	// set iScroll on tabReddits
+	scrollReddits = new iScroll('tabReddits');
+}
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+document.addEventListener('DOMContentLoaded', loaded, false);
+
+
 /**
  *	document.ready
  **/
@@ -284,6 +315,22 @@ $(document).ready(function(e) {
 	}).mouseout(function(e){
 		//handleRelease(e);
 	});
+	
+	/**
+	 * update the label and display settings when an expand/collapse is clicked
+	 */
+	$('.expand').live('click', function(e) {
+		if ($(this).html() == '[-]') {
+			$(this).html('[+]');
+			$(this).parent().siblings(".comment-body").css('display', 'none');
+			$(this).parent().siblings(".replies").css('display', 'none');
+		} else {
+			$(this).html('[-]');
+			$(this).parent().siblings(".comment-body").css('display', '');
+			$(this).parent().siblings(".replies").css('display', '');
+		}
+	});
+	
 });
 
 
@@ -354,6 +401,7 @@ function loadReddits_Handler(json) {
 	} // end for
 	
 	r_reddits = reddits;
+	scrollReddits.refresh();
 	hideSpinny($("#tabReddits"));
 	
 } // end loadReddits_Handler function
@@ -379,6 +427,7 @@ function loadPosts_Handler(json) {
 			
 	// store the posts globally
 	r_posts = r_posts.concat(posts);
+	scrollPosts.refresh();
 	hideSpinny($("#tabPosts"));
 	
 } // end loadPosts_Handler function
@@ -429,6 +478,8 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 	
 	// add the thumbnail if needed
 	if (post.thumbnail != '') {
+		if (post.thumbnail.indexOf("/static/") == 0)
+			post.thumbnail = "http://www.reddit.com" + post.thumbnail;
 		var $thumb = $("<img src=\"" + post.thumbnail + "\" alt=\"[img]\" />");
 		$postElement.append($thumb);
 	} // end if
@@ -507,7 +558,7 @@ function renderPostBody(r_post, showComments, animateSwitch) {
 			$postComments.css('display', '');
 		} // end else
 		
-		LoadComments(loadComments_Handler);
+		LoadComments(loadComments_Handler, r_post);
 		$postComments.css('width', $(window).width() - 250);
 		$postComments.css('height', $(window).height() - $postHeader.height());
 	} else {
@@ -538,7 +589,7 @@ function renderSubreddit(subreddit, $reddits) {
 function renderComment(comment, $container) {
 	
 	var $reply = $("<div class=\"reply\"></div>");
-	var $header = $("<div class=\"reply-header\"><span class=\"username\"><a href=\"#\">" + comment.author + "</a></span><span>" + (comment.ups - comment.downs) + "&nbsp;points</span><span>" + getAgoLabel(comment.created_utc) + "<span></div>");
+	var $header = $("<div class=\"reply-header\"><span class=\"expand\">[-]</span><span class=\"username\"><a href=\"#\">" + comment.author + "</a></span><span>" + (comment.ups - comment.downs) + "&nbsp;points</span><span>" + getAgoLabel(comment.created_utc) + "<span></div>");
 	var $comment = $("<div class=\"comment-body\">" + comment.body + "</div>");
 	$reply.append($header);
 	$reply.append($comment);

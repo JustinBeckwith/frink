@@ -77,6 +77,26 @@ form input[type=text], input[type=password] {
 	font-size: 1.2em;
 }
 
+.link-box {
+	width: auto;
+	margin: auto;
+	background-color: #F3F3F3;
+	border: 2px solid #000000;
+	padding: 5px;
+}
+
+.link-box li {
+	width: auto;
+	list-style-type: none;
+	border: 1px solid #000000;
+}
+
+.link-box ul li a {
+	color: #000000;
+	font-weight: bold;
+	text-decoration: none;
+}
+
 
 
 /*--------------------------------------------------------------------------
@@ -328,6 +348,12 @@ form input[type=text], input[type=password] {
 	text-decoration: none;
 	font-weight: bold;
 	color: #336699;
+}
+
+.expand {
+	font-weight: bold;
+	color: #336699;
+	cursor: pointer;
 }
 
 .reply-header {
