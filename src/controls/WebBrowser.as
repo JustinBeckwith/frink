@@ -3,7 +3,10 @@ package controls  {
 	import flash.display.Stage;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.LocationChangeEvent;
+	import flash.events.MouseEvent;
+	import flash.events.TransformGestureEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
@@ -38,12 +41,13 @@ package controls  {
 		
 		public function WebBrowser() {
 			addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
-			
+						
 			// not sure if this is the place to give it a minimum size
 			// if we don't do this without a defined size its 0 x 0
 			width = 480;
 			height = 300;
 		}
+		
 		
 		/**
 		 * When the stage property is available add it to the web view

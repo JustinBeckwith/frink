@@ -30,6 +30,7 @@ package
 		protected static var allowInstantiation : Boolean;
 		protected var version : String = "1.0.0";
 		protected var mailTimer : Timer;
+		public var isLocal : Boolean = false;
 		
 		/**
 		 * check if the user has previously entered credentials

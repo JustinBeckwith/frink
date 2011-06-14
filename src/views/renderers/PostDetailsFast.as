@@ -4,6 +4,7 @@ package views.renderers {
 	import mx.styles.CSSStyleDeclaration;
 	
 	import spark.components.IconItemRenderer;
+	import spark.components.List;
 	import spark.components.supportClasses.StyleableTextField;
 
 	public class PostDetailsFast extends IconItemRenderer {
@@ -85,6 +86,8 @@ package views.renderers {
 				authorDisplay.setStyle("fontSize", 14);
 				addChild(authorDisplay);
 			}
+			
+			
 			
 			// use a function on the icon to ensure it gets created
 			this.iconFunction = function(data:Object) : String {
@@ -528,7 +531,6 @@ package views.renderers {
 			currentY += domainAlignmentHeight + verticalGap;
 			
 			// subreddit
-			trace ("subreddit Width: " + subredditWidth);
 			setElementPosition(scoreDisplay, labelComponentsX, currentY);
 			setElementPosition(subredditDisplay, labelComponentsX + verticalGap + scoreWidth, currentY);
 			setElementPosition(authorDisplay, labelComponentsX + verticalGap + scoreWidth + verticalGap + subredditWidth, currentY);

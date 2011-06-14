@@ -169,7 +169,7 @@
 					</s:SkinnableContainer>
 					<s:DataGroup id="list" width="100%" dataProvider="{childComments}" itemRenderer="views.renderers.CommentDetails">
 						<s:layout>
-							<s:VerticalLayout />
+							<s:VerticalLayout useVirtualLayout="true" />
 						</s:layout>
 					</s:DataGroup>
 				</s:HGroup>

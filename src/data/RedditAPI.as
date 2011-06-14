@@ -129,6 +129,9 @@ package data
 			if (after != null)
 				url += "&after=" + after;
 			
+			if (FrinkData.instance.isLocal)
+				url = "../tests/URL_FRONT_PAGE.json";
+			
 			var request : URLRequest = new URLRequest(url);
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, loadPosts_completeHandler);

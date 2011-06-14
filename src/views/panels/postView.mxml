@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%" xmlns:renderers="views.renderers.*" creationComplete="creationCompleteHandler(event)" xmlns:controls="controls.*"
-		  backgroundColor="0xCCCCCC" xmlns:panels="views.panels.*" show="showHandler(event)" hide="hideHandler(event)" xmlns:views="views.*" >
+		  backgroundColor="0xCCCCCC" xmlns:panels="views.panels.*" show="showHandler(event)" hide="hideHandler(event)" xmlns:views="views.*" gestureSwipe="gestureSwipeHandler(event)" >
 	<fx:Metadata>
 		[Event(name="close", type="flash.events.Event")]
 	</fx:Metadata>
@@ -250,6 +250,18 @@
 				this.currentState = "normal";
 			}
 
+			
+			/**
+			 * hide the post view
+			 **/
+			protected function gestureSwipeHandler(event:TransformGestureEvent):void
+			{
+				if (event.offsetX == 1) {
+					this.btnBack_clickHandler(null);
+				}
+				
+			}
+			
 		]]>
 	</fx:Script>	
 	
