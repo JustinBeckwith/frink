@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width"/>
+		<meta id="touch-event-mode" content="native"/>
+		<title>Frink Reddit Client</title>
+		
+		<!-- jquery -->
+		<script type="text/javascript" src="plugins/jquery/jquery-1.4.4.min.js"></script>
+		
+		<!-- fancybox -->
+		<script type="text/javascript" src="plugins/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+		<link rel="stylesheet" href="plugins/fancybox/jquery.fancybox-1.3.4.css" />
+		
+		<!-- core -->
+		<link rel="stylesheet" href="styles/frink.css" />	
+		<script type="text/javascript" src="scripts/frink.js"></script>
+		<script type="text/javascript" src="scripts/reddit-api.js"></script>
+		
+	</head>		
+	<body>	
+		<!-- LEFT BAR -->
+		<div id="tabLeft">
+			<div class="header"><img src="images/frink-head.png" alt="the Frink project" /></div>
+			<ul>
+				<li class="selected">
+					<a href="#listpage" r="" tab="tabPosts">
+						<div>
+							<img src="images/NIXUS/32x32/Home.png" alt="visit the frink home page" />						
+							Front Page						
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="#listpage" r="all" tab="tabPosts">
+						<div>
+							<img src="images/NIXUS/32x32/Web.png" alt="visit the frink home page" />
+							All Reddits
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="#tab" tab="tabReddits">
+						<div>
+							<img src="images/NIXUS/32x32/Template.png" alt="visit the frink home page" />
+							SubReddits
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="#tab" tab="tabMail">
+						<div>
+							<img src="images/NIXUS/32x32/Mail_Read.png" alt="visit the frink home page" />
+							Mail
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="#tab" tab="tabProfile">
+						<div>
+							<img src="images/NIXUS/32x32/User.png" alt="visit the frink home page" />
+							Profile
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="#tab" tab="tabSearch">
+						<div>
+							<img src="images/NIXUS/32x32/Search.png" alt="visit the frink home page" />
+							Search
+						</div>
+					</a>
+				</li>
+			</ul>
+			<div id="footer">
+				<a href="#tabWrite" id="btnWritePost"><img src="images/NIXUS/32x32/Edit.png" alt="Make new post"></a></li>
+				<a href="#tabSettings" id="btnSettings"><img src="images/NIXUS/32x32/System.png" alt="Settings"></a>
+				<a href="#tabAbout" id="btnAbout"><img src="images/NIXUS/32x32/Info.png" alt="About"></a>
+			</div>			
+		</div>
+		
+		<!-- REDDITS -->
+		<div id="tabReddits" class="tab">
+			<ul id="reddits"></ul>
+		</div>
+		
+		<!-- LIST PAGE -->
+		<div id="tabPosts" class="tab">
+			<ul id="posts"></ul>
+		</div>
+		
+		<!-- POST -->
+		<div id="tabPost" class="tab">
+			<div id="post-header"></div>
+			<iframe id="contentFrame"></iframe>
+			<div id="post-comments" style="display:none"></div>
+		</div>
+			
+		<!-- MAIL -->
+		<div id="tabMail" class="tab">
+			Here is where mail will go when I get around to it.
+		</div>
+		
+		<!-- PROFILE -->
+		<div id="tabProfile" class="tab">
+			Here is where the profile page will go when I get around to it.
+		</div>
+		
+		<!-- SEARCH -->
+		<div id="tabSearch" class="tab">
+			<form id="frmSearch">
+				<input type="textbox" id="txtSearch" name="txtSearch"/>
+				<input type="button" value="Search" id="btnSearch">
+			</form>
+		</div>
+		
+		
+		
+		<!--
+			MODALS 
+			_____________________
+			this is the html for the modals created from the bottom icons of the left bar
+		-->
+				
+		<!-- WRITE -->
+		<div class="modal">
+			<div class="modal-content" id="tabWrite">
+				<h2>New Post</h2>
+				<form id="frmWrite">
+					<input type="textbox" id="txtWrite"/>
+					<div class="modal-footer">
+						<input type="button" value="post" id="btnWrite">
+						<input type="button" value="cancel" class="close-button">
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<!-- SETTINGS -->
+		<div class="modal">
+			<div class="modal-content" id="tabSettings">
+				<h2>Settings</h2>
+				<form method="post" id="frmSettings">
+					<div>
+						<label for="username">Username:</label>
+						<input type="text" name="username" id="username" value=""  />
+					</div>	
+					<div>
+						<label for="password">Password:</label>
+						<input type="password" name="password" id="password" value="" />
+					</div>	
+					<br />
+					<div class="modal-footer">
+						<input type="button" value="save" id="btnSaveSettings" />
+						<input type="button" value="cancel" class="close-button">
+					</div>
+				</form>		
+			</div>
+		</div>
+		
+		<!-- ABOUT -->
+		<div class="modal">
+			<div class="modal-content" id="tabAbout">
+				<h2>Project Fink</h2>
+				<img src="images/frink.png" />
+				<br />
+				Version 1.0 alpha
+				<br />
+				A reddit application created just for the PlayBook by reddit user <a href="http://www.reddit.com/user/justinblat/" target="_blank">justinblat</a>.
+				<br />
+				<br />
+				<a href="http://jbeckwith.com" target="_blank">The Blog</a>
+				<br />
+				<a href="http://twitter.com/justinbeckwith" target="_blank">The Twitter</a>
+				<div class="modal-footer">
+					<input type="button" value="close" class="close-button">
+				</div>
+			</div>
+		</div>
+		
+		<!-- XSS FRAME -->
+		<iframe id="iXss" src="forms/xss-form.html" style="display: none;" />
+		
+	</body>
+</html>

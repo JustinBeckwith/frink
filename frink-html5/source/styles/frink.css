@@ -1,0 +1,341 @@
+/*--------------------------------------------------------------------------
+--
+-- MAIN
+--
+--------------------------------------------------------------------------*/
+
+html {
+	height: 100%;
+}
+
+body {
+	font-family: verdana, arial;
+	height: 100%;
+	background-color: #CEE3F8;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+
+.tab {
+	position: absolute;
+	height: 100%;
+	top: 0px;
+	background-color: #F3F3F3;
+	overflow: auto;
+	border-right: 1px solid #000000;
+	left: 201px;
+	width: 400px;
+	padding: 10px;
+	z-index: 0;
+}
+
+label {
+	display: block;
+}
+
+form div {
+	padding-bottom: 15px;
+}
+
+form input[type=text], input[type=password] {
+	width: 250px;
+}
+
+/*--------------------------------------------------------------------------
+--
+-- MODALS
+--
+--------------------------------------------------------------------------*/
+
+
+.modal {
+	display: none;
+}
+
+.modal-content {
+	padding: 20px;
+	color: #FFFFFF;
+	background-image: -moz-linear-gradient(100% 100% 90deg, #000000, #5F99CF);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5F99CF), to(#000000));
+}
+
+.modal-content a {
+	color: #FFFFFF;
+}
+
+.modal-footer {
+	margin-top: 15px;
+	text-align: center;
+	padding: 10px;
+	background-color: #F3F3F3;
+	border: 1px solid #000000;
+	min-width: 300px;
+}
+
+.modal-footer input[type=button] {
+	font-size: 1.2em;
+}
+
+
+
+/*--------------------------------------------------------------------------
+--
+-- LEFT BAR
+--
+--------------------------------------------------------------------------*/
+
+#tabLeft {
+	float: left;
+	width: 200px;
+	border-right: 1px solid #000000;
+	height: 100%;
+	background-color: #5F99CF;
+	z-index: 100;
+}
+
+#tabLeft .header {
+	padding-top: 10px;
+	text-align: center;
+}
+#tabLeft .header img {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#tabLeft ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	border-top: 1px solid #AAAAAA;
+}
+
+#tabLeft ul li {
+	padding: 5px 0px 5px 0px;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+#tabLeft .selected {
+	background-image: -moz-linear-gradient(100% 100% 90deg, #000000, #5F99CF);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5F99CF), to(#000000));
+}
+
+#tabLeft ul li img {
+	vertical-align: middle;
+	border: 0;
+	padding: 0px 10px 0px 10px;
+}
+
+#tabLeft a {
+    font-weight: bold;
+    text-decoration: none;
+	color: white;
+}
+
+#footer {
+	float: left;
+	position: fixed;
+	bottom: 0px;
+	background-color: #CCCCCC;
+	width: 200px;
+	border-top: 1px solid #000000;
+	padding: 5px 0px 5px 0px;
+	text-align: center;
+}
+
+#footer img {
+	border: 0;
+}
+
+/*--------------------------------------------------------------------------
+--
+-- REDDITS
+--
+--------------------------------------------------------------------------*/
+
+#tabReddits {
+	width: 420px;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+#reddits {
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+	list-style-type: none;
+}
+
+#reddits a {
+	text-decoration: none;
+	color: #333333;
+}
+
+#reddits li {
+	background-color: #F3F3F3;
+	border-bottom: 2px solid #CCCCCC;
+	padding: 10px;
+}
+
+/*--------------------------------------------------------------------------
+--
+-- POSTS
+--
+--------------------------------------------------------------------------*/
+
+#tabPosts {
+	width: 420px;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	border-left: 1px solid #000000;
+	overflow-x: hidden;
+}
+
+#posts {
+	list-style-type: none;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+
+#posts a {
+	text-decoration: none;
+	color: #333333;
+}
+
+.post {
+	background-color: #F3F3F3;
+	border-bottom: 2px solid #CCCCCC;
+	padding: 10px;
+	overflow: auto;
+}
+
+.post-middle { 
+	max-width: 200px;
+	float: left;
+}
+
+.domain {
+	font-size: 0.8em;
+}
+
+.post img {
+	float: left;
+	overflow: auto;
+	margin-right: 10px;
+	border: 0px;
+	max-width: 70px;
+}
+
+.bottombar {
+	font-size: 0.8em;
+}
+
+.score {
+	color: #FF0000;
+}
+
+.post-left {
+	overflow: hidden;
+}
+
+.post-footer {
+	padding: 5px;
+}
+
+.num_comments {
+	float: right;
+	font-size: 0.7em;
+}
+
+.hours {
+	font-size: 0.7em;
+}
+
+
+/*--------------------------------------------------------------------------
+--
+-- POST DETAILS
+--
+--------------------------------------------------------------------------*/
+
+#tabPost {
+	padding: 0px;
+	overflow: hidden;
+	border-left: 1px solid #000000;
+}
+
+#contentFrame {
+	border: none;
+	overflow: auto;
+}
+
+#post-header {
+	position: fixed relative;
+	top: 0px;
+	width: 100%;
+}
+
+#post-header .post {
+	background-image: -moz-linear-gradient(100% 100% 90deg, #5F99CF, #ffffff);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#5F99CF));
+	cursor: pointer;
+}
+
+/** total hack, use new box model stuff in CSS3 when time **/
+#post-header .post .post-left {
+	float: left;
+}
+
+#controlBar {
+	list-style-type: none;
+	float: right;
+}
+
+#controlBar li {
+	display: inline;
+}
+
+#controlBar li img {
+	border: 0px;
+	padding-left: 10px;
+}
+
+/*--------------------------------------------------------------------------
+--
+-- COMMENTS
+--
+--------------------------------------------------------------------------*/
+
+#post-comments {
+	padding: 10px;
+	overflow: auto;
+}
+
+.comment-body {
+	padding-bottom: 10px;
+}
+
+.replies {
+	border-left: 1px solid #CCCCCC;
+	padding-left: 25px;
+}
+
+.username a {
+	text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+}
+
+.reply-header {
+	font-size: x-small;
+	color: #888888;
+	padding-bottom: 5px;
+}
+
+.reply-header span {
+	padding-right: 8px;
+}

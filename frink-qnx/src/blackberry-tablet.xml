@@ -1,0 +1,11 @@
+<qnx>
+	<initialWindow>
+		<systemChrome>none</systemChrome>
+		<transparent>false</transparent>
+	</initialWindow>
+	<publisher>Koipond Labs, LLC</publisher>
+	<category>core.internet</category>
+	<icon>
+		<image>frinkicon.png</image>
+	</icon>
+</qnx>
