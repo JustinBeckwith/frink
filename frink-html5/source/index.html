@@ -15,6 +15,18 @@
 		<!-- iscroll -->
 		<script type="text/javascript" src="plugins/iscroll/iscroll-4.0.js"></script>
 		
+		<!-- modals -->
+		<script type="text/javascript" src="scripts/modals/settings.js"></script>
+		<script type="text/javascript" src="scripts/modals/about.js"></script>
+		<script type="text/javascript" src="scripts/modals/write.js"></script>
+		
+		<!-- objects -->
+		<script type="text/javascript" src="scripts/objects/post.js"></script>
+		<script type="text/javascript" src="scripts/objects/posts.js"></script>
+		<script type="text/javascript" src="scripts/objects/comments.js"></script>
+		<script type="text/javascript" src="scripts/objects/reddits.js"></script>
+		<script type="text/javascript" src="scripts/objects/mail.js"></script>
+		
 		<!-- core -->
 		<link type="text/css" rel="stylesheet" href="styles/frink.css" />	
 		<script type="text/javascript" src="scripts/frink.js"></script>
@@ -50,7 +62,7 @@
 						</div>
 					</a>
 				</li>
-				<li>
+				<li id="liMail" style="display:none;">
 					<a href="#tab" tab="tabMail">
 						<div>
 							<img src="images/NIXUS/32x32/Mail_Read.png" alt="visit the frink home page" />
@@ -58,6 +70,7 @@
 						</div>
 					</a>
 				</li>
+				<!--
 				<li>
 					<a href="#tab" tab="tabProfile">
 						<div>
@@ -74,9 +87,10 @@
 						</div>
 					</a>
 				</li>
+				-->
 			</ul>
 			<div id="footer">
-				<a href="#tabWrite" id="btnWritePost"><img src="images/NIXUS/32x32/Edit.png" alt="Make new post"></a></li>
+				<!--<a href="#tabWrite" id="btnWritePost"><img src="images/NIXUS/32x32/Edit.png" alt="Make new post"></a></li>-->
 				<a href="#tabSettings" id="btnSettings"><img src="images/NIXUS/32x32/System.png" alt="Settings"></a>
 				<a href="#tabAbout" id="btnAbout"><img src="images/NIXUS/32x32/Info.png" alt="About"></a>
 			</div>			
@@ -143,11 +157,22 @@
 		<div class="modal">
 			<div class="modal-content" id="tabSettings">
 				<h2>Settings</h2>
-				<form method="post" id="frmSettings">
+				
+				<div id="loggedIn" style="display:none">
+					Logged in as:
+					<input type="text" disabled="true" id="loggedUserName" />
+					<div class="modal-footer">
+						<input type="button" value="log out" id="btnLogOut" />
+						<input type="button" value="cancel" class="close-button">
+					</div>
+				</div>
+				
+				<div id="loggedOut">
 					<div>
 						<label for="username">Username:</label>
 						<input type="text" name="username" id="username" value=""  />
-					</div>	
+					</div>
+					<br />	
 					<div>
 						<label for="password">Password:</label>
 						<input type="password" name="password" id="password" value="" />
@@ -157,7 +182,7 @@
 						<input type="button" value="save" id="btnSaveSettings" />
 						<input type="button" value="cancel" class="close-button">
 					</div>
-				</form>		
+				</div>		
 			</div>
 		</div>
 		
@@ -170,22 +195,20 @@
 				A reddit application for tablets by reddit user <a href="http://www.reddit.com/user/justinblat/" target="_blank">justinblat</a>.
 				<br />
 				<br />
-				
-				<ul class="link-box">
-					<li><a href="http://jbeckwith.com" target="_blank">Visit the Blog</a></li>
-					<li><a href="http://twitter.com/frinkapp" target="_blank">Frink! on Twitter</a></li>
-					<li><a href="https://github.com/JustinBeckwith/frink" target="_blank">View the Source</a></li>
-					<li><a href="https://github.com/JustinBeckwith/frink/issues" target="_blank">Report a Bug</a></li>
-				</ul>
-								
+				<div class="link-box" style="width: 250px;">
+					<ul>
+						<a href="http://jbeckwith.com" target="_blank"><li>Visit the Blog</li></a>
+						<a href="http://twitter.com/frinkapp" target="_blank"><li>Frink! on Twitter</li></a>
+						<a href="https://github.com/JustinBeckwith/frink" target="_blank"><li>View the Source</li></a>
+						<a href="https://github.com/JustinBeckwith/frink/issues" target="_blank"><li>Report a Bug</li></a>
+					</ul>
+				</div>
+				<div style="clear:both">&nbsp;</div>
 				<div class="modal-footer">
 					<input type="button" value="close" class="close-button">
 				</div>
 			</div>
 		</div>
-		
-		<!-- XSS FRAME -->
-		<iframe id="iXss" src="forms/xss-form.html" style="display: none;" />
 		
 	</body>
 </html>

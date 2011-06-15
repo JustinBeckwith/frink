@@ -139,7 +139,7 @@ function logout(handler) {
 	
 	$.post(url, postData, 
 		function(json, textStatus) {
-			handler(json);
+			if (handler) handler(json);
 		}, "json" 
 	);
 	
