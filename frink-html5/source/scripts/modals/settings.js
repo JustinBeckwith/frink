@@ -67,7 +67,6 @@ $(document).ready(function(e) {
  */
 function attemptPreLogin() {
 	if (localStorage.username != null && localStorage.password != null) {
-		console.log('we got cred!');
 		attemptLogin(attemptLogin_Handler, localStorage.username, localStorage.password);	
 	} // end if
 } // end attemptPreLogin

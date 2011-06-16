@@ -34,181 +34,169 @@
 		
 	</head>		
 	<body>	
-		<!-- LEFT BAR -->
-		<div id="tabLeft">
-			<div class="header"><img src="images/frink-head.png" alt="the Frink project" /></div>
-			<ul>
-				<li class="selected">
-					<a href="#listpage" r="" tab="tabPosts">
-						<div>
-							<img src="images/NIXUS/32x32/Home.png" alt="visit the frink home page" />						
-							Front Page						
-						</div>
-					</a>
-				</li>
-				<li>
-					<a href="#listpage" r="all" tab="tabPosts">
-						<div>
-							<img src="images/NIXUS/32x32/Web.png" alt="visit the frink home page" />
-							All Reddits
-						</div>
-					</a>
-				</li>
-				<li>
-					<a href="#tab" tab="tabReddits">
-						<div>
-							<img src="images/NIXUS/32x32/Template.png" alt="visit the frink home page" />
-							SubReddits
-						</div>
-					</a>
-				</li>
-				<li id="liMail" style="display:none;">
-					<a href="#tab" tab="tabMail">
-						<div>
-							<img src="images/NIXUS/32x32/Mail_Read.png" alt="visit the frink home page" />
-							Mail
-						</div>
-					</a>
-				</li>
-				<!--
-				<li>
-					<a href="#tab" tab="tabProfile">
-						<div>
-							<img src="images/NIXUS/32x32/User.png" alt="visit the frink home page" />
-							Profile
-						</div>
-					</a>
-				</li>
-				<li>
-					<a href="#tab" tab="tabSearch">
-						<div>
-							<img src="images/NIXUS/32x32/Search.png" alt="visit the frink home page" />
-							Search
-						</div>
-					</a>
-				</li>
-				-->
-			</ul>
-			<div id="footer">
-				<!--<a href="#tabWrite" id="btnWritePost"><img src="images/NIXUS/32x32/Edit.png" alt="Make new post"></a></li>-->
-				<a href="#tabSettings" id="btnSettings"><img src="images/NIXUS/32x32/System.png" alt="Settings"></a>
-				<a href="#tabAbout" id="btnAbout"><img src="images/NIXUS/32x32/Info.png" alt="About"></a>
-			</div>			
-		</div>
 		
-		<!-- REDDITS -->
-		<div id="tabReddits" class="tab">
-			<ul id="reddits"></ul>
-		</div>
-		
-		<!-- LIST PAGE -->
-		<div id="tabPosts" class="tab">
-			<ul id="posts"></ul>
-		</div>
-		
-		<!-- POST -->
-		<div id="tabPost" class="tab">
-			<div id="post-header"></div>
-			<iframe id="contentFrame"></iframe>
-			<div id="post-comments" style="display:none"></div>
-		</div>
+		<div id="main">
 			
-		<!-- MAIL -->
-		<div id="tabMail" class="tab">
-			Here is where mail will go when I get around to it.
-		</div>
-		
-		<!-- PROFILE -->
-		<div id="tabProfile" class="tab">
-			Here is where the profile page will go when I get around to it.
-		</div>
-		
-		<!-- SEARCH -->
-		<div id="tabSearch" class="tab">
-			<form id="frmSearch">
-				<input type="textbox" id="txtSearch" name="txtSearch"/>
-				<input type="button" value="Search" id="btnSearch">
-			</form>
-		</div>
-		
-		
-		
-		<!--
-			MODALS 
-			_____________________
-			this is the html for the modals created from the bottom icons of the left bar
-		-->
-				
-		<!-- WRITE -->
-		<div class="modal">
-			<div class="modal-content" id="tabWrite">
-				<h2>New Post</h2>
-				<form id="frmWrite">
-					<input type="textbox" id="txtWrite"/>
-					<div class="modal-footer">
-						<input type="button" value="post" id="btnWrite">
-						<input type="button" value="cancel" class="close-button">
-					</div>
-				</form>
+			<!-- LEFT BAR -->
+			<div id="tabLeft">
+				<div class="header"><img src="images/frink-head.png" alt="the Frink project" /></div>
+				<ul>
+					<li class="selected">
+						<a href="#listpage" r="" tab="tabPosts" id="linkPosts">
+							<div>
+								<img src="images/icons/front-page-selected.png" alt="visit the frink home page" />						
+								Front Page						
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#listpage" r="all" tab="tabPosts" id="linkAll">
+							<div>
+								<img src="images/icons/all-reddits-emboss.png" alt="visit the frink home page" />
+								All Reddits
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#tab" tab="tabReddits" id="linkReddits">
+							<div>
+								<img src="images/icons/sub-reddits-emboss.png" alt="visit the frink home page" />
+								SubReddits
+							</div>
+						</a>
+					</li>
+					<li id="liMail" style="display:none;">
+						<a href="#tab" tab="tabMail" id="linkMail">
+							<div>
+								<img src="images/icons/mail-emboss.png" alt="visit the frink home page" />
+								Mail
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div id="footer">
+					<!--<a href="#tabWrite" id="btnWritePost"><img src="images/icons/Edit.png" alt="Make new post"></a></li>-->
+					<a href="#tabSettings" id="btnSettings"><img src="images/icons/settings-emboss.png" alt="Settings"></a>
+					<a href="#tabAbout" id="btnAbout"><img src="images/icons/info-emboss.png" alt="About"></a>
+				</div>			
 			</div>
-		</div>
-		
-		<!-- SETTINGS -->
-		<div class="modal">
-			<div class="modal-content" id="tabSettings">
-				<h2>Settings</h2>
+			
+			<!-- MIDDLE PANEL -->
+			<div id="middle">
 				
-				<div id="loggedIn" style="display:none">
-					Logged in as:
-					<input type="text" disabled="true" id="loggedUserName" />
-					<div class="modal-footer">
-						<input type="button" value="log out" id="btnLogOut" />
-						<input type="button" value="cancel" class="close-button">
-					</div>
+				<!-- LIST PAGE -->
+				<div id="tabPosts" class="tab">
+					<ul id="posts"></ul>
 				</div>
 				
-				<div id="loggedOut">
+				<!-- REDDITS -->
+				<div id="tabReddits" class="tab" style="display:none;">
+					<ul id="reddits"></ul>
+				</div>
+				
+					
+				<!-- MAIL -->
+				<div id="tabMail" class="tab" style="display:none;">
 					<div>
-						<label for="username">Username:</label>
-						<input type="text" name="username" id="username" value=""  />
+						<div id="messageTypeList">
+							<ul>
+								<li class="selected">inbox</li>
+								<li>sent</li>
+								<li>comments</li>
+								<li>moderator</li>
+							</ul>
+						</div>
+						<div style="clear:both">&nbsp;</div>
+						<ul id="messages"></ul>
+					</div>		
+				</div>
+			</div>
+			
+			<!-- POST -->
+			<div id="tabPost" class="tab">
+				<div id="post-header"></div>
+				<iframe id="contentFrame"></iframe>
+				<div id="post-comments" style="display:none"></div>
+			</div>
+			
+			
+			<!--
+				MODALS 
+				_____________________
+				this is the html for the modals created from the bottom icons of the left bar
+			-->
+					
+			<!-- WRITE -->
+			<div class="modal">
+				<div class="modal-content" id="tabWrite">
+					<h2>New Post</h2>
+					<form id="frmWrite">
+						<input type="textbox" id="txtWrite"/>
+						<div class="modal-footer">
+							<input type="button" value="post" id="btnWrite">
+							<input type="button" value="cancel" class="close-button">
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<!-- SETTINGS -->
+			<div class="modal">
+				<div class="modal-content" id="tabSettings">
+					<div class="modal-title">Settings</div>
+					
+					<div id="loggedIn" style="display:none">
+						Logged in as:
+						<input type="text" disabled="true" id="loggedUserName" />
+						<div class="modal-footer">
+							<input type="button" value="log out" id="btnLogOut" />
+							<input type="button" value="cancel" class="close-button">
+						</div>
 					</div>
-					<br />	
-					<div>
-						<label for="password">Password:</label>
-						<input type="password" name="password" id="password" value="" />
-					</div>	
+					
+					<div id="loggedOut">
+						<div>
+							<label for="username">Username:</label>
+							<input type="text" name="username" id="username" value=""  />
+						</div>
+						<br />	
+						<div>
+							<label for="password">Password:</label>
+							<input type="password" name="password" id="password" value="" />
+						</div>	
+						<br />
+						<div class="modal-footer">
+							<input type="button" value="save" id="btnSaveSettings" />
+							<input type="button" value="cancel" class="close-button">
+						</div>
+					</div>		
+					
+				</div>
+			</div>
+			
+			<!-- ABOUT -->
+			<div class="modal">
+				<div class="modal-content" id="tabAbout">
+					<div class="modal-title">About Frink!</div>
+					Version 1.1
 					<br />
-					<div class="modal-footer">
-						<input type="button" value="save" id="btnSaveSettings" />
-						<input type="button" value="cancel" class="close-button">
+					A reddit application for tablets by reddit user <a href="http://www.reddit.com/user/justinblat/" target="_blank">justinblat</a>.
+					<br />
+					<br />
+					<div class="link-box" style="width: 250px;">
+						<ul>
+							<a href="http://jbeckwith.com" target="_blank"><li>Visit the Blog</li></a>
+							<a href="http://twitter.com/frinkapp" target="_blank"><li>Frink! on Twitter</li></a>
+							<a href="https://github.com/JustinBeckwith/frink" target="_blank"><li>View the Source</li></a>
+							<a href="https://github.com/JustinBeckwith/frink/issues" target="_blank"><li>Report a Bug</li></a>
+						</ul>
 					</div>
-				</div>		
-			</div>
-		</div>
-		
-		<!-- ABOUT -->
-		<div class="modal">
-			<div class="modal-content" id="tabAbout">
-				<h2>Project Frink!</h2>
-				Version 1.1
-				<br />
-				A reddit application for tablets by reddit user <a href="http://www.reddit.com/user/justinblat/" target="_blank">justinblat</a>.
-				<br />
-				<br />
-				<div class="link-box" style="width: 250px;">
-					<ul>
-						<a href="http://jbeckwith.com" target="_blank"><li>Visit the Blog</li></a>
-						<a href="http://twitter.com/frinkapp" target="_blank"><li>Frink! on Twitter</li></a>
-						<a href="https://github.com/JustinBeckwith/frink" target="_blank"><li>View the Source</li></a>
-						<a href="https://github.com/JustinBeckwith/frink/issues" target="_blank"><li>Report a Bug</li></a>
-					</ul>
-				</div>
-				<div style="clear:both">&nbsp;</div>
-				<div class="modal-footer">
-					<input type="button" value="close" class="close-button">
+					<div style="clear:both">&nbsp;</div>
+					<div class="modal-footer">
+						<input type="button" value="close" class="close-button">
+					</div>
 				</div>
 			</div>
-		</div>
-		
+		</div>			
 	</body>
 </html>

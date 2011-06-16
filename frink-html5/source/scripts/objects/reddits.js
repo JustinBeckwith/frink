@@ -5,18 +5,23 @@
 --
 --------------------------------------------------------------------------*/
 
+var bindingReddits = false;
+var scrollReddits;
 
 $(document).ready(function(e) {
 	
 	/**
 	 * show more subreddits if scrolled to the bottom of the subreddit list
 	 **/
-	$("#tabReddits").scroll(function(e) {
-		var $tabReddits = $("#tabReddits");
-		if (($tabReddits[0].scrollHeight - $tabReddits.scrollTop()) == $tabReddits.outerHeight()) {
-			showSpinny($("#tabReddits"));
-			LoadReddits(loadReddits_Handler, null, r_subreddit_after);
-		} // end if
+	scrollReddits = new iScroll('tabReddits', {
+		onScrollBottom: function() {
+			if (!bindingReddits && r_subreddit_after != null) {
+				console.log('bottom');
+				bindingReddits = true;
+				showSpinny($("#tabReddits"));
+				LoadReddits(loadReddits_Handler, null, r_subreddit_after);
+			} // end if
+		}
 	});
 	
 	/**
@@ -48,6 +53,9 @@ $(document).ready(function(e) {
  *	loadRedditsTab
  **/
 function loadRedditsTab() {
+	console.log('load reddits');
+	showSpinny($("#tabReddits"));
+	$("#reddits").html("");
 	LoadReddits(loadReddits_Handler);
 } // end loadREdditsTab method
 
@@ -73,6 +81,7 @@ function loadReddits_Handler(json) {
 	
 	r_reddits = reddits;
 	scrollReddits.refresh();
+	bindingReddits = false;
 	hideSpinny($("#tabReddits"));
 	
 } // end loadReddits_Handler function
@@ -82,6 +91,7 @@ function loadReddits_Handler(json) {
  *	renderSubreddit
  **/
 function renderSubreddit(subreddit, $reddits) {
+	console.log(subreddit);
 	$reddits.append("<li><a href=\"#listpage\" r=\"" + subreddit.display_name + "\">" + subreddit.display_name + "</a></li>");
 } // end renderSubreddit method
 

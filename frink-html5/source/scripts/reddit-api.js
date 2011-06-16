@@ -146,32 +146,25 @@ function logout(handler) {
 } // end logout method
 
 /**
- *	loadMessages - public available, normal handler
- **/
-function loadMessages(messageType, before, after) {
-	this.loadMessagesInternal(loadMessages_completeHandler, messageType, before, after);
-}
-
-/**
  * loadMessages - route to the appropriate listener
  **/
-function loadMessagesInternal(handler, messageType, before, after) {
+function loadMessages(handler, messageType, before, after) {
 	
 	var url = null;
 	switch(messageType) {
-		case MessageType.INBOX:
+		case 'inbox':
 			url = URL_MESSAGES_INBOX;
 			break;
-		case MessageType.COMMENTS:
+		case 'comments':
 			url = URL_MESSAGES_COMMENTS;
 			break;
-		case MessageType.MOD:
+		case 'moderator':
 			url = URL_MESSAGES_MOD;
 			break;
-		case MessageType.SENT:
+		case 'sent':
 			url = URL_MESSAGES_SENT;
 			break;
-		case MessageType.UNREAD:
+		case 'unread':
 			url = URL_MESSAGES_UNREAD;
 			break;
 	}
@@ -187,14 +180,10 @@ function loadMessagesInternal(handler, messageType, before, after) {
 	// any time you request the messages list with .json, the message is not
 	// marked as read.  To get around this, make a phantom request to the non-json
 	// version of the request message 
-	if (messageType != MessageType.UNREAD) 
+	if (messageType != 'unread') 
 	{
 		var url2 = url.replace(".json","");
-		
-		// var loader2 : URLLoader = new URLLoader();
-		// loader2.addEventListener(Event.COMPLETE, api_messageNotifyHandler);
-		// loader2.addEventListener(IOErrorEvent.IO_ERROR, api_errorHandler);
-		// loader2.load(request2);
+		$.get(url2);
 	}
 } 
 
@@ -202,6 +191,6 @@ function loadMessagesInternal(handler, messageType, before, after) {
  * get the number of unread messages for the current user
  **/
 function getUnreadMessageCount(handler) {
-	loadMessagesInternal(handler, MessageType.UNREAD);
+	loadMessages(handler, 'unread');
 }
 

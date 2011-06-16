@@ -14,6 +14,7 @@ var r_posts = [];
 var r_subreddit = null;
 var r_subreddit_after = null;
 var r_subreddit_before = null;
+var r_messages = null;
 
 var isLoggedIn = false;
 var topZ = 30;
@@ -23,35 +24,7 @@ var startMouseX;
 var startTabX;
 var isDown = false;
 
-var scrollPosts, scrollReddits;
-
-/**
- * once dom content is loaded enable the iScroll component
- */
-function loaded() {
-	
-	// set iScroll on tabPosts
-	scrollPosts = new iScroll('tabPosts', {
-		pullToRefresh: 'both',
-		pullUpLabel: 'load more posts...',
-		onPullDown: function() {
-			// clear the current posts list and reload
-			$("#posts").html("");
-			LoadPosts(loadPosts_Handler, r_subreddit);
-		},
-		onPullUp: function() {
-			// load the next page of results
-			console.log('loading more...' + r_before + ":" + r_after);
-			LoadPosts(loadPosts_Handler, r_subreddit, null, r_after);
-		}
-	});
-	
-	// set iScroll on tabReddits
-	scrollReddits = new iScroll('tabReddits');
-}
-
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-document.addEventListener('DOMContentLoaded', loaded, false);
 
 
 /**
@@ -63,48 +36,19 @@ $(document).ready(function(e) {
 	 * show the front page by default
 	 **/
 	showSpinny($("#tabPosts"));
-	$("#tabPosts").css("z-index", topZ++).animate({ left: 201 });
-	r_subreddit = "";
-	LoadPosts(loadPosts_Handler);
+	if (localStorage.username != null && localStorage.password != null) {
+		attemptPreLogin();
+	} else {
+		LoadPosts(loadPosts_Handler);
+	} // end else
 	
 	/**
 	 * when a left menu item is clicked tinker with the styles and show the appropriate tab
 	 **/
 	$("#tabLeft ul li a").click(function(e) {
-		
 		e.preventDefault();
-		
-		// apply the selected class to the menu item
-		$(this).parent().parent().find("li").attr("class", "");
-		$(this).parent().attr("class","selected");
-		
-		// hide any other tabs
-		var $tab = $("#" + $(this).attr("tab"));
-		$(".tab").each(function() {
-			if ($tab.attr("id") != $(this).attr("id"))
-				$(this).css("left", 201).css("z-index", 0);
-		});
-		$("#tabPost").animate({ opacity: 0 });
-		
-		$tabLeft = $("#tabLeft");
-		var leftPos = $tabLeft.position().left + $tabLeft.width() + 1;
-		showSpinny($tab);
-		$tab.css("z-index", topZ++).animate({ left: leftPos });
-		
-		// custom load code, could be an eval, but evals make me feel dirty.
-		switch($(this).attr("tab")) {
-			case "tabSearch":
-				loadSearchTab();
-				break;
-			case "tabReddits":
-				loadRedditsTab();
-				break;
-			case "tabWrite":
-				loadWriteTab();
-				break;
-		} // end switch
+		showTab($(this));
 	});
-	
 	
 	/**
 	 *	close the fancybox when a modal close button is clicked
@@ -112,11 +56,59 @@ $(document).ready(function(e) {
 	$(".close-button").live('click', function(e) {
 		$.fancybox.close();
 	});
-	
-	// if creds were left in the db, try to log in
-	attemptPreLogin();
 });
 
+
+/**
+ * hide all the tabs and show the appropriate one
+ */
+function showTab($link) {
+	// apply the selected class to the menu item
+	$link.parent().parent().find("li").attr("class", "");
+	$link.parent().attr("class","selected");
+		
+	// set all images back to emboss, not selected
+	$link.parent().parent().find("li img").each(function(index) {
+		$(this).attr('src', $(this).attr('src').replace('-selected', '-emboss'));
+	});
+	
+	// set the image for the selected menu item to selected
+	$link.find('img').attr('src', $link.find('img').attr('src').replace('-emboss', '-selected'));
+	
+	// hide any other tabs
+	var $tab = $("#" + $link.attr("tab"));
+	$(".tab").each(function() {
+		if ($tab.attr("id") != $link.attr("id"))
+			$(this).css("display", "none");
+	});
+	$("#tabPost").animate({ opacity: 0 });
+	
+	$tabLeft = $("#tabLeft");
+	var leftPos = $tabLeft.position().left + $tabLeft.width() + 1;
+	showSpinny($tab);
+	$("#middle").css('left', 201);
+	$tab.css('display', '');
+	
+	// custom load code, could be an eval, but evals make me feel dirty.
+	console.log($link.attr("id"));
+	switch($link.attr("id")) {
+		case "linkSearch":
+			loadSearchTab();
+			break;
+		case "linkReddits":
+			loadRedditsTab();
+			break;
+		case "linkMail":
+			loadMailTab();
+			break;
+		case "linkPosts":
+			loadPostTab();
+			break;
+		case "linkAll":
+			loadAllTab();
+			break;
+	} // end switch
+} // end showTab function
 
 /**
  * any time an authentication event occurs update the UI
@@ -130,9 +122,9 @@ function authChange() {
 		$("#liMail").css('display','none');
 	} // end else
 	
-	// switch to the posts tab and refresh the list
+	// switch to the posts tab $parentresh the list
 	showSpinny($("#tabPosts"));
-	$("#tabPosts").css("z-index", topZ++).animate({ left: 201 });
+	showTab($("#linkPosts"));
 	r_subreddit = "";
 	LoadPosts(loadPosts_Handler);
 	
@@ -150,14 +142,29 @@ function getAgoLabel(created_utc) {
 
 	var currentTimeTicks = (new Date()).getTime();
 	var minutesAgoCreated = (currentTimeTicks - (created_utc*1000))/1000/60;
-	var agoLabel = "";
-	if (minutesAgoCreated > 60) {
-		agoLabel = Math.round(minutesAgoCreated/60) + " Hours";
+	var unitsAgo;
+	var unitLabel;
+	
+	if (minutesAgoCreated > 60*24*365) {
+		unitsAgo = Math.round(minutesAgoCreated/60/24/30);
+		unitLabel = "year"
+	} else if (minutesAgoCreated > 60*24*30) {
+		unitsAgo = Math.round(minutesAgoCreated/60/24/30);
+		unitLabel = "month";
+	} else if (minutesAgoCreated > 60*24) {
+		unitsAgo = Math.round(minutesAgoCreated/60/24);
+		unitLabel = "day";	
+	} else if (minutesAgoCreated > 60) {
+		unitsAgo = Math.round(minutesAgoCreated/60);
+		unitLabel = "hour";
 	} else {
-		agoLabel = Math.round(minutesAgoCreated) + " Minutes";
+		unitsAgo = Math.round(minutesAgoCreated);
+		unitLabel = "minute";
 	} // end else
 	
+	var agoLabel = unitsAgo + " " + unitLabel + (unitsAgo > 1 ? "s" : "");
 	return agoLabel;
+	
 } // end getAgoLabel
 
 //

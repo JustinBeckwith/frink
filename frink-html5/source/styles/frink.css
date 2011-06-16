@@ -11,23 +11,42 @@ html {
 body {
 	font-family: verdana, arial;
 	height: 100%;
-	background-color: #CEE3F8;
+	background-color: #000000;
 	margin: 0px;
-	padding: 0px;
+	padding: 2px;
 	overflow: hidden;
 }
 
-.tab {
+#main {
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+	border: 1px solid #000000;
+	background-image: url('../images/hash-background.png');
+	overflow-y: hidden;
+}
+
+#middle {
 	position: absolute;
 	height: 100%;
-	top: 0px;
-	background-color: #F3F3F3;
-	overflow: auto;
-	border-right: 1px solid #000000;
+	top: 2px;
+	background-color: #F7F7F7;
+	overflow: hidden;
 	left: 201px;
-	width: 400px;
-	padding: 10px;
+	width: 550px;
 	z-index: 0;
+	border-radius: 5px;
+	border: 1px solid #000000;
+}
+
+
+#middle .tab {
+	height: 100%;
+}
+
+
+.empty {
+	color: #FF0000;
 }
 
 label {
@@ -53,22 +72,33 @@ input[type=text], input[type=password] {
 	display: none;
 }
 
+.modal-title {
+	padding: 15px;
+	background-color: #AAAAAA;
+	font-weight: bold;
+	margin-bottom: 15px;
+	border: 1px solid #000000;
+}
+
 .modal-content {
+	min-height: 200px;
 	padding: 20px;
-	color: #FFFFFF;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5F99CF), to(#000000));
+	color: #000000;
+	font-weight: bold;
+	background-image: url('../images/big-frink-head.png');
+	background-repeat:no-repeat;
+	background-position-x: center;
+	background-position-y: bottom;
 }
 
 .modal-content a {
-	color: #FFFFFF;
+	color: #000000;
 }
 
 .modal-footer {
 	margin-top: 15px;
 	text-align: center;
 	padding: 10px;
-	background-color: #F3F3F3;
-	border: 1px solid #000000;
 	min-width: 300px;
 }
 
@@ -96,8 +126,8 @@ input[type=text], input[type=password] {
 }
 
 .link-box ul a {
+	font-weight: normal;
 	color: #000000;
-	font-weight: bold;
 	text-decoration: none;
 }
 
@@ -114,7 +144,6 @@ input[type=text], input[type=password] {
 	width: 200px;
 	border-right: 1px solid #000000;
 	height: 100%;
-	background-color: #5F99CF;
 	z-index: 100;
 }
 
@@ -132,17 +161,21 @@ input[type=text], input[type=password] {
 	margin: 0px;
 	padding: 0px;
 	list-style-type: none;
-	border-top: 1px solid #AAAAAA;
+	border-top: 1px solid #404045;
 }
 
 #tabLeft ul li {
 	padding: 5px 0px 5px 0px;
-	border-bottom: 1px solid #AAAAAA;
+	border-bottom: 1px solid #404045;
 }
 
 #tabLeft .selected {
-	background-image: -moz-linear-gradient(100% 100% 90deg, #000000, #5F99CF);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5F99CF), to(#000000));
+	background: rgba(0, 0, 0, .25);
+	/*background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5F99CF), to(#000000));*/
+}
+
+#tabLeft .selected img {
+	opacity: 1.0; 
 }
 
 #tabLeft ul li img {
@@ -161,7 +194,6 @@ input[type=text], input[type=password] {
 	float: left;
 	position: fixed;
 	bottom: 0px;
-	background-color: #CCCCCC;
 	width: 200px;
 	border-top: 1px solid #000000;
 	padding: 5px 0px 5px 0px;
@@ -172,18 +204,21 @@ input[type=text], input[type=password] {
 	border: 0;
 }
 
+#btnAbout {
+	float:right;
+	margin-right: 5px;
+}
+
+#btnSettings {
+	float:left;
+	margin-left: 5px;
+}
+
 /*--------------------------------------------------------------------------
 --
 -- REDDITS
 --
 --------------------------------------------------------------------------*/
-
-#tabReddits {
-	width: 420px;
-	text-align: center;
-	margin: 0px;
-	padding: 0px;
-}
 
 #reddits {
 	margin: 0px;
@@ -208,15 +243,6 @@ input[type=text], input[type=password] {
 -- POSTS
 --
 --------------------------------------------------------------------------*/
-
-#tabPosts {
-	width: 420px;
-	text-align: center;
-	margin: 0px;
-	padding: 0px;
-	border-left: 1px solid #000000;
-	overflow-x: hidden;
-}
 
 #posts {
 	list-style-type: none;
@@ -304,8 +330,9 @@ input[type=text], input[type=password] {
 }
 
 #post-header .post {
-	background-image: -moz-linear-gradient(100% 100% 90deg, #5F99CF, #ffffff);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#5F99CF));
+	background-color: #F7F7F7;
+	border-bottom: 1px solid #D9D9D9;
+	color: #040404;
 	cursor: pointer;
 }
 
@@ -325,7 +352,7 @@ input[type=text], input[type=password] {
 
 #controlBar li img {
 	border: 0px;
-	padding-left: 10px;
+	padding-left: 5px;
 }
 
 /*--------------------------------------------------------------------------
@@ -348,6 +375,7 @@ input[type=text], input[type=password] {
 	padding-left: 25px;
 }
 
+
 .username a {
 	text-decoration: none;
 	font-weight: bold;
@@ -369,3 +397,103 @@ input[type=text], input[type=password] {
 .reply-header span {
 	padding-right: 8px;
 }
+
+
+/*--------------------------------------------------------------------------
+--
+-- MAIL
+--
+--------------------------------------------------------------------------*/
+
+
+#messageTypeList {
+	padding: 15px;
+	background-color: #F3F3F3;
+}
+
+
+#messageTypeList ul {
+	border: 1px solid #000000;
+	border-radius: 10px;
+	background-color: #AAAAAA;
+	font-size: 0.8em;
+	font-weight: bold;
+	float: left;
+	padding: 0px;
+	width: 100%;
+	list-style: none;
+}
+
+#messageTypeList ul li {
+	float: left;
+    width: 25%;
+    margin: 0 0 -1 0;
+    padding: 6px 0;  
+	border-left: 1px solid #000000;
+	cursor: pointer;
+	text-align: center;
+}
+
+#messageTypeList ul li:first-child {
+	border-left: none;
+}
+
+#messageTypeList ul li.selected {
+	background-color: #404045;
+	color: #FFFFFF;
+}
+
+#messageTypeList ul li:first-child.selected {
+    -webkit-border-bottom-left-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#messageTypeList ul li:last-child.selected {
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#messages {
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+	list-style-type: none;
+}
+
+#messages a {
+	text-decoration: none;
+	color: #333333;
+}
+
+
+#messages .username a {
+	text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+}
+
+
+#messages li {
+	background-color: #F3F3F3;
+	border-bottom: 2px solid #CCCCCC;
+	padding: 10px;
+}
+
+.message-body {
+	font-size: 0.8em;
+}
+
+.message-header {
+	font-size: x-small;
+	color: #888888;
+	padding-bottom: 5px;
+}
+
+.message-header span {
+	padding-right: 8px;
+}
+

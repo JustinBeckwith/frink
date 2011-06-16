@@ -7,17 +7,28 @@
 --------------------------------------------------------------------------*/
 
 
+var scrollPosts;
+var bindingPosts = false;
 
 $(document).ready(function(e) {
-	/**
-	 * show more posts if scrolled to the bottom
-	 **/
-	$("#tabPosts").scroll(function(e) {
-		var $posts = $("#tabPosts");
-		if (($posts[0].scrollHeight - $posts.scrollTop()) == $posts.outerHeight()) {
-			showSpinny($("#listpage"));
-			LoadPosts(loadPosts_Handler, null, r_after);
-		} // end if
+	
+	// set iScroll on tabPosts
+	scrollPosts = new iScroll('tabPosts', {
+		pullToRefresh: 'down',
+		onPullDown: function() {
+			// clear the current posts list and reload
+			$("#posts").html("");
+			bindingPosts = true;
+			LoadPosts(loadPosts_Handler, r_subreddit);
+		},
+		onScrollBottom: function() {
+			if (!bindingPosts && r_after != null) {
+				console.log('getting more posts');
+				bindingPosts = true;
+				showSpinny($("#listpage"));
+				LoadPosts(loadPosts_Handler, r_subreddit, null, r_after);
+			} // end if
+		}
 	});
 	
 	/**
@@ -58,6 +69,26 @@ $(document).ready(function(e) {
 --
 --------------------------------------------------------------------------*/
 
+/**
+ *	loadPostsTab
+ **/
+function loadPostTab() {
+	showSpinny($("#tabPost"));
+	$("#posts").html("");
+	LoadPosts(loadPosts_Handler, "");
+} // end loadPostsTab method
+
+/**
+ *	loadAllTab
+ **/
+function loadAllTab() {
+	showSpinny($("#tabPost"));
+	$("#posts").html("");
+	LoadPosts(loadPosts_Handler, "all");
+} // end loadPostsTab method
+
+
+
 
 /**
  *	loadPosts_Handler
@@ -81,6 +112,7 @@ function loadPosts_Handler(json) {
 	r_posts = r_posts.concat(posts);
 	scrollPosts.refresh();
 	hideSpinny($("#tabPosts"));
+	bindingPosts = false;
 	
 } // end loadPosts_Handler function
 
@@ -125,11 +157,11 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 	// add controls if neccesary
 	if (renderControls) {
 		var $controlBar = $("<ul id=\"controlBar\"></ul>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnBack\" title=\"Go back to the post listing\"><img src=\"images/NIXUS/32x32/Back.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnUpBoat\" title=\"Up Boat!\"><img src=\"images/NIXUS/32x32/Up.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnDownBoat\" title=\"Down Boat!\"><img src=\"images/NIXUS/32x32/Down.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnComments\" title=\"View the comments\"><img src=\"images/NIXUS/32x32/Chat.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"" + post.url + "\" target=\"blank\" title=\"Open the link in a new window\"><img src=\"images/NIXUS/32x32/Window.png\" /></a></li>");
+		$controlBar.append("<li><a href=\"#\" id=\"btnBack\" title=\"Go back to the post listing\"><img src=\"images/icons/arrow-left.png\" /></a></li>");
+		$controlBar.append("<li><a href=\"#\" id=\"btnUpBoat\" title=\"Up Boat!\"><img src=\"images/icons/arrow-up.png\" /></a></li>");
+		$controlBar.append("<li><a href=\"#\" id=\"btnDownBoat\" title=\"Down Boat!\"><img src=\"images/icons/arrow-down.png\" /></a></li>");
+		$controlBar.append("<li><a href=\"#\" id=\"btnComments\" title=\"View the comments\"><img src=\"images/icons/comments.png\" /></a></li>");
+		$controlBar.append("<li><a href=\"" + post.url + "\" target=\"blank\" title=\"Open the link in a new window\"><img src=\"images/icons/action.png\" /></a></li>");
 		$postElement.append($controlBar);
 	} // end if
 	

@@ -47,6 +47,7 @@ function iScroll (el, options) {
 		pullUpLabel: ['Pull up to refresh...', 'Release to refresh...', 'Loading...'],
 		onPullDown: function () {},
 		onPullUp: function () {},
+		onScrollBottom: null,
 		onScrollStart: null,
 		onScrollEnd: null,
 		onZoomStart: null,
@@ -363,7 +364,11 @@ iScroll.prototype = {
 		}
 		if (newY > 0 || newY < that.maxScrollY) { 
 			newY = that.options.bounce ? that.y + (deltaY / 2.4) : newY >= 0 || that.maxScrollY >= 0 ? 0 : that.maxScrollY;
-
+			
+			if (that.options.onScrollBottom && that.contentReady) {
+				that.options.onScrollBottom.call(that);
+			}
+			
 			// Pull down to refresh
 			if (that.options.pullToRefresh && that.contentReady) {
 				if (that.pullDownToRefresh && newY > that.offsetBottom) {
