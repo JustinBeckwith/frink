@@ -23,20 +23,21 @@ body {
 	border-radius: 5px;
 	border: 1px solid #000000;
 	background-image: url('../images/hash-background.png');
-	overflow-y: hidden;
+	margin-right: -10px;
+	margin-bottom: -10px;
 }
 
 #middle {
 	position: absolute;
-	height: 100%;
-	top: 2px;
 	background-color: #F7F7F7;
-	overflow: hidden;
 	left: 201px;
+	top: 2px;
+	bottom: 2px;
 	width: 550px;
-	z-index: 0;
 	border-radius: 5px;
 	border: 1px solid #000000;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 
@@ -58,7 +59,7 @@ form div {
 }
 
 input[type=text], input[type=password] {
-	width: 250px;
+	width: 100%;
 }
 
 /*--------------------------------------------------------------------------
@@ -82,13 +83,21 @@ input[type=text], input[type=password] {
 
 .modal-content {
 	min-height: 200px;
-	padding: 20px;
+	min-width: 490px;
 	color: #000000;
 	font-weight: bold;
 	background-image: url('../images/big-frink-head.png');
 	background-repeat:no-repeat;
 	background-position-x: center;
 	background-position-y: bottom;
+	text-align: center;
+}
+
+.modal-body {
+	text-align: left;
+	margin: auto;
+	padding: 10px;
+	display: inline-block;
 }
 
 .modal-content a {
@@ -143,8 +152,9 @@ input[type=text], input[type=password] {
 	float: left;
 	width: 200px;
 	border-right: 1px solid #000000;
-	height: 100%;
-	z-index: 100;
+	top: 2px;
+	bottom: 2px;
+	margin-bottom: -10px;
 }
 
 #tabLeft .header {
@@ -248,8 +258,12 @@ input[type=text], input[type=password] {
 	list-style-type: none;
 	text-align: left;
 	padding: 0px;
-	margin: 0px;
 }
+
+#posts li {
+	cursor: pointer;
+}
+
 
 #posts a {
 	text-decoration: none;
@@ -313,9 +327,14 @@ input[type=text], input[type=password] {
 --------------------------------------------------------------------------*/
 
 #tabPost {
+	position: absolute;
+	left: 201;
+	top: 2px;
+	bottom: 2px;
 	padding: 0px;
 	overflow: hidden;
 	border-left: 1px solid #000000;
+	z-index: 10;
 }
 
 #contentFrame {
@@ -427,7 +446,7 @@ input[type=text], input[type=password] {
 #messageTypeList ul li {
 	float: left;
     width: 25%;
-    margin: 0 0 -1 0;
+    margin-right: -1px;
     padding: 6px 0;  
 	border-left: 1px solid #000000;
 	cursor: pointer;

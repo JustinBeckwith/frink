@@ -81,7 +81,7 @@ function showTab($link) {
 		if ($tab.attr("id") != $link.attr("id"))
 			$(this).css("display", "none");
 	});
-	$("#tabPost").animate({ opacity: 0 });
+	$("#tabPost").css('display','none');
 	
 	$tabLeft = $("#tabLeft");
 	var leftPos = $tabLeft.position().left + $tabLeft.width() + 1;
@@ -90,7 +90,6 @@ function showTab($link) {
 	$tab.css('display', '');
 	
 	// custom load code, could be an eval, but evals make me feel dirty.
-	console.log($link.attr("id"));
 	switch($link.attr("id")) {
 		case "linkSearch":
 			loadSearchTab();
@@ -185,16 +184,11 @@ function showContentTab($tab) {
 
 	// pre-show the spinny
 	showSpinny($tab);
-		
-	// move the posts tab over to the left
-	$("#tabPosts").animate({ left: 50 });
 	
 	// move the content pane to the left, and set to use remaining width
-	$tab.css('z-index', topZ++)
-		.css('opacity', 1)
-		.css('left', $("body").width())
-		.css('width', $("body").width() - 230)
-		.animate({ left: 201 });
+	$tab.css('left', 201)
+		.css('display', 'inline')
+		.css('width', $("body").width() - 230);
 	
 } // end showContentTab method
 

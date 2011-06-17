@@ -29,13 +29,13 @@ $(document).ready(function(e) {
 	 **/
 	$('a[href=#listpage]').live('click', function(e) {	
 		e.preventDefault();
-		showSpinny();
 		r_subreddit = $(this).attr("r");
 		$("#posts").html("");
-		$tabLeft = $("#tabLeft");
-		$("#tabPosts").css('z-index', topZ++);
-		$("#tabPosts").animate({ left: $tabLeft.position().left + $tabLeft.width() });
-		LoadPosts(loadPosts_Handler);
+		$tabPosts = $("#tabPosts");
+		$("#tabReddits").css('display','none');
+		showSpinny($tabPosts);
+		$tabPosts.css('display','');
+		LoadPosts(loadPosts_Handler, r_subreddit);
 	});
 	
 	
@@ -53,7 +53,6 @@ $(document).ready(function(e) {
  *	loadRedditsTab
  **/
 function loadRedditsTab() {
-	console.log('load reddits');
 	showSpinny($("#tabReddits"));
 	$("#reddits").html("");
 	LoadReddits(loadReddits_Handler);
@@ -91,8 +90,7 @@ function loadReddits_Handler(json) {
  *	renderSubreddit
  **/
 function renderSubreddit(subreddit, $reddits) {
-	console.log(subreddit);
-	$reddits.append("<li><a href=\"#listpage\" r=\"" + subreddit.display_name + "\">" + subreddit.display_name + "</a></li>");
+	$reddits.append("<li><a href=\"#listpage\" r=\"" + subreddit.display_name + "\"><div>" + subreddit.display_name + "</div></a></li>");
 } // end renderSubreddit method
 
 

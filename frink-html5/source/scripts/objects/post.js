@@ -7,21 +7,21 @@
 
 
 $(document).ready(function(e) {
+	
 	// btnBack_click
 	$("#btnBack").live('click', function(e) {
 		$("#tabPosts").animate({left: 201});
-		$("#tabPost").animate({opacity: 0});
-		$("#tabPost").css("left", -10000);
+		$("#tabPost").css("display", 'none');
 	});
 	
 	// btnUpBoat_click
 	$("#btnUpBoat").live('click', function(e) {
-		alert('up boat!');
+		vote(null, r_post, 1);
 	});
 	
 	// btnDownBoat_click
 	$("#btnDownBoat").live('click', function(e) {
-		alert('down boat!');
+		vote(null, r_post, -1);
 	});
 	
 	// btnComments_click
