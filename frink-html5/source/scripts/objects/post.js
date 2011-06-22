@@ -10,50 +10,47 @@ $(document).ready(function(e) {
 	
 	// btnBack_click
 	$("#btnBack").live('click', function(e) {
-		$("#tabPosts").animate({left: 201});
-		$("#tabPost").css("display", 'none');
+		$("#contentFrame").attr('src', '');
+		$middle.css('left', 201);
+		$tabPost.css("display", 'none');
 	});
 	
 	// btnUpBoat_click
 	$("#btnUpBoat").live('click', function(e) {
-		vote(null, r_post, 1);
+		makeVote(true);
 	});
 	
 	// btnDownBoat_click
 	$("#btnDownBoat").live('click', function(e) {
-		vote(null, r_post, -1);
+		makeVote(false);
 	});
 	
 	// btnComments_click
 	$("#btnComments").live('click', function(e) {
-		if ($("#post-comments").css('display') == 'none') {
+		if ($postCommentsScroller.css('display') == 'none') {
+			$(this).attr('src', 'images/icons/comments-selected.png');
 			renderPostBody(r_post, true, true);
 		} // end if
 		else {
-			if (!r_post.is_self) {
-				renderPostBody(r_post, false, true)
-			} // end if
+			$(this).attr('src', 'images/icons/comments.png');
+			renderPostBody(r_post, false, true)
 		} // end else
 	});
 	
-	// btnNewWindow_click
-	$("#btnNewWindow").live('click', function(e) {
-		alert('new window');
-	});
-	
-	
-	
 	// track drag movements on posting tab
+	/*
 	$("#tabPost").mousedown(function(e){
 		startMouseX = e.clientX;
 		startTabX = $("#tabPost").position().left;
 		isDown = true;
 	});
+	*/
 	
 	/**
 	 *	when the user swipes backwards on a tablet handle the movement of abs pos divs
 	 *	TODO: js physics engine probably makes this a lot easier
 	 */
+	/*
 	$("#tabPost").mousemove(function(e){
 		if (isDown) {
 			var shift = startTabX - (startMouseX - e.clientX);
@@ -77,6 +74,7 @@ $(document).ready(function(e) {
 			} // end if
 		} // end if
 	});
+	*/
 	
 	/**
 	 *	functions to handle mouse leave/out/up/over for draggable panels
@@ -98,6 +96,83 @@ $(document).ready(function(e) {
 --
 --------------------------------------------------------------------------*/
 
+
+/**
+ *	renderPostBody
+ **/
+function renderPostBody(r_post, showComments, animateSwitch) {
+
+	var	$postHeader = $("#post-header");
+	
+	// if there are only comments, no need to deal with the iframe
+	if (r_post.is_self || showComments) {
+		showSpinny($postContent);
+		$contentFrame.css('display', 'none')
+						.attr('src', '');
+		$postCommentsScroller.css('display', '');
+		LoadComments(loadComments_Handler, r_post);
+	} else {
+		$postCommentsScroller.css('display', 'none');
+		$contentFrame.attr('src', r_post_url)
+					.css('display', '');		
+	} // end else
+	
+	$contentFrame.css('height', $(window).height() - $postHeader.height() - 4);
+    $postCommentsScroller.css('height', $(window).height() - $postHeader.height() - 4);
+	
+} // end renderPostBody method
+
+
+
+
+
+/**
+ * manage the UI and api calls for a vote
+ * 
+ * the reddit API only takes a +1, 0, -1 for votes.  An upvote after a downvote
+ * simply sends the +1, up after up sends a 0, etc
+ **/
+function makeVote(up) {
+	
+	if (isLoggedIn) {
+		
+		// vote logic if the user is logged in
+		var dir = 0;
+		
+		// figure out if the user likes it, hates it, or is ambivalent
+		if (r_post.likes == null) {
+			// there hasn't been a vote yet, so just make the call and do the UI work
+			dir = up ? 1 : -1;
+		} else if (r_post.likes == false) {
+			// the post was previously down voted - undo downs but flipsy up votes
+			dir = up ? 1 : 0;
+		} else if (r_post.likes == true) {
+			// the post was previously up voted - undo ups but flipsy downs
+			dir = up ? 0 : -1;
+		}
+		
+		// update the underlying data structure and UI elements 
+		if (dir == 0) {
+			r_post.likes = null;
+			$("#btnUpBoat").attr('src', 'images/icons/arrow-up.png');
+			$("#btnDownBoat").attr('src', 'images/icons/arrow-down.png');
+		} else if (dir == -1) {
+			r_post.likes = false;
+			$("#btnUpBoat").attr('src', 'images/icons/arrow-up.png');
+			$("#btnDownBoat").attr('src', 'images/icons/arrow-down-selected.png');
+		} else if (dir == 1) { 
+			r_post.likes = true;
+			$("#btnUpBoat").attr('src', 'images/icons/arrow-up-selected.png');
+			$("#btnDownBoat").attr('src', 'images/icons/arrow-down.png');
+		}
+		
+		// perform the back end data call to cast the vote
+		vote(null, r_post.name, dir);
+	} else {
+		// if not logged in, show them the settings dialog
+		$("#btnSettings").click();
+	}
+}
 
 
 /**

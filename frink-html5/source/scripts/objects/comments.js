@@ -6,10 +6,15 @@
 --------------------------------------------------------------------------*/
 
 
+var scrollComments;
+
 $(document).ready(function(e) {
-	/**
-	 * update the label and display settings when an expand/collapse is clicked
-	 */
+	
+	// configure iScroll on comments pane
+	scrollComments = new iScroll('post-comments-scroller');
+	//console.log(scrollComments);
+	
+	// update the label and display settings when an expand/collapse is clicked
 	$('.expand').live('click', function(e) {
 		if ($(this).html() == '[-]') {
 			$(this).html('[+]');
@@ -20,6 +25,7 @@ $(document).ready(function(e) {
 			$(this).parent().siblings(".comment-body").css('display', '');
 			$(this).parent().siblings(".replies").css('display', '');
 		}
+		scrollComments.refresh();
 	});
 });
 
@@ -35,9 +41,7 @@ $(document).ready(function(e) {
 /**
  *	loadComments_Handler
  **/
-function loadComments_Handler(json) {
-	
-	var $postComments = $("#post-comments");	
+function loadComments_Handler(json) {	
 			
 	// for self posts show the body in the comments page
 	if (r_post.selftext_html != null) {
@@ -47,10 +51,12 @@ function loadComments_Handler(json) {
 	// render the recursive comment list
 	var comments = json[1].data.children;
 	for (var i=0; i<comments.length; i++) {
-		renderComment(comments[i].data, $postComments);
+		if (comments[i].data.kind != 'more')
+			renderComment(comments[i].data, $postComments);
 	} // end for
 	
-	hideSpinny($("#tabPosts"));
+	scrollComments.refresh();
+	hideSpinny($postContent);
 			
 } // end loadComments_Handler function
 

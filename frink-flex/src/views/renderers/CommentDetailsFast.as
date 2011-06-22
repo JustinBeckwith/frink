@@ -201,13 +201,7 @@ package views.renderers
 			subDisplay.dataProvider = this.childComments;
 			subDisplay.itemRenderer = new ClassFactory(CommentDetailsFast);
 			
-//			var layout : VerticalLayout = new VerticalLayout();
-//			layout.useVirtualLayout = true;
-//			subDisplay.layout = layout;
-			
-			// damn.  VerticalLayout just doesn't work for some reason? 
-			var layout : TileLayout = new TileLayout();
-			layout.requestedColumnCount = 1;
+			var layout : VerticalLayout = new VerticalLayout();
 			layout.useVirtualLayout = true;
 			subDisplay.layout = layout;
 			
@@ -252,21 +246,17 @@ package views.renderers
 			var subWidth : Number = getElementPreferredWidth(subDisplay);
 			var subHeight : Number = getElementPreferredHeight(subDisplay);
 			
-			//trace(this.width + ":" + this.explicitWidth + ":" + this.explicitMaxWidth + ":" + this.measuredWidth + ":" + this.maxWidth + ":" + this.parent.width + ":");
-			
 			// set the UIComponent properties to define component width and height
 			if (this.expanded) {
 				// this is expanded, so it includes all of the components in size calculations
 				this.measuredWidth = Math.max(labelDisplay.textWidth, topBarWidth, subWidth) + horizontalPadding;
-//				this.measuredHeight = getElementPreferredHeight(labelDisplay) + verticalGap + topBarHeight + verticalGap +
-//					subHeight + verticalPadding;
+				this.measuredHeight = getElementPreferredHeight(labelDisplay) + verticalGap + topBarHeight + verticalGap +
+					subHeight + verticalPadding;
 			} else {
 				// collapsed view only shows the top bar
 				this.measuredWidth = topBarWidth + horizontalPadding;
 				this.measuredHeight = topBarHeight + verticalPadding;
 			}
-			
-			//trace(this.measuredWidth + ":" + this.measuredHeight);
 		}
 		
 		/**
@@ -351,7 +341,6 @@ package views.renderers
 			
 			
 			// BODY
-			//trace('width:' + viewWidth + ":" + this.width);
 			labelDisplay.commitStyles();
 			
 			var bodyWidth : Number = viewWidth;

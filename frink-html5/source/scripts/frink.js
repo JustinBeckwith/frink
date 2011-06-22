@@ -14,15 +14,28 @@ var r_posts = [];
 var r_subreddit = null;
 var r_subreddit_after = null;
 var r_subreddit_before = null;
-var r_messages = null;
+var r_messages = null; 
 
 var isLoggedIn = false;
 var topZ = 30;
+var isPortrait = false;
 
 // globals for swipey code (this is way broke right now)
 var startMouseX;
 var startTabX;
 var isDown = false;
+var resizeTimer;
+
+// create some global jquery obj references
+var $middle;
+var $tabPost;
+var $spinny;
+var $tabPosts;
+var $tabReddits;
+var $postComments;
+var $contentFrame;
+var $postContent;
+var $postCommentsScroller;
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
@@ -32,14 +45,28 @@ document.addEventListener('touchmove', function (e) { e.preventDefault(); }, fal
  **/
 $(document).ready(function(e) {
 	
+	// set some globals
+	$middle = $("#middle");
+	$tabPost = $("#tabPost");
+	$spinny = $("#spinny");
+	$tabPosts = $("#tabPosts");
+	$tabReddits = $("#tabReddits");
+	$postComments = $("#post-comments");
+	$postCommentsScroller = $("#post-comments-scroller");
+	$contentFrame = $("#contentFrame");
+	$postContent = $("#post-content");
+	
+	isPortrait = $(window).height() > $(window).width();
+	
+	onWindowResize();
+	
 	/**
 	 * show the front page by default
 	 **/
-	showSpinny($("#tabPosts"));
 	if (localStorage.username != null && localStorage.password != null) {
 		attemptPreLogin();
 	} else {
-		LoadPosts(loadPosts_Handler);
+		loadPostTab();
 	} // end else
 	
 	/**
@@ -56,7 +83,51 @@ $(document).ready(function(e) {
 	$(".close-button").live('click', function(e) {
 		$.fancybox.close();
 	});
+	
+	
 });
+
+
+
+/**
+ * manage landscape/portrait transitions
+ */
+$(window).resize(function() {
+    //clearTimeout(resizeTimer);
+    //resizeTimer = setTimeout(onWindowResize, 100);
+    onWindowResize();
+});
+
+function onWindowResize() {
+        
+    // determine if we're in portrait or landscape
+    isPortrait = $(window).height() > $(window).width();
+    var postVisible = $tabPost.is(":visible");
+    
+    
+    // resize the post view if selected
+    if (postVisible) {
+    	// move the tabPost over to the far left side hiding text for portrait mode
+    	var left = isPortrait ? 51 : 201;
+    	$tabPost.css('left', left)
+    		.css('width', $(window).width() - left - 10)
+    		.css('height', $(window).height() - 6);
+    		
+    	$contentFrame.css('height', $(window).height() - $("#post-header").height() - 4);
+    	$postCommentsScroller.css('height', $(window).height() - $("#post-header").height() - 4);
+    	
+    } // end if
+    
+    // size and position the middle panel
+    var left = (isPortrait || postVisible) ? 51 : 201;
+	var width = $(window).width() - left - 10;
+	if (width > 550) width = 550;  
+    $middle.css('left', left)
+    	.css('width', width);
+  	  
+};
+
+
 
 
 /**
@@ -64,7 +135,9 @@ $(document).ready(function(e) {
  */
 function showTab($link) {
 	// apply the selected class to the menu item
-	$link.parent().parent().find("li").attr("class", "");
+	$link.parent().parent().children("li").each(function() {
+		$(this).attr("class", "");
+	});
 	$link.parent().attr("class","selected");
 		
 	// set all images back to emboss, not selected
@@ -81,14 +154,12 @@ function showTab($link) {
 		if ($tab.attr("id") != $link.attr("id"))
 			$(this).css("display", "none");
 	});
-	$("#tabPost").css('display','none');
+	$tabPost.css('display','none');
 	
-	$tabLeft = $("#tabLeft");
-	var leftPos = $tabLeft.position().left + $tabLeft.width() + 1;
-	showSpinny($tab);
-	$("#middle").css('left', 201);
+	// reposition and size middle panel
 	$tab.css('display', '');
-	
+	onWindowResize();
+		
 	// custom load code, could be an eval, but evals make me feel dirty.
 	switch($link.attr("id")) {
 		case "linkSearch":
@@ -107,6 +178,7 @@ function showTab($link) {
 			loadAllTab();
 			break;
 	} // end switch
+
 } // end showTab function
 
 /**
@@ -115,17 +187,11 @@ function showTab($link) {
 function authChange() {
 	
 	// show / hide the mail link
-	if (isLoggedIn) {
-		$("#liMail").css('display','');
-	} else {
-		$("#liMail").css('display','none');
-	} // end else
-	
+	$("#liMail").css('display',isLoggedIn ? '' : 'none');
+		
 	// switch to the posts tab $parentresh the list
-	showSpinny($("#tabPosts"));
-	showTab($("#linkPosts"));
 	r_subreddit = "";
-	LoadPosts(loadPosts_Handler);
+	showTab($("#linkPosts"));
 	
 } // end authChange method
 
@@ -178,31 +244,28 @@ function htmlDecode(input){
 
 
 /**
- *	showContentTab
- **/
-function showContentTab($tab) {	
-
-	// pre-show the spinny
-	showSpinny($tab);
-	
-	// move the content pane to the left, and set to use remaining width
-	$tab.css('left', 201)
-		.css('display', 'inline')
-		.css('width', $("body").width() - 230);
-	
-} // end showContentTab method
-
-/**
  *	showSpinny
  **/
 function showSpinny($container) {
+	console.log($container);
+	$container.attr('display', 'none');
 	
+	var left = $container.offset().left;
+	var width = $container.width();
+	
+	
+	console.log(left + ":" + width + ":" + (left + (width/2) - 50));
+	
+	$spinny.css('left', $container.offset().left + ($container.width()/2) - 50)
+			.css('top', $container.offset().top + 20)
+			.css('display', 'inline');
 }
 
 /**
  *	hideSpinny
  **/
 function hideSpinny($container) {
-	
+	$spinny.css('display', 'none');
+	$container.attr('display', 'block');
 }
 

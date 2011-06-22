@@ -23,7 +23,6 @@ $(document).ready(function(e) {
 		},
 		onScrollBottom: function() {
 			if (!bindingPosts && r_after != null) {
-				console.log('getting more posts');
 				bindingPosts = true;
 				showSpinny($("#listpage"));
 				LoadPosts(loadPosts_Handler, r_subreddit, null, r_after);
@@ -41,10 +40,6 @@ $(document).ready(function(e) {
 		r_post_url = $(this).attr('url');
 		r_post = r_posts[$(this).attr('idx')].data;
 		
-		$tabPost = $("#tabPost");
-		$tabPosts = $("#tabPosts");
-		$contentFrame = $("#contentFrame");
-		$postComments = $("#post-comments");
 		$postHeader = $("#post-header");
 				
 		// hide the previous content of the iframe before loading
@@ -56,7 +51,6 @@ $(document).ready(function(e) {
 		showContentTab($tabPost);
 		renderPostHeader(r_post, 0, $postHeader, false, true);
 		renderPostBody(r_post, false);
-		hideSpinny($tabPost);
 	});
 		
 	
@@ -69,11 +63,32 @@ $(document).ready(function(e) {
 --
 --------------------------------------------------------------------------*/
 
+
+/**
+ *	showContentTab
+ **/
+function showContentTab($tab) {	
+
+	// pre-show the spinny
+	showSpinny($tab);
+	
+	// move the middle tab to the left 
+	$middle.css('left', 50);
+	
+	// move the content pane to the left, and set to use remaining width
+	var left = isPortrait ? 51 : 201;
+	$tab.css('left', left)
+		.css('display', 'inline')
+		.css('width', $(window).width() - left - 10);
+	
+} // end showContentTab method
+
+
 /**
  *	loadPostsTab
  **/
 function loadPostTab() {
-	showSpinny($("#tabPost"));
+	showSpinny($tabPosts);
 	$("#posts").html("");
 	LoadPosts(loadPosts_Handler, "");
 } // end loadPostsTab method
@@ -82,7 +97,7 @@ function loadPostTab() {
  *	loadAllTab
  **/
 function loadAllTab() {
-	showSpinny($("#tabPost"));
+	showSpinny($tabPosts);
 	$("#posts").html("");
 	LoadPosts(loadPosts_Handler, "all");
 } // end loadPostsTab method
@@ -94,6 +109,9 @@ function loadAllTab() {
  *	loadPosts_Handler
  **/
 function loadPosts_Handler(json) {
+	
+	// grab the modHash for voting
+	userHash = json.data.modhash;
 			
 	// set the before/after			
 	r_after = json.data.after;
@@ -111,7 +129,7 @@ function loadPosts_Handler(json) {
 	// store the posts globally
 	r_posts = r_posts.concat(posts);
 	scrollPosts.refresh();
-	hideSpinny($("#tabPosts"));
+	hideSpinny($tabPosts);
 	bindingPosts = false;
 	
 } // end loadPosts_Handler function
@@ -136,7 +154,8 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 			
 	// add the title
 	var $title = $("<div class=\"title\">" + post.title + "</div>");
-	$postLeft.append($title);
+	//$postLeft.append($title);
+	$postElement.append($title);
 	
 	// add the domain
 	var $domain = $("<div class=\"domain\">" + post.domain + "</div>");
@@ -157,10 +176,12 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 	// add controls if neccesary
 	if (renderControls) {
 		var $controlBar = $("<ul id=\"controlBar\"></ul>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnBack\" title=\"Go back to the post listing\"><img src=\"images/icons/arrow-left.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnUpBoat\" title=\"Up Boat!\"><img src=\"images/icons/arrow-up.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnDownBoat\" title=\"Down Boat!\"><img src=\"images/icons/arrow-down.png\" /></a></li>");
-		$controlBar.append("<li><a href=\"#\" id=\"btnComments\" title=\"View the comments\"><img src=\"images/icons/comments.png\" /></a></li>");
+		$controlBar.append("<li><img src=\"images/icons/arrow-left.png\" id=\"btnBack\" title=\"Go back to the post listing\" /></li>");
+		$controlBar.append("<li><img src=\"images/icons/arrow-up" + ((r_post.likes==true) ? "-selected" : "") + ".png\" id=\"btnUpBoat\" title=\"Up Boat!\" /></li>");
+		$controlBar.append("<li><img src=\"images/icons/arrow-down" + ((r_post.likes==false) ? "-selected" : "") + ".png\" id=\"btnDownBoat\" title=\"Down Boat!\" /></li>");
+		if (!r_post.is_self) {
+			$controlBar.append("<li><img src=\"images/icons/comments.png\" id=\"btnComments\" title=\"View the comments\" /></li>");
+		} // end if
 		$controlBar.append("<li><a href=\"" + post.url + "\" target=\"blank\" title=\"Open the link in a new window\"><img src=\"images/icons/action.png\" /></a></li>");
 		$postElement.append($controlBar);
 	} // end if
@@ -189,38 +210,3 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 } // end renderPostHeader function
 
 
-/**
- *	renderPostBody
- **/
-function renderPostBody(r_post, showComments, animateSwitch) {
-
-	var	$contentFrame = $("#contentFrame");
-	var	$postComments = $("#post-comments");
-	var	$postHeader = $("#post-header");
-	
-	// if there are only comments, no need to deal with the iframe
-	if (r_post.is_self || showComments) {
-		if (animateSwitch) {
-			$contentFrame.css('display', 'none');
-			$postComments.css('display', '');
-		} else {
-			$contentFrame.css('display', 'none');
-			$postComments.css('display', '');
-		} // end else
-		
-		LoadComments(loadComments_Handler, r_post);
-		$postComments.css('width', $(window).width() - 250);
-		$postComments.css('height', $(window).height() - $postHeader.height());
-	} else {
-		if (animateSwitch) {
-			$("#post-comments").css('display', 'none');
-			$contentFrame.css('display', '');
-		} else {
-			$("#post-comments").css('display', 'none');
-			$contentFrame.css('display', '');
-		}
-		$contentFrame.attr('src', r_post_url);
-		$contentFrame.css('width', $(window).width() - 230);
-		$contentFrame.css('height', $(window).height() - $postHeader.height());
-	} // end else
-} // end renderPostBody method

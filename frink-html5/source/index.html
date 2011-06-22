@@ -35,6 +35,20 @@
 	</head>		
 	<body>	
 		
+		<!-- used with some fancy css3 to make a spinny icon -->
+		<div id="spinny">
+			<div class="bar1"></div>
+			<div class="bar2"></div>
+			<div class="bar3"></div>
+			<div class="bar4"></div>
+			<div class="bar5"></div>
+			<div class="bar6"></div>
+			<div class="bar7"></div>
+			<div class="bar8"></div>
+		</div>
+		
+		
+		
 		<div id="main">
 			
 			<!-- LEFT BAR -->
@@ -113,10 +127,14 @@
 			</div>
 			
 			<!-- POST -->
-			<div id="tabPost" class="tab">
+			<div id="tabPost">
 				<div id="post-header"></div>
-				<iframe id="contentFrame"></iframe>
-				<div id="post-comments" style="display:none"></div>
+				<div id="post-content">
+					<iframe id="contentFrame" style="display:none"></iframe>
+					 <div id="post-comments-scroller" style="display:none">
+						<div id="post-comments"></div>
+					</div>
+				</div>
 			</div>
 			
 			

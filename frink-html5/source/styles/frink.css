@@ -328,16 +328,25 @@ input[type=text], input[type=password] {
 
 #tabPost {
 	position: absolute;
-	left: 201;
+	left: 201px;
 	top: 2px;
 	bottom: 2px;
 	padding: 0px;
 	overflow: hidden;
 	border-left: 1px solid #000000;
 	z-index: 10;
+	background-color: #FFFFFF;
+	-webkit-box-shadow:-10px 0px 20px #000000;
+}
+
+#post-content {
+	width: 100%;
+	height: 100%;
 }
 
 #contentFrame {
+	width: 100%;
+	height: 100%;
 	border: none;
 	overflow: auto;
 }
@@ -363,6 +372,7 @@ input[type=text], input[type=password] {
 #controlBar {
 	list-style-type: none;
 	float: right;
+	margin: 0px;
 }
 
 #controlBar li {
@@ -380,13 +390,19 @@ input[type=text], input[type=password] {
 --
 --------------------------------------------------------------------------*/
 
-#post-comments {
+#post-comments-scroller {
 	padding: 10px;
-	overflow: auto;
+	overflow-y: auto;
+	height: 100%;
+}
+
+
+#post-comments {
+
 }
 
 .comment-body {
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 
 .replies {
@@ -514,5 +530,74 @@ input[type=text], input[type=password] {
 
 .message-header span {
 	padding-right: 8px;
+}
+
+
+
+
+
+/*--------------------------------------------------------------------------
+--
+-- SPINNY
+--
+--------------------------------------------------------------------------*/
+
+#spinny {
+	display:none;
+	position: absolute;
+	width:100px;
+	height:100px;
+	margin:25px;
+	float:left;
+	top: 25px;
+	left: 400px;
+	z-index: 100;
+	-webkit-transform:scale(0.5);
+	-webkit-animation-name: rotateThis;
+  	-webkit-animation-duration:2s;
+  	-webkit-animation-iteration-count:infinite;
+  	-webkit-animation-timing-function:linear;
+}
+
+#spinny div {
+  width:10px;
+  height:30px;
+  background:#000;
+  position:absolute;
+  top:35px;
+  left:45px;
+  -webkit-border-top-left-radius:10px;
+  -webkit-border-top-right-radius:10px;
+}
+
+
+.bar1 {
+  -webkit-transform:rotate(0deg) translate(0, -40px);opacity:0.12;
+}
+.bar2 {
+  -webkit-transform:rotate(45deg) translate(0, -40px);opacity:0.25;
+}
+.bar3 {
+  -webkit-transform:rotate(90deg) translate(0, -40px);opacity:0.37;
+}
+.bar4 {
+  -webkit-transform:rotate(135deg) translate(0, -40px);opacity:0.50;
+}
+.bar5 {
+  -webkit-transform:rotate(180deg) translate(0, -40px);opacity:0.62;
+}
+.bar6 {
+  -webkit-transform:rotate(225deg) translate(0, -40px);opacity:0.75;
+}
+.bar7 {
+  -webkit-transform:rotate(270deg) translate(0, -40px);opacity:0.87;
+}
+.bar8 {
+  -webkit-transform:rotate(315deg) translate(0, -40px);opacity:1;
+}
+
+@-webkit-keyframes rotateThis {
+  from {-webkit-transform:scale(0.5) rotate(0deg);}
+  to {-webkit-transform:scale(0.5) rotate(360deg);}
 }
 

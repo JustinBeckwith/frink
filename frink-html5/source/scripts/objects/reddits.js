@@ -27,7 +27,7 @@ $(document).ready(function(e) {
 	/**
 	 *	open the listing page when a subreddit list item is clicked on
 	 **/
-	$('a[href=#listpage]').live('click', function(e) {	
+	$('#reddits a[href=#listpage]').live('click', function(e) {	
 		e.preventDefault();
 		r_subreddit = $(this).attr("r");
 		$("#posts").html("");
@@ -53,7 +53,7 @@ $(document).ready(function(e) {
  *	loadRedditsTab
  **/
 function loadRedditsTab() {
-	showSpinny($("#tabReddits"));
+	showSpinny($tabReddits);
 	$("#reddits").html("");
 	LoadReddits(loadReddits_Handler);
 } // end loadREdditsTab method
@@ -81,7 +81,7 @@ function loadReddits_Handler(json) {
 	r_reddits = reddits;
 	scrollReddits.refresh();
 	bindingReddits = false;
-	hideSpinny($("#tabReddits"));
+	hideSpinny($tabReddits);
 	
 } // end loadReddits_Handler function
 
