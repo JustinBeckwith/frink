@@ -68,9 +68,6 @@ $(document).ready(function(e) {
  *	showContentTab
  **/
 function showContentTab($tab) {	
-
-	// pre-show the spinny
-	showSpinny($tab);
 	
 	// move the middle tab to the left 
 	$middle.css('left', 50);

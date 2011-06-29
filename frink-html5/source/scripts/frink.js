@@ -25,6 +25,7 @@ var startMouseX;
 var startTabX;
 var isDown = false;
 var resizeTimer;
+var mailTimer;
 
 // create some global jquery obj references
 var $middle;
@@ -188,12 +189,41 @@ function authChange() {
 	
 	// show / hide the mail link
 	$("#liMail").css('display',isLoggedIn ? '' : 'none');
+	
+	// start/stop the mail timer to check for new mail
+	if (isLoggedIn) {
+		checkMail();
+		mailTimer = setInterval(checkMail, 15000);
+	} // end if
+	else {
+		clearInterval(mailTimer);
+	} // end else
 		
 	// switch to the posts tab $parentresh the list
 	r_subreddit = "";
 	showTab($("#linkPosts"));
 	
 } // end authChange method
+
+/**
+ * checkMail - hit the server and look for new mail messages
+ */
+function checkMail() {
+	getUnreadMessageCount(checkMail_handler);
+}
+
+/**
+ * update the icon to regular/orange if there are new messages
+ */
+function checkMail_handler(json) {
+	if (json.data.children.length == 0) {
+		$("#linkMail img").attr('src', 'images/icons/mail-emboss.png')
+	} // end if
+	else {
+		$("#linkMail img").attr('src', 'images/icons/mail-emboss-orange.png')
+	} // end else
+} // end checkMail_handler
+
 
 /*--------------------------------------------------------------------------
 --
@@ -247,14 +277,11 @@ function htmlDecode(input){
  *	showSpinny
  **/
 function showSpinny($container) {
-	console.log($container);
+
 	$container.attr('display', 'none');
 	
 	var left = $container.offset().left;
 	var width = $container.width();
-	
-	
-	console.log(left + ":" + width + ":" + (left + (width/2) - 50));
 	
 	$spinny.css('left', $container.offset().left + ($container.width()/2) - 50)
 			.css('top', $container.offset().top + 20)

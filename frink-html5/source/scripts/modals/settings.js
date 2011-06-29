@@ -67,6 +67,7 @@ $(document).ready(function(e) {
  */
 function attemptPreLogin() {
 	if (localStorage.username != null && localStorage.password != null) {
+		showSpinny($middle);
 		attemptLogin(attemptLogin_Handler, localStorage.username, localStorage.password);	
 	} // end if
 } // end attemptPreLogin
@@ -80,6 +81,7 @@ function attemptLogin_Handler(json) {
 	var result = JSON.stringify(json);
 	isLoggedIn = (result.indexOf(".recover-password") == -1); 
 	setupUI();
+	hideSpinny($middle);
 	authChange();
 
 } // end attemptLogin_Handler method

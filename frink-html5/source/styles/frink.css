@@ -86,7 +86,7 @@ input[type=text], input[type=password] {
 	min-width: 490px;
 	color: #000000;
 	font-weight: bold;
-	background-image: url('../images/big-frink-head.png');
+	background-image: url('../images/big-frink-head-3.png');
 	background-repeat:no-repeat;
 	background-position-x: center;
 	background-position-y: bottom;
@@ -337,6 +337,7 @@ input[type=text], input[type=password] {
 	z-index: 10;
 	background-color: #FFFFFF;
 	-webkit-box-shadow:-10px 0px 20px #000000;
+	display: none;
 }
 
 #post-content {
