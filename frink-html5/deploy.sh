@@ -1,6 +1,12 @@
-cd source
-"C:\Program Files\7-Zip\7za.exe" a -tzip source.zip *
-cd ..
-move source\source.zip source.zip
-bbwp source.zip
-blackberry-deploy -installApp -password tartans -device 192.168.177.128 -package bin\source.bar
+echo 'removing old zip file...'
+rm frink.zip
+echo 'generating new zip...'
+\cd 'source'
+zip -r frink.zip .
+\cd '..'
+mv 'source/frink.zip' frink.zip
+echo 'compiling source�'
+bbwp frink.zip
+echo 'deploying to device...'
+blackberry-deploy -installApp -password codemonkeylikefritos -device 192.168.1.10 -package 'bin/frink.bar'
+echo 'complete!'

@@ -6,11 +6,13 @@
 
 html {
 	height: 100%;
+	width: 100%;
 }
 
 body {
 	font-family: verdana, arial;
 	height: 100%;
+	width: 100%;
 	background-color: #000000;
 	margin: 0px;
 	padding: 2px;
@@ -353,9 +355,7 @@ input[type=text], input[type=password] {
 }
 
 #post-header {
-	position: fixed relative;
-	top: 0px;
-	width: 100%;
+	
 }
 
 #post-header .post {
@@ -363,6 +363,7 @@ input[type=text], input[type=password] {
 	border-bottom: 1px solid #D9D9D9;
 	color: #040404;
 	cursor: pointer;
+	overflow: auto;
 }
 
 /** total hack, use new box model stuff in CSS3 when time **/

@@ -11,7 +11,7 @@ $(document).ready(function(e) {
 	// btnBack_click
 	$("#btnBack").live('click', function(e) {
 		$("#contentFrame").attr('src', '');
-		$middle.css('left', 201);
+		$middle.css('left', isPortrait ? 51 : 201);
 		$tabPost.css("display", 'none');
 	});
 	
@@ -25,6 +25,11 @@ $(document).ready(function(e) {
 		makeVote(false);
 	});
 	
+	// btnOpenLink_click
+	$("#btnOpenLink").live('click', function(e) {
+		followLink(r_post.url);
+	});
+	
 	// btnComments_click
 	$("#btnComments").live('click', function(e) {
 		if ($postCommentsScroller.css('display') == 'none') {
@@ -36,6 +41,8 @@ $(document).ready(function(e) {
 			renderPostBody(r_post, false, true)
 		} // end else
 	});
+	
+	
 	
 	// track drag movements on posting tab
 	/*

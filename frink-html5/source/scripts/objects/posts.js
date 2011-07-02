@@ -14,11 +14,12 @@ $(document).ready(function(e) {
 	
 	// set iScroll on tabPosts
 	scrollPosts = new iScroll('tabPosts', {
-		pullToRefresh: 'down',
+		pullToRefresh: 'down',   
 		onPullDown: function() {
 			// clear the current posts list and reload
-			$("#posts").html("");
 			bindingPosts = true;
+			showSpinny($tabPosts);
+			$("#posts").html("");
 			LoadPosts(loadPosts_Handler, r_subreddit);
 		},
 		onScrollBottom: function() {
@@ -85,6 +86,7 @@ function showContentTab($tab) {
  *	loadPostsTab
  **/
 function loadPostTab() {
+	bindingPosts = true;
 	showSpinny($tabPosts);
 	$("#posts").html("");
 	LoadPosts(loadPosts_Handler, "");
@@ -125,6 +127,7 @@ function loadPosts_Handler(json) {
 			
 	// store the posts globally
 	r_posts = r_posts.concat(posts);
+	scrollPosts.scrollTo(0,0);
 	scrollPosts.refresh();
 	hideSpinny($tabPosts);
 	bindingPosts = false;
@@ -179,7 +182,7 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 		if (!r_post.is_self) {
 			$controlBar.append("<li><img src=\"images/icons/comments.png\" id=\"btnComments\" title=\"View the comments\" /></li>");
 		} // end if
-		$controlBar.append("<li><a href=\"" + post.url + "\" target=\"blank\" title=\"Open the link in a new window\"><img src=\"images/icons/action.png\" /></a></li>");
+		$controlBar.append("<li><img src=\"images/icons/action.png\" id=\"btnOpenLink\" title=\"Open the link in a new window\" /></li>");
 		$postElement.append($controlBar);
 	} // end if
 	

@@ -85,6 +85,10 @@ $(document).ready(function(e) {
 		$.fancybox.close();
 	});
 	
+	// grab any a-href tags and make them event driven so they work
+	$(".link-box ul li").click(function(e) {
+		followLink($(this).attr('href'));
+	});
 	
 });
 
@@ -94,8 +98,6 @@ $(document).ready(function(e) {
  * manage landscape/portrait transitions
  */
 $(window).resize(function() {
-    //clearTimeout(resizeTimer);
-    //resizeTimer = setTimeout(onWindowResize, 100);
     onWindowResize();
 });
 
@@ -104,7 +106,6 @@ function onWindowResize() {
     // determine if we're in portrait or landscape
     isPortrait = $(window).height() > $(window).width();
     var postVisible = $tabPost.is(":visible");
-    
     
     // resize the post view if selected
     if (postVisible) {
@@ -295,4 +296,34 @@ function hideSpinny($container) {
 	$spinny.css('display', 'none');
 	$container.attr('display', 'block');
 }
+
+/**
+ * followLink - method to follow links in BlackBerry Browser
+ **/	
+function followLink(address) {
+	var encodedAddress = "";
+	
+	// URL Encode all instances of ':' in the address
+	encodedAddress = address.replace(/:/g, "%3A");
+	
+	// Leave the first instance of ':' in its normal form
+	encodedAddress = encodedAddress.replace(/%3A/, ":");
+	
+	// Escape all instances of '&' in the address
+	encodedAddress = encodedAddress.replace(/&/g, "\&");
+	
+	if (typeof blackberry !== 'undefined') {
+		try{
+			// If I am a BlackBerry device, invoke native browser
+			var args = new blackberry.invoke.BrowserArguments(encodedAddress);
+			blackberry.invoke.invoke(blackberry.invoke.APP_BROWSER, args);
+		} catch(e) {
+ 			alert("Sorry, there was a problem invoking the browser");
+ 		}
+	} else {
+		// If I am not a BlackBerry device, open link in current browser
+		window.open(encodedAddress); 
+	} // end else
+} // end followLink function
+
 

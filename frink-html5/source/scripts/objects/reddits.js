@@ -79,6 +79,7 @@ function loadReddits_Handler(json) {
 	} // end for
 	
 	r_reddits = reddits;
+	scrollReddits.scrollTo(0,0);
 	scrollReddits.refresh();
 	bindingReddits = false;
 	hideSpinny($tabReddits);
