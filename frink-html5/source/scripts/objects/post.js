@@ -5,8 +5,11 @@
 --
 --------------------------------------------------------------------------*/
 
+var scrollContent;
 
 $(document).ready(function(e) {
+	
+	scrollContent = new iScroll('mask');
 	
 	// btnBack_click
 	$("#btnBack").live('click', function(e) {
@@ -42,6 +45,13 @@ $(document).ready(function(e) {
 		} // end else
 	});
 	
+	// when the post is done loading, modify the iframe to take up the full space
+	// of the content.  iScroll will provide the swipe gestures needed
+	$("#contentFrame").load(function() {
+		$("#contentFrame").css('height', this.contentWindow.document.body.scrollHeight + 'px');
+		$("#contentFrame").css('width', this.contentWindow.document.body.scrollWidth + "px");
+		scrollContent.refresh();
+	});
 	
 	
 	// track drag movements on posting tab
@@ -110,18 +120,24 @@ $(document).ready(function(e) {
 function renderPostBody(r_post, showComments, animateSwitch) {
 
 	var	$postHeader = $("#post-header");
+	var $postContentScroller = $("#post-content-scroller");
 	
 	// if there are only comments, no need to deal with the iframe
 	if (r_post.is_self || showComments) {
 		showSpinny($postContent);
-		$contentFrame.css('display', 'none')
-						.attr('src', '');
+		$postContentScroller.css('display', 'none')
+		$contentFrame.attr('src', '');
 		$postCommentsScroller.css('display', '');
 		LoadComments(loadComments_Handler, r_post);
 	} else {
+		
+		$("#contentFrame").css('height', '100%');
+		$("#contentFrame").css('width', '100%');
+				
 		$postCommentsScroller.css('display', 'none');
 		$contentFrame.attr('src', r_post_url)
-					.css('display', '');		
+		$postContentScroller.css('display', '');
+		scrollContent.refresh();
 	} // end else
 	
 	$contentFrame.css('height', $(window).height() - $postHeader.height() - 4);

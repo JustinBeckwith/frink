@@ -40,10 +40,10 @@ function LoadReddits(handler, before, after) {
 
 	var url = isLoggedIn ? URL_MY_REDDITS : URL_POPULAR_REDDITS;
 
-	if (before != null)
+	if(before != null)
 		url += "&before=" + before;
 
-	if (after != null)
+	if(after != null)
 		url += "&after=" + after;
 
 	$.getJSON(url, function(json) {
@@ -51,7 +51,7 @@ function LoadReddits(handler, before, after) {
 	} // end success handler
 	);
 
-} // end LoadReddits function
+}// end LoadReddits function
 
 //
 // LoadPosts
@@ -59,23 +59,24 @@ function LoadReddits(handler, before, after) {
 function LoadPosts(handler, subreddit, before, after) {
 
 	var url = URL_BASE;
-	if (subreddit != null && subreddit != "") {
+	if(subreddit != null && subreddit != "") {
 		url += "r/" + subreddit + "/";
-	} // end if
+	}// end if
 	url += ".json?count=25";
 
-	if (before != null)
+	if(before != null)
 		url += "&before=" + before;
 
-	if (after != null)
+	if(after != null)
 		url += "&after=" + after;
 
 	$.getJSON(url, function(json) {
-		setTimeout(function() { handler(json) }, 2000);
+		setTimeout(function() { handler(json)
+		}, 2000);
 	} // end success handler
 	);
 
-} // end LoadPosts function
+}// end LoadPosts function
 
 //
 // LoadComments
@@ -88,7 +89,7 @@ function LoadComments(handler, post) {
 		handler(json);
 	} // end success
 	);
-} // end LoadComments function
+}// end LoadComments function
 
 /**
  *	attemptLogin
@@ -96,14 +97,23 @@ function LoadComments(handler, post) {
 function attemptLogin(handler, username, password) {
 
 	var url = URL_LOGIN + "/" + username;
-	var postData = "op=login-main&id=%23login_login-main&renderstyle=html&passwd=" + password + "&user=" + username;
+	var data = {
+		"user" : username,
+		"passwd" : password,
+		"api_type" : "json"
+	};
 
-	$.post(url, postData, function(json, textStatus) {
-		handler(json);
-	}, "json"
-	);
+	$.ajax({
+		type : 'POST',
+		url : url,
+		data : data,
+		success : function(json) { handler(json);
+		},
+		dataType : "json",
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8"
+	});
 
-} // end attemptLogin method
+}// end attemptLogin method
 
 /**
  *	vote
@@ -114,11 +124,10 @@ function vote(handler, name, direction) {
 	var postData = "id=" + name + "&dir=" + direction + "&renderstyle=html&uh=" + userHash;
 
 	$.post(url, postData, function(json, textStatus) {
-		if (handler) handler(json);
-	}, "json"
-	);
-
-} // end vote method
+		if(handler)
+			handler(json);
+	}, "json");
+}// end vote method
 
 /**
  *	logout
@@ -129,12 +138,10 @@ function logout(handler) {
 	var postData = "uh=" + userHash;
 
 	$.post(url, postData, function(json, textStatus) {
-		if (handler)
+		if(handler)
 			handler(json);
-	}, "json"
-	);
-
-} // end logout method
+	}, "json");
+}// end logout method
 
 /**
  * loadMessages - route to the appropriate listener
@@ -160,10 +167,10 @@ function loadMessages(handler, messageType, before, after) {
 			break;
 	}
 
-	if (before != null)
+	if(before != null)
 		url += "&before=" + before;
 
-	if (after != null)
+	if(after != null)
 		url += "&after=" + after;
 
 	$.getJSON(url, handler)
@@ -171,8 +178,8 @@ function loadMessages(handler, messageType, before, after) {
 	// any time you request the messages list with .json, the message is not
 	// marked as read.  To get around this, make a phantom request to the non-json
 	// version of the request message
-	if (messageType != 'unread') {
-		var url2 = url.replace(".json","");
+	if(messageType != 'unread') {
+		var url2 = url.replace(".json", "");
 		$.get(url2);
 	}
 }

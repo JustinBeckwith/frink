@@ -17,15 +17,16 @@ $(document).ready(function(e) {
 		pullToRefresh: 'down',   
 		onPullDown: function() {
 			// clear the current posts list and reload
-			bindingPosts = true;
-			showSpinny($tabPosts);
-			$("#posts").html("");
-			LoadPosts(loadPosts_Handler, r_subreddit);
+			//bindingPosts = true;
+			//showSpinny($tabPosts);
+			//$("#posts").html("");
+			//LoadPosts(loadPosts_Handler, r_subreddit);
 		},
 		onScrollBottom: function() {
 			if (!bindingPosts && r_after != null) {
 				bindingPosts = true;
-				showSpinny($("#listpage"));
+				//showSpinny($("#listpage"));
+				showSpinny($("#tabPosts"));				
 				LoadPosts(loadPosts_Handler, r_subreddit, null, r_after);
 			} // end if
 		}
@@ -89,6 +90,7 @@ function loadPostTab() {
 	bindingPosts = true;
 	showSpinny($tabPosts);
 	$("#posts").html("");
+	scrollPosts.scrollTo(0,0);
 	LoadPosts(loadPosts_Handler, "");
 } // end loadPostsTab method
 
@@ -127,7 +129,6 @@ function loadPosts_Handler(json) {
 			
 	// store the posts globally
 	r_posts = r_posts.concat(posts);
-	scrollPosts.scrollTo(0,0);
 	scrollPosts.refresh();
 	hideSpinny($tabPosts);
 	bindingPosts = false;
@@ -208,5 +209,9 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 	} // end else
 	
 } // end renderPostHeader function
+
+
+
+
 
 

@@ -78,8 +78,9 @@ function attemptPreLogin() {
  **/
 function attemptLogin_Handler(json) {
 	
-	var result = JSON.stringify(json);
-	isLoggedIn = (result.indexOf(".recover-password") == -1); 
+	//var result = JSON.stringify(json);
+	isLoggedIn = json.json.errors.length == 0;
+	//isLoggedIn = (result.indexOf(".recover-password") == -1); 
 	setupUI();
 	hideSpinny($middle);
 	authChange();

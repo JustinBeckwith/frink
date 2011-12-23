@@ -217,7 +217,7 @@ function checkMail() {
  * update the icon to regular/orange if there are new messages
  */
 function checkMail_handler(json) {
-	if (json.data.children.length == 0) {
+	if (json.data && json.data.children.length == 0) {
 		$("#linkMail img").attr('src', 'images/icons/mail-emboss.png')
 	} // end if
 	else {

@@ -31,10 +31,11 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		r_subreddit = $(this).attr("r");
 		$("#posts").html("");
+		scrollPosts.refresh();
 		$tabPosts = $("#tabPosts");
 		$("#tabReddits").css('display','none');
-		showSpinny($tabPosts);
 		$tabPosts.css('display','');
+		showSpinny($tabPosts);
 		LoadPosts(loadPosts_Handler, r_subreddit);
 	});
 	
@@ -55,6 +56,7 @@ $(document).ready(function(e) {
 function loadRedditsTab() {
 	showSpinny($tabReddits);
 	$("#reddits").html("");
+	scrollReddits.scrollTo(0,0);
 	LoadReddits(loadReddits_Handler);
 } // end loadREdditsTab method
 
@@ -79,7 +81,6 @@ function loadReddits_Handler(json) {
 	} // end for
 	
 	r_reddits = reddits;
-	scrollReddits.scrollTo(0,0);
 	scrollReddits.refresh();
 	bindingReddits = false;
 	hideSpinny($tabReddits);

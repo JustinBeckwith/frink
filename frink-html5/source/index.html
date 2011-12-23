@@ -1,13 +1,13 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 		<meta id="touch-event-mode" content="native"/>
 		
 		<title>Frink Reddit Client</title>
 		
 		<!-- jquery -->
-		<script type="text/javascript" src="plugins/jquery/jquery-1.6.1.min.js"></script>
+		<script type="text/javascript" src="plugins/jquery/jquery-1.7.1.js"></script>
 		
 		<!-- fancybox -->
 		<script type="text/javascript" src="plugins/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
@@ -131,8 +131,16 @@
 			<div id="tabPost">
 				<div id="post-header"></div>
 				<div id="post-content">
-					<iframe id="contentFrame" style="display:none"></iframe>
-					 <div id="post-comments-scroller" style="display:none">
+					
+					<div id="post-content-scroller" style="position: relative; width: 100%;height: 100%; display: none;">
+						<div id="mask" style="position:absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;">
+							<div id="faker">
+								<iframe id="contentFrame" style="pointer-events: none;" scrolling="no"></iframe>
+							</div>		
+						</div>
+					</div>
+					
+					<div id="post-comments-scroller" style="display:none">
 						<div id="post-comments"></div>
 					</div>
 				</div>
