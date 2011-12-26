@@ -135,9 +135,12 @@ function renderPostBody(r_post, showComments, animateSwitch) {
 		$("#contentFrame").css('width', '100%');
 				
 		$postCommentsScroller.css('display', 'none');
-		$contentFrame.attr('src', r_post_url)
+		//$contentFrame.attr('src', r_post_url)
 		$postContentScroller.css('display', '');
 		scrollContent.refresh();
+        
+        window.plugins.childBrowser.showWebPage(r_post_url);
+        
 	} // end else
 	
 	$contentFrame.css('height', $(window).height() - $postHeader.height() - 4);

@@ -34,6 +34,16 @@
 		90A87AEC14A847AA00920272 /* PhoneGap.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90A87AEB14A847AA00920272 /* PhoneGap.plist */; };
 		90A87AF014A847AA00920272 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90A87AEF14A847AA00920272 /* AppDelegate.m */; };
 		90A87AF914A848F700920272 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 90A87AF814A848F700920272 /* www */; };
+		90E04C8C14A8596D00EC4004 /* ChildBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C7F14A8596D00EC4004 /* ChildBrowser.bundle */; };
+		90E04C8D14A8596D00EC4004 /* ChildBrowser.js in Sources */ = {isa = PBXBuildFile; fileRef = 90E04C8014A8596D00EC4004 /* ChildBrowser.js */; };
+		90E04C8E14A8596D00EC4004 /* ChildBrowserCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E04C8214A8596D00EC4004 /* ChildBrowserCommand.m */; };
+		90E04C8F14A8596D00EC4004 /* ChildBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E04C8414A8596D00EC4004 /* ChildBrowserViewController.m */; };
+		90E04C9014A8596D00EC4004 /* ChildBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8514A8596D00EC4004 /* ChildBrowserViewController.xib */; };
+		90E04C9114A8596D00EC4004 /* facebook.html in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8714A8596D00EC4004 /* facebook.html */; };
+		90E04C9214A8596D00EC4004 /* FBConnect.js in Sources */ = {isa = PBXBuildFile; fileRef = 90E04C8814A8596D00EC4004 /* FBConnect.js */; };
+		90E04C9314A8596D00EC4004 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8914A8596D00EC4004 /* index.html */; };
+		90E04C9414A8596D00EC4004 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8A14A8596D00EC4004 /* README.txt */; };
+		90E04C9514A8596D00EC4004 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8B14A8596D00EC4004 /* README.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +79,18 @@
 		90A87AEF14A847AA00920272 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = "<group>"; };
 		90A87AF214A847AA00920272 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; name = README; path = Plugins/README; sourceTree = "<group>"; };
 		90A87AF814A848F700920272 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		90E04C7F14A8596D00EC4004 /* ChildBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ChildBrowser.bundle; sourceTree = "<group>"; };
+		90E04C8014A8596D00EC4004 /* ChildBrowser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ChildBrowser.js; sourceTree = "<group>"; };
+		90E04C8114A8596D00EC4004 /* ChildBrowserCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserCommand.h; sourceTree = "<group>"; };
+		90E04C8214A8596D00EC4004 /* ChildBrowserCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserCommand.m; sourceTree = "<group>"; };
+		90E04C8314A8596D00EC4004 /* ChildBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildBrowserViewController.h; sourceTree = "<group>"; };
+		90E04C8414A8596D00EC4004 /* ChildBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildBrowserViewController.m; sourceTree = "<group>"; };
+		90E04C8514A8596D00EC4004 /* ChildBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChildBrowserViewController.xib; sourceTree = "<group>"; };
+		90E04C8714A8596D00EC4004 /* facebook.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = facebook.html; sourceTree = "<group>"; };
+		90E04C8814A8596D00EC4004 /* FBConnect.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FBConnect.js; sourceTree = "<group>"; };
+		90E04C8914A8596D00EC4004 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		90E04C8A14A8596D00EC4004 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		90E04C8B14A8596D00EC4004 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,9 +246,37 @@
 		90A87AF114A847AA00920272 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				90E04C7E14A8596D00EC4004 /* ChildBrowser */,
 				90A87AF214A847AA00920272 /* README */,
 			);
 			name = Plugins;
+			sourceTree = "<group>";
+		};
+		90E04C7E14A8596D00EC4004 /* ChildBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				90E04C7F14A8596D00EC4004 /* ChildBrowser.bundle */,
+				90E04C8014A8596D00EC4004 /* ChildBrowser.js */,
+				90E04C8114A8596D00EC4004 /* ChildBrowserCommand.h */,
+				90E04C8214A8596D00EC4004 /* ChildBrowserCommand.m */,
+				90E04C8314A8596D00EC4004 /* ChildBrowserViewController.h */,
+				90E04C8414A8596D00EC4004 /* ChildBrowserViewController.m */,
+				90E04C8514A8596D00EC4004 /* ChildBrowserViewController.xib */,
+				90E04C8614A8596D00EC4004 /* FBConnectExample */,
+				90E04C8B14A8596D00EC4004 /* README.txt */,
+			);
+			path = ChildBrowser;
+			sourceTree = "<group>";
+		};
+		90E04C8614A8596D00EC4004 /* FBConnectExample */ = {
+			isa = PBXGroup;
+			children = (
+				90E04C8714A8596D00EC4004 /* facebook.html */,
+				90E04C8814A8596D00EC4004 /* FBConnect.js */,
+				90E04C8914A8596D00EC4004 /* index.html */,
+				90E04C8A14A8596D00EC4004 /* README.txt */,
+			);
+			path = FBConnectExample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,6 +344,12 @@
 				90A87AEA14A847AA00920272 /* Capture.bundle in Resources */,
 				90A87AEC14A847AA00920272 /* PhoneGap.plist in Resources */,
 				90A87AF914A848F700920272 /* www in Resources */,
+				90E04C8C14A8596D00EC4004 /* ChildBrowser.bundle in Resources */,
+				90E04C9014A8596D00EC4004 /* ChildBrowserViewController.xib in Resources */,
+				90E04C9114A8596D00EC4004 /* facebook.html in Resources */,
+				90E04C9314A8596D00EC4004 /* index.html in Resources */,
+				90E04C9414A8596D00EC4004 /* README.txt in Resources */,
+				90E04C9514A8596D00EC4004 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +378,10 @@
 			files = (
 				90A87AD014A847A900920272 /* main.m in Sources */,
 				90A87AF014A847AA00920272 /* AppDelegate.m in Sources */,
+				90E04C8D14A8596D00EC4004 /* ChildBrowser.js in Sources */,
+				90E04C8E14A8596D00EC4004 /* ChildBrowserCommand.m in Sources */,
+				90E04C8F14A8596D00EC4004 /* ChildBrowserViewController.m in Sources */,
+				90E04C9214A8596D00EC4004 /* FBConnect.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +540,7 @@
 				90A87AF714A847AA00920272 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
