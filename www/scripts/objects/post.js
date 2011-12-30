@@ -5,15 +5,11 @@
 --
 --------------------------------------------------------------------------*/
 
-var scrollContent;
-
 $(document).ready(function(e) {
-	
-	scrollContent = new iScroll('mask');
 	
 	// btnBack_click
 	$("#btnBack").live('click', function(e) {
-		$("#contentFrame").attr('src', '');
+		if (simpleBrowser) simpleBrowser.hide();
 		$middle.css('left', isPortrait ? 51 : 201);
 		$tabPost.css("display", 'none');
 	});
@@ -43,14 +39,6 @@ $(document).ready(function(e) {
 			$(this).attr('src', 'images/icons/comments.png');
 			renderPostBody(r_post, false, true)
 		} // end else
-	});
-	
-	// when the post is done loading, modify the iframe to take up the full space
-	// of the content.  iScroll will provide the swipe gestures needed
-	$("#contentFrame").load(function() {
-		$("#contentFrame").css('height', this.contentWindow.document.body.scrollHeight + 'px');
-		$("#contentFrame").css('width', this.contentWindow.document.body.scrollWidth + "px");
-		scrollContent.refresh();
 	});
 	
 	
@@ -120,30 +108,20 @@ $(document).ready(function(e) {
 function renderPostBody(r_post, showComments, animateSwitch) {
 
 	var	$postHeader = $("#post-header");
-	var $postContentScroller = $("#post-content-scroller");
 	
 	// if there are only comments, no need to deal with the iframe
 	if (r_post.is_self || showComments) {
 		showSpinny($postContent);
-		$postContentScroller.css('display', 'none')
-		$contentFrame.attr('src', '');
+        if (simpleBrowser) simpleBrowser.hide();
 		$postCommentsScroller.css('display', '');
 		LoadComments(loadComments_Handler, r_post);
 	} else {
-		
-		$("#contentFrame").css('height', '100%');
-		$("#contentFrame").css('width', '100%');
-				
+        var position = $postContent.offset();      
 		$postCommentsScroller.css('display', 'none');
-		//$contentFrame.attr('src', r_post_url)
-		$postContentScroller.css('display', '');
-		scrollContent.refresh();
-        
-        window.plugins.childBrowser.showWebPage(r_post_url);
-        
+        simpleBrowser.createSimpleBrowser(r_post_url, position.left, position.top, $postContent.width(), $postContent.height()-$postHeader.height());
 	} // end else
 	
-	$contentFrame.css('height', $(window).height() - $postHeader.height() - 4);
+	//$contentFrame.css('height', $(window).height() - $postHeader.height() - 4);
     $postCommentsScroller.css('height', $(window).height() - $postHeader.height() - 4);
 	
 } // end renderPostBody method

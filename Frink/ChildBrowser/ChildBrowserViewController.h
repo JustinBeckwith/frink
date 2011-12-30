@@ -49,6 +49,7 @@
 - (IBAction)onDoneButtonPress:(id)sender;
 - (IBAction)onSafariButtonPress:(id)sender;
 - (void)loadURL:(NSString*)url;
+- (void)loadURLAt:(NSString*)url x:(int)x y:(int)y w:(int)w h:(int)h;
 -(void)closeBrowser;
 
 @end

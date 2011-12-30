@@ -12,7 +12,6 @@ $(document).ready(function(e) {
 	
 	// configure iScroll on comments pane
 	scrollComments = new iScroll('post-comments-scroller');
-	//console.log(scrollComments);
 	
 	// update the label and display settings when an expand/collapse is clicked
 	$('.expand').live('click', function(e) {

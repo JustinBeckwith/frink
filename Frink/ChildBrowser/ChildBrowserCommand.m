@@ -26,7 +26,7 @@
 	
     if(childBrowser == NULL)
 	{
-		childBrowser = [[ ChildBrowserViewController alloc ] initWithScale:FALSE ];
+		childBrowser = [[ ChildBrowserViewController alloc ] initWithScale:TRUE ];
 		childBrowser.delegate = self;
 	}
 	
@@ -48,6 +48,26 @@
         
     [childBrowser loadURL:url  ];
         
+}
+
+- (void) showWebPageAt:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options // args: x, y, w, h
+{
+    if(childBrowser == NULL)
+	{
+		childBrowser = [[ ChildBrowserViewController alloc ]  initWithScale:TRUE];
+		childBrowser.delegate = self;
+	}
+    
+    CGFloat x = [[arguments objectAtIndex:0] floatValue];
+    CGFloat y = [[arguments objectAtIndex:1] floatValue];
+    CGFloat w = [[arguments objectAtIndex:2] floatValue];
+    CGFloat h = [[arguments objectAtIndex:3] floatValue];    
+    CGRect viewRect = CGRectMake(20, 20, 100, 100);
+    
+    [self.webView.superview addSubview:childBrowser.view];
+    
+    NSString *url = (NSString*) [arguments objectAtIndex:0];
+    [childBrowser loadURL:url ];
 }
 
 -(void) close:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options // args: url

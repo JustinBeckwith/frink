@@ -24,6 +24,8 @@
 	</array>
 	<key>Plugins</key>
 	<dict>
+		<key>SimpleBrowser</key>
+		<string>SimpleBrowser</string>
 		<key>ChildBrowserCommand</key>
 		<string>ChildBrowserCommand</string>
 		<key>com.phonegap.accelerometer</key>

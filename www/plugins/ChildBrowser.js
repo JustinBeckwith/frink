@@ -46,6 +46,12 @@ ChildBrowser.prototype.showWebPage = function(loc)
   PhoneGap.exec("ChildBrowserCommand.showWebPage", loc);
 };
 
+// Show a webpage, will result in a callback to onLocationChange
+ChildBrowser.prototype.showWebPageAt = function(container, loc)
+{
+    PhoneGap.exec("ChildBrowserCommand.showWebPageAt", loc, 10, 10, 100, 100);
+};
+
 // close the browser, will NOT result in close callback
 ChildBrowser.prototype.close = function()
 {

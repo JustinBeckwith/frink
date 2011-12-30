@@ -44,6 +44,7 @@
 		90E04C9314A8596D00EC4004 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8914A8596D00EC4004 /* index.html */; };
 		90E04C9414A8596D00EC4004 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8A14A8596D00EC4004 /* README.txt */; };
 		90E04C9514A8596D00EC4004 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8B14A8596D00EC4004 /* README.txt */; };
+		90E04C9D14AC3F8F00EC4004 /* SimpleBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E04C9C14AC3F8F00EC4004 /* SimpleBrowser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,8 @@
 		90E04C8914A8596D00EC4004 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		90E04C8A14A8596D00EC4004 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		90E04C8B14A8596D00EC4004 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		90E04C9B14AC3F8F00EC4004 /* SimpleBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleBrowser.h; path = SimpleBrowser/SimpleBrowser.h; sourceTree = "<group>"; };
+		90E04C9C14AC3F8F00EC4004 /* SimpleBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimpleBrowser.m; path = SimpleBrowser/SimpleBrowser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +249,7 @@
 		90A87AF114A847AA00920272 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				90E04C9A14AC3F7300EC4004 /* SimpleBrowser */,
 				90E04C7E14A8596D00EC4004 /* ChildBrowser */,
 				90A87AF214A847AA00920272 /* README */,
 			);
@@ -277,6 +281,15 @@
 				90E04C8A14A8596D00EC4004 /* README.txt */,
 			);
 			path = FBConnectExample;
+			sourceTree = "<group>";
+		};
+		90E04C9A14AC3F7300EC4004 /* SimpleBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				90E04C9B14AC3F8F00EC4004 /* SimpleBrowser.h */,
+				90E04C9C14AC3F8F00EC4004 /* SimpleBrowser.m */,
+			);
+			name = SimpleBrowser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -382,6 +395,7 @@
 				90E04C8E14A8596D00EC4004 /* ChildBrowserCommand.m in Sources */,
 				90E04C8F14A8596D00EC4004 /* ChildBrowserViewController.m in Sources */,
 				90E04C9214A8596D00EC4004 /* FBConnect.js in Sources */,
+				90E04C9D14AC3F8F00EC4004 /* SimpleBrowser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

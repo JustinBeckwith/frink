@@ -52,6 +52,7 @@
 	return self;	
 }
 
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -162,7 +163,11 @@
 }
 
 
-
+-(void)loadURLAt:(NSString*)url x:(int)x y:(int)y w:(int)w h:(int)h
+{
+    self.view.frame = CGRectMake(x, y, w, h);
+    [ self loadURL:url ];
+}
 
 - (void)loadURL:(NSString*)url
 {

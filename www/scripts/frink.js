@@ -34,7 +34,6 @@ var $spinny;
 var $tabPosts;
 var $tabReddits;
 var $postComments;
-var $contentFrame;
 var $postContent;
 var $postCommentsScroller;
 
@@ -54,7 +53,6 @@ $(document).ready(function(e) {
 	$tabReddits = $("#tabReddits");
 	$postComments = $("#post-comments");
 	$postCommentsScroller = $("#post-comments-scroller");
-	$contentFrame = $("#contentFrame");
 	$postContent = $("#post-content");
 	
 	isPortrait = $(window).height() > $(window).width();
@@ -114,8 +112,16 @@ function onWindowResize() {
     	$tabPost.css('left', left)
     		.css('width', $(window).width() - left - 10)
     		.css('height', $(window).height() - 6);
-    		
-    	$contentFrame.css('height', $(window).height() - $("#post-header").height() - 4);
+        
+        // resize the browser component if neccesary
+        var position = $postContent.offset();      
+        if (simpleBrowser) simpleBrowser.resize(position.left, 
+                                                position.top, 
+                                                $postContent.width(), 
+                                                $postContent.height()-$postHeader.height());
+        
+    	//$contentFrame.css('height', $(window).height() - $("#post-header").height() - 4);
+        //simpleBrowser.resize(10, 10, 400, 400);
     	$postCommentsScroller.css('height', $(window).height() - $("#post-header").height() - 4);
     	
     } // end if

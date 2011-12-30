@@ -45,7 +45,7 @@ $(document).ready(function(e) {
 		$postHeader = $("#post-header");
 				
 		// hide the previous content of the iframe before loading
-		$contentFrame.attr('src', 'about:blank');
+		if (simpleBrowser) simpleBrowser.hide();
 		$postHeader.html("");
 		$postComments.html("");
 		
