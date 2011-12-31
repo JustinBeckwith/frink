@@ -45,6 +45,9 @@
 		90E04C9414A8596D00EC4004 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8A14A8596D00EC4004 /* README.txt */; };
 		90E04C9514A8596D00EC4004 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C8B14A8596D00EC4004 /* README.txt */; };
 		90E04C9D14AC3F8F00EC4004 /* SimpleBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E04C9C14AC3F8F00EC4004 /* SimpleBrowser.m */; };
+		90E04C9F14AEE9F700EC4004 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 90E04C9E14AEE9F700EC4004 /* Default-Portrait~ipad.png */; };
+		90E04CA114AEEB8300EC4004 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 90E04CA014AEEB8300EC4004 /* Default-Landscape~ipad.png */; };
+		90E04CA314AEEEAE00EC4004 /* frinkIcon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 90E04CA214AEEEAE00EC4004 /* frinkIcon-72.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +97,9 @@
 		90E04C8B14A8596D00EC4004 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		90E04C9B14AC3F8F00EC4004 /* SimpleBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleBrowser.h; path = SimpleBrowser/SimpleBrowser.h; sourceTree = "<group>"; };
 		90E04C9C14AC3F8F00EC4004 /* SimpleBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimpleBrowser.m; path = SimpleBrowser/SimpleBrowser.m; sourceTree = "<group>"; };
+		90E04C9E14AEE9F700EC4004 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
+		90E04CA014AEEB8300EC4004 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		90E04CA214AEEEAE00EC4004 /* frinkIcon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "frinkIcon-72.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +137,9 @@
 		90A87A9D14A847A900920272 = {
 			isa = PBXGroup;
 			children = (
+				90E04CA214AEEEAE00EC4004 /* frinkIcon-72.png */,
+				90E04CA014AEEB8300EC4004 /* Default-Landscape~ipad.png */,
+				90E04C9E14AEE9F700EC4004 /* Default-Portrait~ipad.png */,
 				90A87AF814A848F700920272 /* www */,
 				90A87AC914A847A900920272 /* Frink */,
 				90A87AAE14A847A900920272 /* Frameworks */,
@@ -363,6 +372,9 @@
 				90E04C9314A8596D00EC4004 /* index.html in Resources */,
 				90E04C9414A8596D00EC4004 /* README.txt in Resources */,
 				90E04C9514A8596D00EC4004 /* README.txt in Resources */,
+				90E04C9F14AEE9F700EC4004 /* Default-Portrait~ipad.png in Resources */,
+				90E04CA114AEEB8300EC4004 /* Default-Landscape~ipad.png in Resources */,
+				90E04CA314AEEEAE00EC4004 /* frinkIcon-72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
