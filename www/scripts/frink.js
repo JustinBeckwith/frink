@@ -283,24 +283,25 @@ function htmlDecode(input){
 /**
  *	showSpinny
  **/
+var spinners = [];
 function showSpinny($container) {
-
-	$container.attr('display', 'none');
-	
-	var left = $container.offset().left;
-	var width = $container.width();
-	
-	$spinny.css('left', $container.offset().left + ($container.width()/2) - 50)
-			.css('top', $container.offset().top + 20)
-			.css('display', 'inline');
+    var opts = {
+        lines:12,
+        length:7,
+        width:4,
+        radius:10,
+        trail:60,
+        speed:1.0
+    };
+    var spinner = new Spinner(opts).spin($container.get(0));
+    spinners.push(spinner);
 }
 
 /**
  *	hideSpinny
  **/
 function hideSpinny($container) {
-	$spinny.css('display', 'none');
-	$container.attr('display', 'block');
+    spinners.pop().stop();
 }
 
 /**

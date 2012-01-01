@@ -121,7 +121,7 @@ function renderPostBody(r_post, showComments, animateSwitch) {
         simpleBrowser.createSimpleBrowser(r_post_url, position.left, position.top, $postContent.width(), $postContent.height()-$postHeader.height());
 	} // end else
 	
-	//$contentFrame.css('height', $(window).height() - $postHeader.height() - 4);
+	//$postCommentsScroller.css('width', $(window).height() - $postHeader.height() - 4);
     $postCommentsScroller.css('height', $(window).height() - $postHeader.height() - 4);
 	
 } // end renderPostBody method
