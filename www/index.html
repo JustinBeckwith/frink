@@ -41,21 +41,27 @@
         
         <!-- phone gap plugins -->
         <script type="text/javascript" charset="utf-8" src="plugins/SimpleBrowser.js"></script>
+        <script type="text/javascript" src="scripts/FrinkBrowser.js"></script>
         
         <script type="text/javascript">
             
             var simpleBrowser = null;
             
             function onBodyLoad()
-            {		
+            {	
                 document.addEventListener("deviceready", onDeviceReady, false);
+                
+                var e = document.createEvent('Events');
+                e.initEvent('deviceready');
+                document.dispatchEvent(e);
             }
             
             function onDeviceReady()
             {
                 try {
                     
-                    simpleBrowser = window.plugins.simpleBrowser;
+                    //simpleBrowser = window.plugins.simpleBrowser;
+                    simpleBrowser = getBrowser();
                     
                 } catch (ex) {
                     navigator.notification.alert(":(");

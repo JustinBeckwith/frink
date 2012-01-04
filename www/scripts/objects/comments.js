@@ -67,7 +67,7 @@ function renderComment(comment, $container) {
 	
 	var $reply = $("<div class=\"reply\"></div>");
 	var $header = $("<div class=\"reply-header\"><span class=\"expand\">[-]</span><span class=\"username\"><a href=\"#\">" + comment.author + "</a></span><span>" + (comment.ups - comment.downs) + "&nbsp;points</span><span>" + getAgoLabel(comment.created_utc) + "<span></div>");
-	var $comment = $("<div class=\"comment-body\">" + comment.body + "</div>");
+	var $comment = $("<div class=\"comment-body\">" + comment.body_html + "</div>");
 	$reply.append($header);
 	$reply.append($comment);
 		
