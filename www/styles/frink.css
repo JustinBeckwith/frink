@@ -404,6 +404,11 @@ input[type=text], input[type=password] {
 	padding-bottom: 15px;
 }
 
+.comment-body p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
 .replies {
 	border-left: 1px solid #CCCCCC;
 	padding-left: 25px;

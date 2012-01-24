@@ -130,13 +130,14 @@ function vote(handler, name, direction) {
 }// end vote method
 
 /**
- *	logout
+ *	Log the user out of their current session
+ *  @param handler {callback} callback handler for the logot 
  **/
 function logout(handler) {
 
 	var url = URL_LOGOUT;
 	var postData = "uh=" + userHash;
-
+	
 	$.post(url, postData, function(json, textStatus) {
 		if(handler)
 			handler(json);

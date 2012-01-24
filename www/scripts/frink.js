@@ -301,7 +301,8 @@ function showSpinny($container) {
  *	hideSpinny
  **/
 function hideSpinny($container) {
-    spinners.pop().stop();
+    var spinner = spinners.pop();
+    if (spinner) spinner.stop();
 }
 
 /**

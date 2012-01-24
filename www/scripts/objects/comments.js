@@ -7,6 +7,7 @@
 
 
 var scrollComments;
+var inExternalLink = false;
 
 $(document).ready(function(e) {
 	
@@ -25,6 +26,15 @@ $(document).ready(function(e) {
 			$(this).parent().siblings(".replies").css('display', '');
 		}
 		scrollComments.refresh();
+	});
+				  
+	// swallow any a href tags rendered in the comment body
+	$(".comment-body a").live('click', function(e) {
+		e.preventDefault();
+		var position = $postContent.offset();
+		var postHeader = $("#post-header");
+		inExternalLink = true;
+		simpleBrowser.createSimpleBrowser($(this).attr('href'), position.left, position.top-2, $postContent.width(), $postContent.height()-$postHeader.height());
 	});
 });
 
@@ -50,7 +60,7 @@ function loadComments_Handler(json) {
 	// render the recursive comment list
 	var comments = json[1].data.children;
 	for (var i=0; i<comments.length; i++) {
-		if (comments[i].data.kind != 'more')
+		if (comments[i].kind != 'more') 
 			renderComment(comments[i].data, $postComments);
 	} // end for
 	
@@ -67,7 +77,8 @@ function renderComment(comment, $container) {
 	
 	var $reply = $("<div class=\"reply\"></div>");
 	var $header = $("<div class=\"reply-header\"><span class=\"expand\">[-]</span><span class=\"username\"><a href=\"#\">" + comment.author + "</a></span><span>" + (comment.ups - comment.downs) + "&nbsp;points</span><span>" + getAgoLabel(comment.created_utc) + "<span></div>");
-	var $comment = $("<div class=\"comment-body\">" + comment.body_html + "</div>");
+	var body = $("<div></div>").html(comment.body_html);
+	var $comment = $("<div class=\"comment-body\">" + body.text() + "</div>");
 	$reply.append($header);
 	$reply.append($comment);
 		

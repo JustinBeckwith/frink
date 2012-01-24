@@ -10,8 +10,11 @@ $(document).ready(function(e) {
 	// btnBack_click
 	$("#btnBack").live('click', function(e) {
 		if (simpleBrowser) simpleBrowser.hide();
-		$middle.css('left', isPortrait ? 51 : 201);
-		$tabPost.css("display", 'none');
+		if (!inExternalLink) {
+			$middle.css('left', isPortrait ? 51 : 201);
+			$tabPost.css("display", 'none');
+		} 
+		inExternalLink = false;
 	});
 	
 	// btnUpBoat_click
