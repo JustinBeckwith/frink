@@ -13,8 +13,10 @@ $(document).ready(function(e) {
 	
 	// show the settings window
 	$("#btnSettings").fancybox({
-		showCloseButton: false,
-		onComplete: function(e) {
+		padding: 0,
+		margin: 0,
+		closeBtn: false,
+		afterLoad: function(e) {
 			if (!isLoggedIn) {
 				$("#username").focus();
 			} // end else

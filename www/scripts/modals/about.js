@@ -12,8 +12,9 @@ $(document).ready(function(e) {
 	 *	show the about window
 	 **/
 	$("#btnAbout").fancybox({
-		showCloseButton: false,
-		title: 'About Frink!'
+		padding: 0,
+		margin: 0,
+		closeBtn: false
 	});
 	
 });

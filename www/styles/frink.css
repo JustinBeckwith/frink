@@ -93,17 +93,27 @@ input[type=text], input[type=password] {
 
 .modal-title {
 	padding: 15px;
-	background-color: #AAAAAA;
 	font-weight: bold;
-	margin-bottom: 15px;
-	border: 1px solid #000000;
+	border-bottom: 1px solid #7a8091;
+	background-image: -webkit-gradient(linear, 0% 25%, 0% 100%, from(#FFFFFF), to(#a8acb9));
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	color: #7a8091;
+}
+
+.modal-desc {
+	font-size: 0.8em;
+	background-color: #cbced2;
+	text-align: left;
+	font-weight: normal;
+	border-bottom: 1px solid #7a8091;
+	padding: 10px;
 }
 
 .modal-content {
 	min-height: 200px;
 	min-width: 490px;
 	color: #000000;
-	font-weight: bold;
 	background-image: url('../images/big-frink-head-3.png');
 	background-repeat:no-repeat;
 	background-position-x: center;
@@ -134,9 +144,14 @@ input[type=text], input[type=password] {
 }
 
 .link-box {
+	border: 1px solid #48577b;
+	border-radius: 10px;
 	margin-left: auto;
 	margin-right: auto;
 	padding: 0px;
+	background-color: #f7f7f7;
+	font-weight: bold;
+	font-size: 0.8em;
 }
 
 .link-box ul {
@@ -147,9 +162,12 @@ input[type=text], input[type=password] {
 }
 
 .link-box ul li {
-	background-color: #F3F3F3;
-	border: 1px solid #000000;
 	padding: 10px;
+	border-bottom: 1px solid #48577b;
+}
+
+.link-box ul li:last-child {
+	border-bottom: 0px;
 }
 
 .link-box ul a {
