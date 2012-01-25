@@ -64,6 +64,22 @@ input[type=text], input[type=password] {
 	width: 100%;
 }
 
+#listSpin {
+	height: 100px;
+	font-size: 1.4em;
+	text-align: center;
+	vertical-align: 60px;
+	color: #AAA;
+	font-weight: bold;
+}
+
+#listSpinX {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
 /*--------------------------------------------------------------------------
 --
 -- MODALS

@@ -137,13 +137,17 @@ function logout(handler) {
 
 	var url = URL_LOGOUT;
 	var postData = "uh=" + userHash;
-	
+
+	// for reasons beyond my understanding, this always returns a 
+	// 302.  The logout works, but the event doesn't
 	$.post(url, postData, function(json, textStatus) {
-		isLoggedIn = false;
 		console.log('not logged in!!!');
-		if(handler)
-			handler(json);
 	}, "json");
+
+	// lie and say we're logged out.
+	isLoggedIn = false;
+	if(handler) handler(json);
+
 }// end logout method
 
 /**

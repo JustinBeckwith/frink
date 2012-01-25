@@ -16,9 +16,8 @@ $(document).ready(function(e) {
 	scrollReddits = new iScroll('tabReddits', {
 		onScrollBottom: function() {
 			if (!bindingReddits && r_subreddit_after != null) {
-				console.log('bottom');
 				bindingReddits = true;
-				showSpinny($("#tabReddits"));
+				addLoading($("#reddits"), scrollReddits);
 				LoadReddits(loadReddits_Handler, null, r_subreddit_after);
 			} // end if
 		}
@@ -81,9 +80,8 @@ function loadReddits_Handler(json) {
 	} // end for
 	
 	r_reddits = reddits;
-	scrollReddits.refresh();
+	removeLoading(scrollReddits);
 	bindingReddits = false;
-	hideSpinny($tabReddits);
 	
 } // end loadReddits_Handler function
 

@@ -14,19 +14,20 @@ $(document).ready(function(e) {
 	
 	// set iScroll on tabPosts
 	scrollPosts = new iScroll('tabPosts', {
+		bounceLock: true,
 		pullToRefresh: 'down',   
 		onPullDown: function() {
+			console.log('on pull down');
 			// clear the current posts list and reload
 			//bindingPosts = true;
 			//showSpinny($tabPosts);
 			//$("#posts").html("");
 			//LoadPosts(loadPosts_Handler, r_subreddit);
 		},
-		onScrollBottom: function() {
+		onScrollBottom: function() {				  
 			if (!bindingPosts && r_after != null) {
 				bindingPosts = true;
-				//showSpinny($("#listpage"));
-				showSpinny($("#tabPosts"));				
+				addLoading($("#posts"), scrollPosts);
 				LoadPosts(loadPosts_Handler, r_subreddit, null, r_after);
 			} // end if
 		}
@@ -104,8 +105,6 @@ function loadAllTab() {
 } // end loadPostsTab method
 
 
-
-
 /**
  *	loadPosts_Handler
  **/
@@ -126,11 +125,13 @@ function loadPosts_Handler(json) {
 		var post = posts[i].data;
 		renderPostHeader(post, i+r_posts.length, $posts, true);
 	}; // end for
-			
+	
 	// store the posts globally
 	r_posts = r_posts.concat(posts);
-	scrollPosts.refresh();
-	hideSpinny($tabPosts);
+
+	// remove the spinner
+	removeLoading(scrollPosts);
+
 	bindingPosts = false;
 	
 } // end loadPosts_Handler function

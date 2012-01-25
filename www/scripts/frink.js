@@ -305,6 +305,27 @@ function hideSpinny($container) {
     if (spinner) spinner.stop();
 }
 
+
+/**
+ *	add the loading graphic to the bottom of the list
+ * 	@param $list
+ **/
+function addLoading($list, scroller) {
+	$list.append($("<li id='listSpin'><span id='listSpinX'>&nbsp;</span>loading</li>"));
+	showSpinny($("#listSpinX"));
+	scroller.refresh();
+}
+
+/**
+ *	add the loading graphic to the bottom of the list
+ * 	@param $list
+ **/
+function removeLoading(scroller) {
+	$("#listSpin").remove();
+	scroller.refresh();
+	hideSpinny();
+}
+
 /**
  * followLink - method to follow links in BlackBerry Browser
  **/	
