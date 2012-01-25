@@ -136,9 +136,9 @@ function loadPosts_Handler(json) {
 } // end loadPosts_Handler function
 
 
-//
-// renderPostHeader
-//
+/**
+ * render the post header - this should really be using templating
+ **/
 function renderPostHeader(post, idx, parent, useLI, renderControls) {	
 	
 	// create the post div
@@ -147,8 +147,8 @@ function renderPostHeader(post, idx, parent, useLI, renderControls) {
 	
 	// add the thumbnail if needed
 	if (post.thumbnail != '') {
-		if (post.thumbnail.indexOf("/static/") == 0)
-			post.thumbnail = "http://www.reddit.com" + post.thumbnail;
+		if (post.thumbnail == 'self') post.thumbnail = 'images/self.png';
+		if (post.thumbnail == 'default') post.thumbnail = 'images/default.png';
 		var $thumb = $("<img src=\"" + post.thumbnail + "\" alt=\"[img]\" />");
 		$postElement.append($thumb);
 	} // end if

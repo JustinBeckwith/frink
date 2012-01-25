@@ -139,6 +139,8 @@ function logout(handler) {
 	var postData = "uh=" + userHash;
 	
 	$.post(url, postData, function(json, textStatus) {
+		isLoggedIn = false;
+		console.log('not logged in!!!');
 		if(handler)
 			handler(json);
 	}, "json");
